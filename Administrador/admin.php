@@ -13,7 +13,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Administrador</title>
     <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="/php-login/assets/css/style.css">
 </head>
 <body>
     <h1>Administrador</h1>
@@ -22,7 +22,15 @@
     </form>
     
     <form>
-        <input type="button" value="Ver Libro Diario" onclick = "location.href='librodiario.php'">
+        <input type="buttom" value="Ver Libro Diario" onclick = "location.href='librodiario.php'">
+    </form>
+    
+    <form>
+        <input type="buttom" value="Ver Libro Mayor" onclick="location.href='libromayor.php'">
+    </form>
+
+    <form>
+        <input type="buttom" value="Plan de Cuentas" onclick="location.href='plandecuenta.php'">
     </form>
 
     <form>
@@ -30,7 +38,7 @@
     </form>
     
     <form>
-        <input type ="buttom" value="Cerrar Sesión" OnClick= "location.href='logout.php'">
+        <input type ="buttom" value="Cerrar Sesión" OnClick= "location.href='/php-login/logout.php'">
     </form>
 </body>
 </html>

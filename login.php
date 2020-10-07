@@ -20,9 +20,9 @@
     if (count($results) > 0 && password_verify($_POST['password'], $results['password'])) { 
       $_SESSION['user_id'] = $results['id'];
       if($rol == '1'){
-          header('location: admin.php');
+          header('location: /php-login/Administrador/admin.php');
       }else{
-        header('location: colab.php');  
+        header('location: /php-login/Colaborador/colab.php');  
       }
 
     } else {

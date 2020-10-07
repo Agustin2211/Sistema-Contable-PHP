@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
         <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="assets/css/style.css">
+        <link rel="stylesheet" href="/php-login/assets/css/style.css">
         <h2> Administración de Usuarios Registrados</h2>	
 		<div class="well well-small">
 		<hr class="soft"/>
