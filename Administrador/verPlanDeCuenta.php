@@ -23,7 +23,7 @@
 	echo "<center><table border='1'; class='table table-hover';color = #white>";
 		echo "<tr class='warning'>";
 			echo "<td>Id</td>";
-			echo "<td>Cuenta</td>";
+			echo "<td>Nombre de la Cuenta</td>";
 			echo "<td>Codigo</td>";
 			echo "<td>Tipo</td>";
 			echo "<td>Saldo Actual</td>";

@@ -22,6 +22,16 @@ input[type="text"], input[type="password"]{
     margin: 20px auto;
 }
 
+input[type="number"]{
+    outline: none;
+    padding: 20px;
+    display: block;
+    width: 300px;
+    border-radius: 3px;
+    border: 1px solid #023FFF;
+    margin: 20px auto;
+}
+
 input[type="submit"]{
     padding: 10px;
     color: black;

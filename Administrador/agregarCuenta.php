@@ -1,17 +1,17 @@
 <?php
 
-require 'database.php';
+require('database.php');
 
 $message = '';
 
-if ((!empty($_POST['cuenta'])) && (!empty($_POST['codigo'])) && (!empty($_POST['tipo'])) && (!empty($_POST['recibeSaldo'])) && (!empty($_POST['saldoActual']))) {
-    $sql = "INSERT INTO cuentas (cuenta, codigo, tipo, recibeSaldo, saldoActual) VALUES (cuenta, codigo, tipo, recibeSaldo, saldoActual)";
+if (!empty($_POST['cuenta']) && !empty($_POST['codigo']) && !empty($_POST['tipo']) && !empty($_POST['recibeSaldo']) && !empty($_POST['saldoActual'])) {
+    $sql = "INSERT INTO cuentas ('id', cuenta', 'codigo', 'tipo', 'recibeSaldo', 'saldoActual') VALUES (NULL, :cuenta, :codigo, :tipo, :recibeSaldo, :saldoActual)";
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam('cuenta', $_POST['cuenta']);
-    $stmt->bindParam('codigo', $_POST['codigo']);
-    $stmt->bindParam('tipo', $_POST['tipo']);
-    $stmt->bindParam('recibeSaldo', $_POST['recibeSaldo']);
-    $stmt->bindParam('saldoActual', $_POST['saldoActual']);
+    $stmt->bindParam(':cuenta', $_POST['cuenta']);
+    $stmt->bindParam(':codigo', $_POST['codigo']);
+    $stmt->bindParam(':tipo', $_POST['tipo']);
+    $stmt->bindParam(':recibeSaldo', $_POST['recibeSaldo']);
+    $stmt->bindParam(':saldoActual', $_POST['saldoActual']);
     
     if ($stmt->execute()) {
       $message = 'Cuenta agregada correctamente';
@@ -38,11 +38,11 @@ if ((!empty($_POST['cuenta'])) && (!empty($_POST['codigo'])) && (!empty($_POST['
 <?php endif; ?>
 
         <form action="agregarCuenta.php" method="POST">
-            <input name="cuenta" type="text">
-            <input name="codigo" type="text">
+            <label>Nombre de la Cuenta:</label><input name="cuenta" type="text">
+            <input name="codigo" type="number" min='0'>
             <input name="tipo" type="text">
-            <input name="recibeSaldo" type="text">
-            <input name="saldoActual" type="text">
+            <input name="recibeSaldo" type="number" min='0' max='1'>
+            <input name="saldoActual" type="number" min='0'>
             <input type="submit" value="Agregar Cuenta">
         </form>
 
