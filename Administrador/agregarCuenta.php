@@ -5,13 +5,13 @@ require 'database.php';
 $message = '';
 
 if ((!empty($_POST['cuenta'])) && (!empty($_POST['codigo'])) && (!empty($_POST['tipo'])) && (!empty($_POST['recibeSaldo'])) && (!empty($_POST['saldoActual']))) {
-    $sql = "INSERT INTO cuentas (cuenta, codigo, tipo, recibeSaldo, saldoActual) VALUES (:cuenta, :codigo, :tipo, recibeSaldo, :saldoActual)";
+    $sql = "INSERT INTO cuentas (cuenta, codigo, tipo, recibeSaldo, saldoActual) VALUES (cuenta, codigo, tipo, recibeSaldo, saldoActual)";
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':cuenta', $_POST['cuenta']);
-    $stmt->bindParam(':codigo', $_POST['codigo']);
-    $stmt->bindParam(':tipo', $_POST['tipo']);
-    $stmt->bindParam(':recibeSaldo', $_POST['recibeSaldo']);
-    $stmt->bindParam(':saldoActual', $_POST['saldoActual']);
+    $stmt->bindParam('cuenta', $_POST['cuenta']);
+    $stmt->bindParam('codigo', $_POST['codigo']);
+    $stmt->bindParam('tipo', $_POST['tipo']);
+    $stmt->bindParam('recibeSaldo', $_POST['recibeSaldo']);
+    $stmt->bindParam('saldoActual', $_POST['saldoActual']);
     
     if ($stmt->execute()) {
       $message = 'Cuenta agregada correctamente';
