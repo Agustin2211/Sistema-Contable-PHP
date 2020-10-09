@@ -5,7 +5,7 @@ require('database.php');
 $message = '';
 
 if (!empty($_POST['cuenta']) && !empty($_POST['codigo']) && !empty($_POST['tipo']) && !empty($_POST['recibeSaldo']) && !empty($_POST['saldoActual'])) {
-    $sql = "INSERT INTO cuentas ('id', cuenta', 'codigo', 'tipo', 'recibeSaldo', 'saldoActual') VALUES (NULL, :cuenta, :codigo, :tipo, :recibeSaldo, :saldoActual)";
+    $sql = "INSERT INTO cuentas (cuenta, codigo, tipo, recibeSaldo, saldoActual) VALUES (:cuenta, :codigo, :tipo, :recibeSaldo, :saldoActual)";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':cuenta', $_POST['cuenta']);
     $stmt->bindParam(':codigo', $_POST['codigo']);
