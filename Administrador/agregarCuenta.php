@@ -1,24 +1,24 @@
 <?php
 
-require('database.php');
+ require('database.php');
 
 $message = '';
 
-if (!empty($_POST['cuenta']) && !empty($_POST['codigo']) && !empty($_POST['tipo']) && !empty($_POST['recibeSaldo']) && !empty($_POST['saldoActual'])) {
-    $sql = "INSERT INTO cuentas (cuenta, codigo, tipo, recibeSaldo, saldoActual) VALUES (:cuenta, :codigo, :tipo, :recibeSaldo, :saldoActual)";
-    $stmt = $conn->prepare($sql);
+/*if (!empty($_POST['cuenta']) && !empty($_POST['codigo']) && !empty($_POST['tipo']) && !empty($_POST['recibeSaldo']) && !empty($_POST['saldoActual'])) {*/
+    $stmt = $conn->prepare("INSERT INTO cuentas (cuenta, codigo, tipo, recibeSaldo, saldoActual) VALUES (:cuenta, :codigo, :tipo, :recibeSaldo, :saldoActual)");
     $stmt->bindParam(':cuenta', $_POST['cuenta']);
     $stmt->bindParam(':codigo', $_POST['codigo']);
     $stmt->bindParam(':tipo', $_POST['tipo']);
     $stmt->bindParam(':recibeSaldo', $_POST['recibeSaldo']);
     $stmt->bindParam(':saldoActual', $_POST['saldoActual']);
-    
-    if ($stmt->execute()) {
+    $stmt->execute();
+
+    /*if ($stmt->execute()) {
       $message = 'Cuenta agregada correctamente';
     } else {
       $message = 'Perdon, hubo un error al agregar la cuenta';
-    }
-}
+    }*/
+
 
 ?>
 
@@ -38,14 +38,20 @@ if (!empty($_POST['cuenta']) && !empty($_POST['codigo']) && !empty($_POST['tipo'
 <?php endif; ?>
 
         <form action="agregarCuenta.php" method="POST">
-            <label>Nombre de la Cuenta:</label><input name="cuenta" type="text">
-            <label>Codigo:</label><input name="codigo" type="number" min='0'>
-            <input name="tipo" type="text">
-            <input name="recibeSaldo" type="number" min='0' max='1'>
-            <input name="saldoActual" type="number" min='0'>
+            <label>Nombre de la Cuenta:</label>
+                <input name="cuenta" type="text">
+            <label>Codigo:</label>
+                <input name="codigo" type="number" min='0'>
+            <label>Tipo de Cuenta:</label>
+                <input name="tipo" type="text">
+            <label>Recibe Saldo:</label>
+                <input name="recibeSaldo" type="number" min='0' max='1'>
+            <label>Saldo Actual:</label>
+                <input name="saldoActual" type="number" min='0'>
             <input type="submit" value="Agregar Cuenta">
         </form>
 
+        <form></form>
         <form>
             <input type="buttom" value="Atrás" OnClick="location.href='plandecuenta.php'">
         </form>
