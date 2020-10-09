@@ -39,7 +39,7 @@ if (!empty($_POST['cuenta']) && !empty($_POST['codigo']) && !empty($_POST['tipo'
 
         <form action="agregarCuenta.php" method="POST">
             <label>Nombre de la Cuenta:</label><input name="cuenta" type="text">
-            <input name="codigo" type="number" min='0'>
+            <label>Codigo:</label><input name="codigo" type="number" min='0'>
             <input name="tipo" type="text">
             <input name="recibeSaldo" type="number" min='0' max='1'>
             <input name="saldoActual" type="number" min='0'>
