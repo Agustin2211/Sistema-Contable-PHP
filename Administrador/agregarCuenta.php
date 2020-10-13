@@ -75,7 +75,7 @@ $message = '';
     </div>
 
         <form>
-            <input type="buttom" value="Atrás" OnClick="location.href='plandecuenta.php'">
+            <input type="buttom" value="Atras" onclick="location.href='plandecuenta.php'">
         </form>
 
     </body>
