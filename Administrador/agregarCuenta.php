@@ -12,7 +12,10 @@ $message = '';
     $stmt->bindParam(':recibeSaldo', $_POST['recibeSaldo']);
     $stmt->bindParam(':saldoActual', $_POST['saldoActual']);
     $stmt->execute();
-
+    /*echo'<script type="text/javascript">
+    alert("Cuenta Guardada Correctamente");
+    </script>';
+*/
     /*if ($stmt->execute()) {
       $message = 'Cuenta agregada correctamente';
     } else {
@@ -37,21 +40,40 @@ $message = '';
     <p> <?= $message ?></p>
 <?php endif; ?>
 
-        <form action="agregarCuenta.php" method="POST">
-            <label>Nombre de la Cuenta:</label>
-                <input name="cuenta" type="text">
-            <label>Codigo:</label>
+    <div class="container">
+        <form action="agregarCuenta.php" class="form-inline" role="form" method="POST">
+            
+            <div class="form-group">
+                <label for="cuenta">Nombre de la Cuenta:</label>
+                <input name="cuenta" type="text" id="cuenta">
+            </div>
+
+            <div class="form-group">
+                <label>Codigo:</label>
                 <input name="codigo" type="number" min='0'>
-            <label>Tipo de Cuenta:</label>
+            </div>
+
+            <div class="form-group">
+                <label>Tipo de Cuenta:</label>
                 <input name="tipo" type="text">
-            <label>Recibe Saldo:</label>
+            </div>
+
+            <div class="form-group">
+                <label>Recibe Saldo:</label>
                 <input name="recibeSaldo" type="number" min='0' max='1'>
-            <label>Saldo Actual:</label>
+            </div>
+            
+            <div class="form-group">
+                <label>Saldo Actual:</label>
                 <input name="saldoActual" type="number" min='0'>
+            </div>
+
             <input type="submit" value="Agregar Cuenta">
+        
         </form>
 
-        <form></form>
+    </div>
+
         <form>
             <input type="buttom" value="Atrás" OnClick="location.href='plandecuenta.php'">
         </form>

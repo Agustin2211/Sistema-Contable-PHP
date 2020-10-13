@@ -38,7 +38,7 @@
 		echo "<td>$arreglo[1]</td>";
         echo "<td>$arreglo[2]</td>";
         echo "<td>$arreglo[3]</td>";
-        echo "<td>$arreglo[4]</td>";
+        echo "<td>$arreglo[5]</td>";
         echo "</tr>";
     }
 

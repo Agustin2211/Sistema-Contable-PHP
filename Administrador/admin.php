@@ -18,7 +18,7 @@
 <body>
     <h1>Administrador</h1>
     <form>
-        <input type="buttom" value="Ingresar Asiento" OnClick = "location.href='asientoContable.php'">
+        <input type="buttom" value="Ingresar Asiento" OnClick = "location.href='nuevoAsiento.php'">
     </form>
     
     <form>
