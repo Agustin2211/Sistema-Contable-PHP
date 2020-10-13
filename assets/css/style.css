@@ -77,10 +77,14 @@ table{
 	border-collapse: collapse;
 }
 
-th, td{
+td{
+    background-color: #023FFF;
 	border: solid black;
 	text-align: center;
 }
 
+tr:hover{
+    background-color: #0284FF;
+}
 
 
