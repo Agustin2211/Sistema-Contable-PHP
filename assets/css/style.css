@@ -15,17 +15,16 @@ body{
 input[type="text"], input[type="password"]{
     outline: none;
     padding: 20px;
-    display: block;
     width: 300px;
     border-radius: 3px;
     border: 1px solid #023FFF;
     margin: 20px auto;
 }
 
+
 input[type="number"]{
     outline: none;
     padding: 20px;
-    display: block;
     width: 300px;
     border-radius: 3px;
     border: 1px solid #023FFF;
@@ -72,20 +71,7 @@ input[type="buttom"]:hover{
     box-shadow: inset;
 }
 
-table{
-	background-color: #ffffff;
-	width: 100%;
-	border-collapse: collapse;
-}
 
-td{
-    background-color: #023FFF;
-	border: solid black;
-	text-align: center;
-}
 
-tr:hover{
-    background-color: #0284FF;
-}
 
 

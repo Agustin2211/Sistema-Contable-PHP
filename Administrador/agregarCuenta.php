@@ -32,6 +32,7 @@ $message = '';
         <title>Agregar Cuenta</title>
         <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="/php-login/assets/css/style.css">
+        <h1>Agregar Cuenta</h1>
     </head>
 
     <body>
@@ -43,30 +44,25 @@ $message = '';
     <div class="container">
         <form action="agregarCuenta.php" class="form-inline" role="form" method="POST">
             
-            <div class="form-group">
-                <label for="cuenta">Nombre de la Cuenta:</label>
-                <input name="cuenta" type="text" id="cuenta">
-            </div>
+            <p>
+                Nombre de la Cuenta: <input name="cuenta" type="text" id="cuenta">
+            </p>
 
-            <div class="form-group">
-                <label>Codigo:</label>
-                <input name="codigo" type="number" min='0'>
-            </div>
+            <p>
+                Codigo: <input name="codigo" type="number" min='0'>
+            </p>
 
-            <div class="form-group">
-                <label>Tipo de Cuenta:</label>
-                <input name="tipo" type="text">
-            </div>
+            <p>
+                Tipo de Cuenta: <input name="tipo" type="text">
+            </p>
 
-            <div class="form-group">
-                <label>Recibe Saldo:</label>
-                <input name="recibeSaldo" type="number" min='0' max='1'>
-            </div>
+            <p>
+                Recibe Saldo: <input name="recibeSaldo" type="number" min='0' max='1'>
+            </p>
             
-            <div class="form-group">
-                <label>Saldo Actual:</label>
-                <input name="saldoActual" type="number" min='0'>
-            </div>
+            <p>
+               Saldo Actual: <input name="saldoActual" type="number" min='0'>
+            </p>
 
             <input type="submit" value="Agregar Cuenta">
         
@@ -79,5 +75,6 @@ $message = '';
         </form>
 
     </body>
+
 
 </html>

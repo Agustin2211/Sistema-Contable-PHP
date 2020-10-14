@@ -7,6 +7,7 @@
     <title>Plan de Cuenta</title>
     <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/php-login/assets/css/style.css">
+    <h1>Plan de Cuentas </h1>
 </head>
 <body>
 

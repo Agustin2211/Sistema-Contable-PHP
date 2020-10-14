@@ -13,7 +13,7 @@
        
         table{
 	        background-color: white;
-	        width: 80%;
+	        width: 90%;
             border-collapse: collapse;
             margin: auto;
         }
