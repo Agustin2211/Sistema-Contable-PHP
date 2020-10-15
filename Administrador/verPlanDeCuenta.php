@@ -49,7 +49,8 @@
 			<th width="30%">Codigo</th>
 			<th width="30%">Tipo</th>
             <th width="30%">Saldo Actual</th>
-            <th width="30%">Eliminar Cuenta</th>
+            <th width="30%">Visibilidad</th>
+            <th width="30%">Cambiar Visibilidad</th>
 		</tr>
 	
 	<?php 
@@ -63,8 +64,9 @@
             <td><?php echo $row->codigo;?></td>
             <td><?php echo $row->tipo;?></td>
             <td><?php echo $row->saldoActual;?></td>
+            <td><?php echo $row->recibeSaldo;?></td>
 			<td>
-			<a href="borrarCuenta.php?id=<?php echo $row->id;?>"><img src='/php-login/images/eliminar.png' class='img-rounded'/></a>
+			<a href="editarCuenta.php?id=<?php echo $row->id;?>"><img src='/php-login/images/actualizar.gif' class='img-rounded'/></a>
         	</td>
 		</tr>
 	<?php } ?>

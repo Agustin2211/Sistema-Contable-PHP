@@ -10,61 +10,71 @@
     <h1>Plan de Cuentas</h1>
     
     <style>
-       
-        table{
-	        background-color: white;
-	        width: 90%;
-            border-collapse: collapse;
-            margin: auto;
-        }
-        
-        td{
-            background-color: white;
-	        border: solid black;
-            text-align: center;
-            height: auto;
-        }
-        
-    </style>
+
+	    table{
+        background-color: white;
+        border: solid black;
+        width: 90%;
+	    border-collapse: collapse;
+	    text-align: center;
+	    margin: auto;
+	    height: auto;
+    }
+    td{
+        background-color: white;
+        border: solid black;
+        height: auto;
+    }
+
+    th{
+        background-color: white;
+        border: solid black;
+        text-align: center;
+        height: auto;
+    }
+
+</style>
 
 </head>
 
 <body>
 
-
 <?php
+		include("funciones.php");
+	?>
 
-    $message = ' ';
+	<table>
+		<tr>
+			<th width="30%">Cuenta</th>
+			<th width="30%">Codigo</th>
+			<th width="30%">Tipo</th>
+            <th width="30%">Saldo Actual</th>
 
-    require("database.php");
-    $sql=("SELECT * FROM cuentas");
-    $mysqli=new MySQLI('localhost','root','','php_login_database');
+		</tr>
+	
+	<?php 
+		$sql = "select * from cuentas order by codigo";
+		$result = db_query($sql);
+		while($row = mysqli_fetch_object($result)){
+            if($row->recibeSaldo=='1'){
+	?>
+		<tr>
+			<td><?php echo $row->cuenta;?></td>
+            <td><?php echo $row->codigo;?></td>
+            <td><?php echo $row->tipo;?></td>
+            <td><?php echo $row->saldoActual;?></td>
+		</tr>
+	<?php }} ?>
 
-    $query=mysqli_query($mysqli,$sql);
-
-    echo "<table class='table'>";
-        echo "<tr class='warning'>";
-          echo "<td>Id</td>";
-          echo "<td>Nombre de la Cuenta</td>";
-          echo "<td>Codigo</td>";
-          echo "<td>Tipo</td>";
-            echo "<td>Saldo Actual</td>";
-      echo "</tr>";
-
-    while($arreglo=mysqli_fetch_array($query)){
-        echo "<tr class='success'>";
-        echo "<td>$arreglo[0]</td>";
-        echo "<td>$arreglo[1]</td>";
-        echo "<td>$arreglo[2]</td>";
-        echo "<td>$arreglo[3]</td>";
-        echo "<td>$arreglo[5]</td>";
-        echo "</tr>";
-    } 
-    echo "</table>";
-?>
+</table>
+    
+    </form action="" metod="POST">
+        <input type="buttom" value="Buscar Cuenta" onclick="location.href='buscarCuenta.php'">
+    </form>
 
     <form>
-        <input type="buttom" value="Atras" OnClick = "location.href='colab.php'">
+     <input type="buttom" value="Atras" OnClick = "location.href='colab.php'">
     </form>
+
 </body>
 </html>

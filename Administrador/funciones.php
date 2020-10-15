@@ -15,7 +15,7 @@ function delete($tblname,$field_id,$id){
 
 function edit($tblname,$field_id,$id){
 
-	$sql = "select * from users where $id=id";
+	$sql = "select * from $tblname u where $id=id";
 	$result = db_query($sql);
 	$row = mysqli_fetch_object($result);
 
@@ -27,6 +27,25 @@ function edit($tblname,$field_id,$id){
 	} else{
 
 		$sql = "UPDATE `$tblname` SET `rol_id` = '1' WHERE $field_id = $id";
+		return db_query($sql);
+
+	}
+
+}
+
+function visibilidadCuenta($tblname, $field_id, $id){
+	$sql = "select * from $tblname u where $id=id";
+	$result = db_query($sql);
+	$row = mysqli_fetch_object($result);
+
+	if($row->recibeSaldo == '1'){	
+
+		$sql = "UPDATE `$tblname` SET `recibeSaldo` = '0' WHERE $field_id = $id";
+		return db_query($sql);
+
+	} else{
+
+		$sql = "UPDATE `$tblname` SET `recibeSaldo` = '1' WHERE $field_id = $id";
 		return db_query($sql);
 
 	}

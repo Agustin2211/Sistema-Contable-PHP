@@ -14,11 +14,17 @@
     <form>
         <input type="buttom" value="Agregar Cuenta" OnClick = "location.href='agregarCuenta.php'">
     </form>
-    
+
+    <form>
+        <input type="buttom" value="Buscar Cuenta" onclick = "location.href='buscarCuenta.php'">
+    </form>
+
     <form>
         <input type="buttom" value="Ver Plan de Cuenta" onclick = "location.href='verPlanDeCuenta.php'">
     </form>
     
+
+
     <form>
         <input type="buttom" value="Atras" onclick="location.href='admin.php'">
     </form>
