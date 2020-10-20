@@ -10,8 +10,69 @@
     <h1>Asientos</h1>
 </head>
 
+    
+<style>
+
+    table{
+        background-color: white;
+        border: solid black;
+        width: 90%;
+        border-collapse: collapse;
+        text-align: center;
+        margin: auto;
+        height: auto;
+    }
+
+    td{
+        background-color: white;
+        border: solid black;
+        height: auto;
+    }
+
+    th{
+        background-color: white;
+        border: solid black;
+        text-align: center;
+        height: auto;
+    }
+
+</style>
+
+</head>
+
 <body>
 
+    <?php
+        include("funciones.php");
+    ?>
+
+    <table>
+        <tr>
+        <th width="30%">Fecha</th>
+        <th width="30%">Numero de Asiento</th>
+        <th width="30%">Descripcion</th>
+        <th width="30%"></th>
+    </tr>
+
+    <?php 
+        $sql = "select * from cuentas order by codigo";
+        $result = db_query($sql);
+        while($row = mysqli_fetch_object($result)){
+    ?>
+
+    <tr>
+        <td><?php echo $row->cuenta;?></td>
+        <td><?php echo $row->codigo;?></td>
+        <td><?php echo $row->tipo;?></td>
+        <td>
+            <a href="editarCuenta.php?id=<?php echo $row->id;?>">Ver</a>
+        </td>
+    </tr>
+    <?php } ?>
+
+</table>
+
+    <p>
     <form>
         <input type="buttom" value="Registrar Nuevo Asiento" onclick="location.href = 'nuevoAsiento.php'">
     </form>
@@ -19,7 +80,7 @@
 	<form>
 		<input type="buttom" value ="Atras" onclick="location.href = 'admin.php'">
 	</form>
-
+    </p>
 </body>
 
 </html>

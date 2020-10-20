@@ -5,5 +5,4 @@
     delete('users','id',$id);
     header("administrarRoles.php"); 
     
-
 ?>

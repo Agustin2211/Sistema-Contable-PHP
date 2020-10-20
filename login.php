@@ -49,8 +49,8 @@
     <h1>Ingresar</h1>
 
     <form action="login.php" method="POST">
-      <input name="email" type="text" placeholder="Ingrese su Usuario">
-      <input name="password" type="password" placeholder="Ingrese su Contraseña">
+      <input name="email" type="text" placeholder="Ingrese su Usuario" required>
+      <input name="password" type="password" placeholder="Ingrese su Contraseña" required>
       <input type="submit" value="Ingresar">
     </form>
 

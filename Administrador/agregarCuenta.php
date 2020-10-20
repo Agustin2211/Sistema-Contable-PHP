@@ -45,23 +45,29 @@ $message = '';
         <form action="agregarCuenta.php" class="form-inline" role="form" method="POST">
             
             <p>
-                Nombre de la Cuenta: <input name="cuenta" type="text" id="cuenta">
+                Nombre de la Cuenta: <input name="cuenta" type="text" id="cuenta" required pattern="[a-z A-Z]{1,}" title="El nombre de la cuenta solamente debe contener letras.">
             </p>
 
             <p>
-                Codigo: <input name="codigo" type="number" min='0'>
+                Codigo: <input name="codigo" type="number" min='0' required>
             </p>
 
             <p>
-                Tipo de Cuenta: <input name="tipo" type="text">
+                Tipo de Cuenta: <select name="tipo" this.options[this.selectedIndex].innerHTML required>
+                    <option value='Ac'>Activo</option>
+                    <option value='Pa'>Pasivo</option>
+                    <option value='Pm'>Patrimonio Neto</option>
+                    <option value='R+'>Resultado Positivo</option>
+                    <option value='R-'>Resultado Negativo</option>
+                </select>
             </p>
 
             <p>
-                Recibe Saldo: <input name="recibeSaldo" type="number" min='0' max='1'>
+                Recibe Saldo: <input name="recibeSaldo" type="number" min='0' max='1' required pattern="(0|1)">
             </p>
             
             <p>
-               Saldo Actual: <input name="saldoActual" type="number" min='0'>
+               Saldo Actual: <input name="saldoActual" type="number" min='0' required>
             </p>
 
             <input type="submit" value="Agregar Cuenta">
@@ -76,5 +82,21 @@ $message = '';
 
     </body>
 
+    <style>
+        select{
+            padding: 10px;
+            color: black;
+            border-color: #0284FF;
+            background: white;
+            width: 200px;
+            margin: 20px auto;
+            margin-top: 10px;
+            cursor: pointer;
+            font-variant-caps: all-petite-caps;
+            font-size: 17px;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
 
 </html>
