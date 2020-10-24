@@ -5,5 +5,4 @@
     visibilidadCuenta('cuentas','id',$id);
     header("verPlanDeCuenta.php"); 
     
-
 ?>

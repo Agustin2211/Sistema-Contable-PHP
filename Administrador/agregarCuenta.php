@@ -5,12 +5,11 @@
 $message = '';
 
 /*if (!empty($_POST['cuenta']) && !empty($_POST['codigo']) && !empty($_POST['tipo']) && !empty($_POST['recibeSaldo']) && !empty($_POST['saldoActual'])) {*/
-    $stmt = $conn->prepare("INSERT INTO cuentas (cuenta, codigo, tipo, recibeSaldo, saldoActual) VALUES (:cuenta, :codigo, :tipo, :recibeSaldo, :saldoActual)");
+    $stmt = $conn->prepare("INSERT INTO cuentas (cuenta, codigo, tipo, recibeSaldo, saldoActual) VALUES (:cuenta, :codigo, :tipo, :recibeSaldo, 0)");
     $stmt->bindParam(':cuenta', $_POST['cuenta']);
     $stmt->bindParam(':codigo', $_POST['codigo']);
     $stmt->bindParam(':tipo', $_POST['tipo']);
     $stmt->bindParam(':recibeSaldo', $_POST['recibeSaldo']);
-    $stmt->bindParam(':saldoActual', $_POST['saldoActual']);
     $stmt->execute();
     /*echo'<script type="text/javascript">
     alert("Cuenta Guardada Correctamente");
@@ -45,15 +44,15 @@ $message = '';
         <form action="agregarCuenta.php" class="form-inline" role="form" method="POST">
             
             <p>
-                Nombre de la Cuenta: <input name="cuenta" type="text" id="cuenta" required pattern="[a-z A-Z]{1,}" title="El nombre de la cuenta solamente debe contener letras.">
+                <label>Nombre de la Cuenta: </label><input name="cuenta" type="text" id="cuenta" required pattern="[a-z A-Z]{1,}" title="El nombre de la cuenta solamente debe contener letras.">
             </p>
 
             <p>
-                Codigo: <input name="codigo" type="number" min='0' required>
+                <label>Codigo: </label><input name="codigo" type="number" min='0' required>
             </p>
 
             <p>
-                Tipo de Cuenta: <select name="tipo" this.options[this.selectedIndex].innerHTML required>
+                <label>Tipo de Cuenta: </label><select name="tipo" this.options[this.selectedIndex].innerHTML required>
                     <option value='Ac'>Activo</option>
                     <option value='Pa'>Pasivo</option>
                     <option value='Pm'>Patrimonio Neto</option>
@@ -63,11 +62,7 @@ $message = '';
             </p>
 
             <p>
-                Recibe Saldo: <input name="recibeSaldo" type="number" min='0' max='1' required pattern="(0|1)">
-            </p>
-            
-            <p>
-               Saldo Actual: <input name="saldoActual" type="number" min='0' required>
+                <label>Recibe Saldo: </label><input name="recibeSaldo" type="number" min='0' max='1' required pattern="(0|1)">
             </p>
 
             <input type="submit" value="Agregar Cuenta">
@@ -76,11 +71,15 @@ $message = '';
 
     </div>
 
+       
+
+    </body>
+
+    <footer>
         <form>
             <input type="buttom" value="Atras" onclick="location.href='plandecuenta.php'">
         </form>
-
-    </body>
+    </footer>
 
     <style>
         select{

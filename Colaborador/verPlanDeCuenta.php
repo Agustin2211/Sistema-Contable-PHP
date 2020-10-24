@@ -49,14 +49,13 @@
 			<th width="30%">Codigo</th>
 			<th width="30%">Tipo</th>
             <th width="30%">Saldo Actual</th>
-
 		</tr>
 	
 	<?php 
 		$sql = "select * from cuentas order by codigo";
 		$result = db_query($sql);
 		while($row = mysqli_fetch_object($result)){
-            if($row->recibeSaldo=='1'){
+            if($row->recibeSaldo == 1){
 	?>
 		<tr>
 			<td><?php echo $row->cuenta;?></td>

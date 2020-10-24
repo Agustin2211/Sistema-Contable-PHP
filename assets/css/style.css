@@ -7,18 +7,25 @@
 }
 
 body{
-    background-image: url("bg2.jpg");
+    background-image: url("fondo.jpg");
     background-size: cover;
     background-attachment: fixed;
 }
 
-input[type="text"], input[type="password"]{
-    outline: none;
-    padding: 20px;
-    width: 300px;
-    border-radius: 3px;
-    border: 1px solid #023FFF;
+input[type="text"], input[type="password"], input[type="datetime"], input[type="number"]{
+    padding: 10px;
+    color: black;
+    background: white;
+    border-color: #023FFF;
+    width: 200px;
     margin: 20px auto;
+    margin-top: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-variant-caps: all-petite-caps;
+    font-size: 17px;
+    font-weight: bold;
+    text-align: center;
 }
 
 
@@ -71,6 +78,44 @@ input[type="buttom"]:hover{
     box-shadow: inset;
 }
 
+select{
+    padding: 10px;
+    color: black;
+    background: white;
+    border-color: #023FFF;
+    width: 200px;
+    margin: 20px auto;
+    margin-top: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-variant-caps: all-petite-caps;
+    font-size: 17px;
+    font-weight: bold;
+    text-align: center;
+}
+
+table{
+    background-color: white;
+    width: 90%;
+    border: solid black;
+    border-collapse: collapse;
+    text-align: center;
+    margin: auto;
+    height: auto;
+}
+
+td{
+    background-color: white;
+    border: solid black;
+    height: auto;
+}
+
+th{
+    background-color: white;
+    border: solid black;
+    text-align: center;
+    height: auto;
+}
 
 
 

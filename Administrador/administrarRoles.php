@@ -10,67 +10,42 @@
 
 	<body>
 	
-	<?php
-		include("funciones.php");
-	?>
+		<?php
+			include("funciones.php");
+		?>
 
-	<table>
-		<tr>
-			<th width="30%">Email</th>
-			<th width="30%">Rol</th>
-			<th width="30%">Dar Privilegios</th>
-			<th width="30%">Eliminar Usuario</th>
-		</tr>
+		<table>
+			<tr>
+				<th width="30%">Email</th>
+				<th width="30%">Rol</th>
+				<th width="30%">Dar Privilegios</th>
+				<th width="30%">Eliminar Usuario</th>
+			</tr>
 	
-	<?php 
-		$sql = "select * from users";
-		$result = db_query($sql);
-		while($row = mysqli_fetch_object($result)){
-	?>
+		<?php 
+			$sql = "select * from users";
+			$result = db_query($sql);
+			while($row = mysqli_fetch_object($result)){
+		?>
 	
-		<tr>
-			<td><?php echo $row->email;?></td>
-			<td><?php echo $row->rol_id;?></td>
-			<td>
-			<a href="editarUsuario.php?id=<?php echo $row->id;?>"><img src='/php-login/images/actualizar.gif' class='img-rounded'/></a>
-        	</td>
-			<td>
-			<a href="borrarUsuario.php?id=<?php echo $row->id;?>"><img src='/php-login/images/eliminar.png' class='img-rounded'/></a>
-        	</td>
-		</tr>
-	<?php } ?>
+			<tr>
+				<td><?php echo $row->email;?></td>
+				<td><?php echo $row->rol_id;?></td>
+				<td>
+					<a href="editarUsuario.php?id=<?php echo $row->id;?>"><img src='/php-login/images/actualizar.gif' class='img-rounded'/></a>
+        		</td>
+				<td>
+					<a href="borrarUsuario.php?id=<?php echo $row->id;?>"><img src='/php-login/images/eliminar.png' class='img-rounded'/></a>
+        		</td>
+			</tr>
+		<?php } ?>
 
-</table>
+		</table>
 
 		<form>
 			<input type="buttom" value="Atras" OnClick = "location.href='admin.php'">
 		</form>
 	
 	</body>
-
-<style>
-	table{
-	background-color: white;
-	width: 90%;
-    border: solid black;
-	border-collapse: collapse;
-	text-align: center;
-	margin: auto;
-	height: auto;
-}
-td{
-    background-color: white;
-    border: solid black;
-
-    height: auto;
-}
-
-th{
-    background-color: white;
-    border: solid black;
-    text-align: center;
-    height: auto;
-}
-
-</style>
+	
 </html>

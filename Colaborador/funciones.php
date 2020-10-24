@@ -2,6 +2,7 @@
     function db_query($query) {
         $connection = mysqli_connect("localhost","root",'',"php_login_database");
         $result = mysqli_query($connection,$query);
+
         return $result;
 }
 
@@ -57,5 +58,6 @@ function select_id($tblname,$field_name,$field_id){
 	$GLOBALS['row'] = mysqli_fetch_object($db);
 
 	return $sql;
+
 }
 ?>

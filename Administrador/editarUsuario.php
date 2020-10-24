@@ -5,5 +5,4 @@
     edit('users','id',$id);
     header("administrarRoles.php"); 
     
-
 ?>
