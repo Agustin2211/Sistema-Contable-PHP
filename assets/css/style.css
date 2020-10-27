@@ -12,7 +12,7 @@ body{
     background-attachment: fixed;
 }
 
-input[type="text"], input[type="password"], input[type="datetime"], input[type="number"]{
+input[type="number"]{
     padding: 10px;
     color: black;
     background: white;
@@ -28,14 +28,32 @@ input[type="text"], input[type="password"], input[type="datetime"], input[type="
     text-align: center;
 }
 
-
-input[type="number"]{
-    outline: none;
-    padding: 20px;
-    width: 300px;
-    border-radius: 3px;
-    border: 1px solid #023FFF;
+input[type="datetime"]{
+    padding: 10px;
+    color: black;
+    background: white;
+    border-color: #023FFF;
+    width: 200px;
     margin: 20px auto;
+    margin-top: 10px;
+    border-radius: 5px;
+    font-variant-caps: all-petite-caps;
+    font-size: 17px;
+    font-weight: bold;
+    text-align: center;
+}
+
+input[type="text"], input[type="password"]{
+    padding: 10px;
+    color: black;
+    background: white;
+    border-color: #023FFF;
+    width: 200px;
+    margin: 20px auto;
+    margin-top: 10px;
+    border-radius: 5px;
+    font-size: 17px;
+    font-weight: bold;
 }
 
 input[type="submit"]{
@@ -116,9 +134,4 @@ th{
     text-align: center;
     height: auto;
 }
-
-
-
-
-
 

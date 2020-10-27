@@ -1,3 +1,7 @@
+<?php
+
+?>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -5,7 +9,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Registrar Asiento</title>
-        <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="/php-login/assets/css/style.css">
         <h1>Registrar Asiento</h1>
     </head>
@@ -17,7 +21,7 @@
             
             <div>  
                 <p>
-                    Fecha: <input type="datetime" name="fecha" required readonly value="<?php echo date("d-m-Y H:i a");?>">
+                    Fecha: <input type="datetime" name="fecha" required readonly value="<?php echo date("d-m-Y");?>">
                 </p>
 
                 <p>
@@ -26,8 +30,8 @@
             </div> 
     
             <div>
-                Seleccionar Cuenta: 
                 <footer>
+                    Seleccionar Cuenta:
                     <select name="cuenta">
                         <option value="cuenta" required></option>
                             <?php include("funciones.php"); ?>
@@ -52,17 +56,25 @@
             </div>
 
             <div>
-                Monto: <input type="number" min='0' required><select id="dondeVa" required>
-                                                                <option value ="debe">Debe</option>
-                                                                <option value ="haber">Haber</option>
-                                                             </select>
+                Monto: <input type="number" min='0' required><label> </label><select id="dondeVa" required>
+                                                                                <option value ="debe">Debe</option>
+                                                                                <option value ="haber">Haber</option>
+                                                                             </select>
             </div>
     
+            <form>
+                <input type="submit" value="Cargar Asiento">
+            </form>
+
+        </form>
+        
         <p>
             <form>
                 <input type="buttom" value ="Atras" onclick="location.href = 'admin.php'">
             </form>
         </p>
+    
+
 
     </body>
 

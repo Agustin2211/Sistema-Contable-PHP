@@ -59,16 +59,4 @@ if (!empty($_POST['email']) && !empty($_POST['password']) && (!empty($_POST['con
 
 </body>
 
-<style>
-  input[type="text"], input[type="password"]{
-    outline: none;
-    display: block;
-    padding: 20px;
-    width: 300px;
-    border-radius: 3px;
-    border: 1px solid #023FFF;
-    margin: 20px auto;
-}
-</style>
-
 </html>

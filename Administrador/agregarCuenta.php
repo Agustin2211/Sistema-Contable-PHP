@@ -11,6 +11,11 @@ $message = '';
     $stmt->bindParam(':tipo', $_POST['tipo']);
     $stmt->bindParam(':recibeSaldo', $_POST['recibeSaldo']);
     $stmt->execute();
+    if ($stmt->execute()) {
+        $message = 'Cuenta agregada correctamente';
+      } else {
+        $message = 'Perdon, hubo un error al agregar la cuenta';
+      }
     /*echo'<script type="text/javascript">
     alert("Cuenta Guardada Correctamente");
     </script>';
@@ -29,7 +34,7 @@ $message = '';
     <head>
         <meta charset="utf-8">
         <title>Agregar Cuenta</title>
-        <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="/php-login/assets/css/style.css">
         <h1>Agregar Cuenta</h1>
     </head>
@@ -80,22 +85,5 @@ $message = '';
             <input type="buttom" value="Atras" onclick="location.href='plandecuenta.php'">
         </form>
     </footer>
-
-    <style>
-        select{
-            padding: 10px;
-            color: black;
-            border-color: #0284FF;
-            background: white;
-            width: 200px;
-            margin: 20px auto;
-            margin-top: 10px;
-            cursor: pointer;
-            font-variant-caps: all-petite-caps;
-            font-size: 17px;
-            font-weight: bold;
-            text-align: center;
-        }
-    </style>
 
 </html>
