@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-10-2020 a las 04:50:36
+-- Tiempo de generación: 27-10-2020 a las 19:29:38
 -- Versión del servidor: 10.4.14-MariaDB
 -- Versión de PHP: 7.4.10
 
@@ -123,8 +123,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `email`, `password`, `rol_id`) VALUES
-(1, 'agustin', '$2y$10$rTFh87RTc9lKrxqCHrs.T.vq3Sr6o8P520e4oKl3jEUAKJ57OOpJ6', 2),
-(2, 'administrador', '$2y$10$7Sv4C085k5pPBUi8DWh6rOqV4cVj2CbxvcDQr2V7tahW9BEu06Ihq', 1);
+(2, 'administrador', '$2y$10$7Sv4C085k5pPBUi8DWh6rOqV4cVj2CbxvcDQr2V7tahW9BEu06Ihq', 1),
+(14, 'AGUSTIN', '$2y$10$SnNlV/crm2GkC0givU77G.1VIYUXfZftME9oPGBkThoPc1b7hZZ6q', 2),
+(15, 'carlos', '$2y$10$ub9yV06JZZGhKEWOIjvHYOspa2AbXsUhlz53bTAfDhOkU6pF4qiLW', 2);
 
 --
 -- Índices para tablas volcadas
@@ -134,22 +135,19 @@ INSERT INTO `users` (`id`, `email`, `password`, `rol_id`) VALUES
 -- Indices de la tabla `asiento`
 --
 ALTER TABLE `asiento`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `idUsuario` (`idUsuario`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `cuentaasiento`
 --
 ALTER TABLE `cuentaasiento`
-  ADD UNIQUE KEY `idAsiento` (`idAsiento`,`idCuenta`),
-  ADD KEY `idCuenta` (`idCuenta`);
+  ADD UNIQUE KEY `idAsiento` (`idAsiento`,`idCuenta`);
 
 --
 -- Indices de la tabla `cuentas`
 --
 ALTER TABLE `cuentas`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id` (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `users`
@@ -177,24 +175,7 @@ ALTER TABLE `cuentas`
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
-
---
--- Restricciones para tablas volcadas
---
-
---
--- Filtros para la tabla `asiento`
---
-ALTER TABLE `asiento`
-  ADD CONSTRAINT `asiento_ibfk_1` FOREIGN KEY (`idUsuario`) REFERENCES `users` (`id`);
-
---
--- Filtros para la tabla `cuentaasiento`
---
-ALTER TABLE `cuentaasiento`
-  ADD CONSTRAINT `cuentaasiento_ibfk_1` FOREIGN KEY (`idCuenta`) REFERENCES `cuentas` (`id`),
-  ADD CONSTRAINT `cuentaasiento_ibfk_2` FOREIGN KEY (`idAsiento`) REFERENCES `asiento` (`id`);
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
