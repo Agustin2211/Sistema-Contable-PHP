@@ -5,35 +5,34 @@
     require('database.php');
 
     $message = '';
+    
+    date_default_timezone_set('America/Argentina/Buenos_Aires');
 
+    if(!empty($_POST)){
 
-    if (isset($_SESSION['user_id'])) {
-        $records = $conn->prepare('SELECT id, email, password FROM users WHERE id = :id');
-        $records->bindParam(':id', $_SESSION['user_id']);
-        $records->execute();
-        $results = $records->fetch(PDO::FETCH_ASSOC);
-        $usuario = $results['id'];
-        if (count($results) > 0) {
-            $user = $results;
+        $dondeva = $_POST['dondeVa'];
+
+        if("debe" == $dondeva){
+            $idcuenta = $_POST['idCuenta'];
+            $debe = $_POST['monto'];
+            $haber = 0;
+            $records = $conn->prepare("INSERT INTO tablapost (idCuenta, debe, haber) VALUES ($idcuenta, $debe, $haber)");
+            $records->bindParam('idCuenta', $idcuenta);
+            $records->bindParam('debe', $debe);
+            $records->bindParam('haber', $haber);
+            $records->execute();
+        }else{
+            $idcuenta = $_POST['idCuenta'];
+            $debe = 0;
+            $haber = $_POST['monto'];
+            $records = $conn->prepare("INSERT INTO tablapost (idCuenta, debe, haber) VALUES ($idcuenta, $debe, $haber)");
+            $records->bindParam('idCuenta', $idcuenta);
+            $records->bindParam('debe', $debe);
+            $records->bindParam('haber', $haber);
+            $records->execute();
         }
     }
-
-    date_default_timezone_set('America/Argentina/Buenos_Aires');
-    $fecha = date("Y-m-d");
-    $stmt = $conn->prepare("INSERT INTO asiento (fecha, idUsuario) VALUES ('$fecha', '$usuario')");
-    $stmt->bindParam(':fecha', $fecha);
-    $stmt->bindParam('idUsuario', $usuario);
-    $stmt->execute();
-
-    $stmt = $conn->prepare("INSERT INTO cuentaasiento (idAsiento, debe, haber, saldo, idCuenta) VALUES ('$ver->id', '')");
-    $stmt->bindParam(':idAsiento', $ver->id);
-    $stmt->bindParam(':debe', $usuario);
-    $stmt->bindParam(':haber', $usuario);
-    $stmt->bindParam(':saldo', $usuario);
-    $stmt->bindParam(':idCuenta', $usuario);
-    $stmt->execute();
 ?>
-
 
 <!DOCTYPE html>
 <html>
@@ -52,75 +51,79 @@
 <?php endif; ?>
 
     <body>
-        <form action="nuevoAsiento.php" class="form-inline" role="form" method="POST">
-
+        <div class="container">
                 <p>
-                    <label>Fecha: </label> <input type="datetime" name="fecha" id="fecha"required readonly value="<?php echo date("Y-m-d");?>">
+                    <label>Fecha: </label> <input type="datetime" name="fecha" required readonly value="<?php echo date("Y-m-d");?>">
                 </p>
 
-            <div>
-                <footer>
-                    Seleccionar Cuenta:
-                    <select name="cuenta">
-                        <option value="cuenta" required></option>
-                            <?php include("funciones.php"); ?>
-                            <?php 
-                                $sql="SELECT id, cuenta
-                                      from cuentas
-                                      where recibeSaldo = '1'";
-                                $result=db_query($sql);
-                            ?>
+                <form action="nuevoAsiento.php" class="form-inline" role="form" method="POST">
+                    <p>
+                    <label>Seleccionar Cuenta: </label> <select class="form-control input-sm" name="idCuenta" id="idCuenta" this.options[this.selectedIndex].innerHTML>
+                                                        <?php include("funciones.php"); ?>
+                                                        <?php 
+                                                            $sql="SELECT id, cuenta
+                                                            from cuentas
+                                                            where recibeSaldo = '1'";
+                                                        $result=db_query($sql);
+                                                        ?>
         
-                            <?php while($row=mysqli_fetch_object($result)){ ?>
-                                <option value="<?php echo $row->id ?>"><?php echo $row->cuenta; ?></option>
-                            <?php } ?>
-                    </select>
-                </footer>
+                                                        <?php while($row=mysqli_fetch_row($result)): ?>
+                                                            <option value= <?php echo $row[0] ?> > <?php echo $row[1];?> </option>
+                                                        <?php endwhile ?>
+                                                        </select>
+                </p>
     
-                <form>
+                <p>
                     <input type="buttom" value="Agregar Cuenta" OnClick = "location.href='agregarCuenta.php'">
                     <input type="buttom" value="Ver Plan de Cuenta" onclick = "location.href='verPlanDeCuenta.php'">
-                </form>
+                </p>
 
-            </div>
-
-            <div>
-               <label>Monto: </label><input type="number" name="monto" min='0' required><label> </label><select id="dondeVa" required>
-                                                                                                            <option value ="debe">Debe</option>
-                                                                                                            <option value ="haber">Haber</option>
-                                                                                                        </select>
-            </div>
+            <p>
+               <label>Monto: </label><input step="any" type="number" step="0.01" name="monto" id="monto" min='0' required><label> </label><select name="dondeVa" required>
+                                                                                                                                            <option value ="debe">Debe</option>
+                                                                                                                                            <option value ="haber">Haber</option>
+                                                                                                                                        </select>
+            </p>
     
-            <form>
+            <p>
                 <input type="submit" value="Cargar Asiento">
-            </form>
-
-            <table class="table table-hover table-condensed table-bordered" style="text-align: center;">
+            </p>
+        </form>
+        </div>
+        
+        <table class="table table-hover table-condensed table-bordered" style="text-align: center;">
 	            <caption><label>Asientos Cargados</label></caption>
 	            <tr>
 		            <td>Id</td>
-		            <td>Fecha</td>
-		            <td>IdUsuario</td>
+		            <td>Cuenta</td>
+                    <td>Debe</td>
+                    <td>Haber</td>
+                    <td>Eliminar</td>
                 </tr>
                 
             <?php 
-                $sql = "SELECT * FROM asiento";
+                $sql = "SELECT * FROM tablapost";
                 $result= db_query($sql);
                 while($ver=mysqli_fetch_object($result)): 
             ?>
 
 	            <tr>
 		            <td><?php echo $ver->id; ?></td>
-		            <td><?php echo $ver->fecha; ?></td>
-		            <td><?php echo $ver->idUsuario; ?></td>
+		            <td><?php echo $ver->idCuenta; ?></td>
+                    <td><?php echo $ver->debe; ?></td>
+                    <td><?php echo $ver->haber; ?></td>
+                    <td>
+                        <a href="borrarAsiento.php?id=<?php echo $ver->id; clearstatcache(); ?>"><img src='/php-login/images/eliminar.png' class='img-rounded'/></a>
+        	        </td>
+		    </tr>
 	            </tr>
             <?php endwhile; ?>
             </table>
-        </form>
-        
+
+
         <p>
             <form>
-                <input type="buttom" value="Registrar Asientos" onclick="registrarAsientos()">
+                <input type="buttom" value="Registrar Asientos" <?php clearstatcache(); ?> onclick="location.href='registrarAsientos.php'">
             </form>
 
             <form>
@@ -129,11 +132,5 @@
         </p>
 
     </body>
-
-    <script>
-        function registrarAsientos(){
-            
-        }
-    </script>
 
 </html>
