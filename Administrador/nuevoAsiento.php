@@ -25,11 +25,6 @@
     $stmt->bindParam('idUsuario', $usuario);
     $stmt->execute();
 
-
-    $sql = "SELECT * FROM asiento";
-    $result= db_query($sql);
-    $ver=mysqli_fetch_object($result);
-
     $stmt = $conn->prepare("INSERT INTO cuentaasiento (idAsiento, debe, haber, saldo, idCuenta) VALUES ('$ver->id', '')");
     $stmt->bindParam(':idAsiento', $ver->id);
     $stmt->bindParam(':debe', $usuario);
