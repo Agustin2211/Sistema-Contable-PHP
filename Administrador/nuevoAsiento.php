@@ -18,7 +18,7 @@
         }
     }
 
-    if(!empty($_POST['monto'])){
+    if(!empty($_POST['monto'])){ //este if no funciona y no se como hacerlo andar
         date_default_timezone_set('America/Argentina/Buenos_Aires');
         $fecha = date("Y-m-d");
         $stmt = $conn->prepare("INSERT INTO asiento (fecha, idUsuario) VALUES ('$fecha', '$usuario')");
