@@ -18,12 +18,14 @@
         }
     }
 
-    $fecha = date("Y-m-d");
-    $stmt = $conn->prepare("INSERT INTO asiento (fecha, idUsuario) VALUES ('$fecha', '$usuario')");
-    $stmt->bindParam(':fecha', $fecha);
-    $stmt->bindParam('idUsuario', $usuario);
-    $stmt->execute();
-
+    if(!empty($_POST['monto'])){
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
+        $fecha = date("Y-m-d");
+        $stmt = $conn->prepare("INSERT INTO asiento (fecha, idUsuario) VALUES ('$fecha', '$usuario')");
+        $stmt->bindParam(':fecha', $fecha);
+        $stmt->bindParam('idUsuario', $usuario);
+        $stmt->execute();
+    }
 ?>
 
 <!DOCTYPE html>
@@ -44,9 +46,7 @@
 
     <body>
         <form action="nuevoAsiento.php" class="form-inline" role="form" method="POST">
-            
-        <?php date_default_timezone_set('America/Argentina/Buenos_Aires');?>
-            
+
                 <p>
                     <label>Fecha: </label> <input type="datetime" name="fecha" id="fecha"required readonly value="<?php echo date("Y-m-d");?>">
                 </p>
@@ -78,7 +78,7 @@
             </div>
 
             <div>
-                Monto: <input type="number" min='0' required><label> </label><select id="dondeVa" required>
+               <label>Monto: </label><input type="number" name="monto" min='0' required><label> </label><select id="dondeVa" required>
                                                                                 <option value ="debe">Debe</option>
                                                                                 <option value ="haber">Haber</option>
                                                                              </select>
@@ -88,68 +88,40 @@
                 <input type="submit" value="Cargar Asiento">
             </form>
 
-           
+            <table class="table table-hover table-condensed table-bordered" style="text-align: center;">
+	            <caption><label>Asientos Cargados</label></caption>
+	            <tr>
+		            <td>Id</td>
+		            <td>Fecha</td>
+		            <td>IdUsuario</td>
+                </tr>
+                
+            <?php 
+                $sql = "SELECT * FROM asiento";
+                $result= db_query($sql);
+                while($ver=mysqli_fetch_object($result)): 
+            ?>
 
-            </form>
-
-            <input type="buttom" value="Registrar Asientos" onclick="registrarAsientos()">
+	            <tr>
+		            <td><?php echo $ver->id; ?></td>
+		            <td><?php echo $ver->fecha; ?></td>
+		            <td><?php echo $ver->idUsuario; ?></td>
+	            </tr>
+            <?php endwhile; ?>
+            </table>
+        </form>
         
         <p>
+            <form>
+                <input type="buttom" value="Registrar Asientos" onclick="registrarAsientos()">
+            </form>
+
             <form>
                 <input type="buttom" value ="Atras" onclick="location.href = 'admin.php'">
             </form>
         </p>
 
     </body>
-
-    <table class="table table-hover table-condensed table-bordered" style="text-align: center;">
-	<caption><label>Articulos</label></caption>
-	<tr>
-		<td>Id</td>
-		<td>Fecha</td>
-		<td>IdUsuario</td>
-
-	</tr>
-
-    <?php 
-        $server = 'localhost';
-        $username = 'root';
-        $password = '';
-        $database = 'php_login_database';
-        $conn = mysqli_connect($server, $username, $password, $database);
-        $records = $conn->prepare('SELECT * FROM asiento');
-        mysqli_query($conn, $records);
-        $result = $records->fetch(PDO::FETCH_ASSOC);
-        while($ver=mysqli_fetch_row($result)): ?>
-
-	<tr>
-		<td><?php echo $ver[0]; ?></td>
-		<td><?php echo $ver[1]; ?></td>
-		<td><?php echo $ver[2]; ?></td>
-
-		<td>
-			<?php 
-			$imgVer=explode("/", $ver[4]) ; 
-			$imgruta=$imgVer[1]."/".$imgVer[2]."/".$imgVer[3];
-			?>
-			<img width="80" height="80" src="<?php echo $imgruta ?>">
-		</td>
-		<td><?php echo $ver[5]; ?></td>
-		<td>
-			<span  data-toggle="modal" data-target="#abremodalUpdateArticulo" class="btn btn-warning btn-xs" onclick="agregaDatosArticulo('<?php echo $ver[6] ?>')">
-				<span class="glyphicon glyphicon-pencil"></span>
-			</span>
-		</td>
-		<td>
-			    <span class="btn btn-danger btn-xs" onclick="eliminaArticulo('<?php echo $ver[6] ?>')">
-				    <span class="glyphicon glyphicon-remove"></span>
-			    </span>
-		    </td>
-	    </tr>
-    <?php endwhile; ?>
-    </table>
-
-
 
     <script>
         function registrarAsientos(){
