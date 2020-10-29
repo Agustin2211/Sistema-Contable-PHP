@@ -13,8 +13,6 @@ $message = '';
     $stmt->execute();
     if ($stmt->execute()) {
         $message = 'Cuenta agregada correctamente';
-      } else {
-        $message = 'Perdon, hubo un error al agregar la cuenta';
       }
     /*echo'<script type="text/javascript">
     alert("Cuenta Guardada Correctamente");

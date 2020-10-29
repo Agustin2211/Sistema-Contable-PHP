@@ -18,15 +18,27 @@
         }
     }
 
-    if(!empty($_POST['monto'])){ //este if no funciona y no se como hacerlo andar
-        date_default_timezone_set('America/Argentina/Buenos_Aires');
-        $fecha = date("Y-m-d");
-        $stmt = $conn->prepare("INSERT INTO asiento (fecha, idUsuario) VALUES ('$fecha', '$usuario')");
-        $stmt->bindParam(':fecha', $fecha);
-        $stmt->bindParam('idUsuario', $usuario);
-        $stmt->execute();
-    }
+    date_default_timezone_set('America/Argentina/Buenos_Aires');
+    $fecha = date("Y-m-d");
+    $stmt = $conn->prepare("INSERT INTO asiento (fecha, idUsuario) VALUES ('$fecha', '$usuario')");
+    $stmt->bindParam(':fecha', $fecha);
+    $stmt->bindParam('idUsuario', $usuario);
+    $stmt->execute();
+
+
+    $sql = "SELECT * FROM asiento";
+    $result= db_query($sql);
+    $ver=mysqli_fetch_object($result);
+
+    $stmt = $conn->prepare("INSERT INTO cuentaasiento (idAsiento, debe, haber, saldo, idCuenta) VALUES ('$ver->id', '')");
+    $stmt->bindParam(':idAsiento', $ver->id);
+    $stmt->bindParam(':debe', $usuario);
+    $stmt->bindParam(':haber', $usuario);
+    $stmt->bindParam(':saldo', $usuario);
+    $stmt->bindParam(':idCuenta', $usuario);
+    $stmt->execute();
 ?>
+
 
 <!DOCTYPE html>
 <html>
@@ -79,9 +91,9 @@
 
             <div>
                <label>Monto: </label><input type="number" name="monto" min='0' required><label> </label><select id="dondeVa" required>
-                                                                                <option value ="debe">Debe</option>
-                                                                                <option value ="haber">Haber</option>
-                                                                             </select>
+                                                                                                            <option value ="debe">Debe</option>
+                                                                                                            <option value ="haber">Haber</option>
+                                                                                                        </select>
             </div>
     
             <form>
