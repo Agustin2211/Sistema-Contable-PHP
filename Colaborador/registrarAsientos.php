@@ -72,8 +72,9 @@
         </form>
 
         <form>
-            <input type="buttom" value="Menu Principal" onclick="location.href='admin.php'">
+            <input type="buttom" value="Menu Principal" onclick="location.href='colab.php'">
         </form>
 
     </body>
+    
 </html>

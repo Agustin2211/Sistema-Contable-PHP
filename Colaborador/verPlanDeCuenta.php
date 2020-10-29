@@ -1,79 +1,49 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Ver Plan de Cuenta</title>
-    <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/php-login/assets/css/style.css">
-    <h1>Plan de Cuentas</h1>
-    
-    <style>
+    <html>
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta http-equiv="X-UA-Compatible" content="ie=edge">
+            <title>Ver Plan de Cuenta</title>
+            <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+            <link rel="stylesheet" href="/php-login/assets/css/style.css">
+            <h1>Plan de Cuentas</h1>
+        </head>
 
-	    table{
-        background-color: white;
-        border: solid black;
-        width: 90%;
-	    border-collapse: collapse;
-	    text-align: center;
-	    margin: auto;
-	    height: auto;
-    }
-    td{
-        background-color: white;
-        border: solid black;
-        height: auto;
-    }
+    <body>
+        <?php
+	        include("funciones.php");
+	    ?>
 
-    th{
-        background-color: white;
-        border: solid black;
-        text-align: center;
-        height: auto;
-    }
-
-</style>
-
-</head>
-
-<body>
-
-<?php
-		include("funciones.php");
-	?>
-
-	<table>
-		<tr>
-			<th width="30%">Cuenta</th>
-			<th width="30%">Codigo</th>
-			<th width="30%">Tipo</th>
-            <th width="30%">Saldo Actual</th>
-		</tr>
+	    <table>
+		    <tr>
+			    <th width="30%">Cuenta</th>
+			    <th width="30%">Codigo</th>
+			    <th width="30%">Tipo</th>
+		    </tr>
 	
-	<?php 
-		$sql = "select * from cuentas order by codigo";
-		$result = db_query($sql);
-		while($row = mysqli_fetch_object($result)){
-            if($row->recibeSaldo == 1){
-	?>
-		<tr>
-			<td><?php echo $row->cuenta;?></td>
-            <td><?php echo $row->codigo;?></td>
-            <td><?php echo $row->tipo;?></td>
-            <td><?php echo $row->saldoActual;?></td>
-		</tr>
-	<?php }} ?>
+	    <?php 
+		    $sql = "select * from cuentas where recibeSaldo = 1 order by codigo";
+		    $result = db_query($sql);
+		    while($row = mysqli_fetch_object($result)){
+        ?>
+	
+		    <tr>
+			    <td><?php echo $row->cuenta;?></td>
+                <td><?php echo $row->codigo;?></td>
+                <td><?php echo $row->tipo;?></td>
+		    </tr>
+	    <?php } ?>
 
-</table>
+        </table>
     
-    </form action="" metod="POST">
-        <input type="buttom" value="Buscar Cuenta" onclick="location.href='buscarCuenta.php'">
-    </form>
+        </form action="" metod="POST">
+            <input type="buttom" value="Buscar Cuenta" onclick="location.href='buscarCuenta.php'">
+        </form>
 
-    <form>
-     <input type="buttom" value="Atras" OnClick = "location.href='colab.php'">
-    </form>
+        <form>
+            <input type="buttom" value="Atras" OnClick = "location.href='plandecuenta.php'">
+        </form>
 
-</body>
+    </body>
 </html>

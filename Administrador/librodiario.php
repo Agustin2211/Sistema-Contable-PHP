@@ -18,23 +18,22 @@
 
         <table>
             <tr>
-                <th width="30%">Fecha</th>
-                <th width="30%">Numero de Asiento</th>
-                <th width="30%">Descripcion</th>
-                <th width="30%"></th>
+                <th width="30%">Cuenta</th>
+                <th width="30%">Debe</th>
+                <th width="30%">Haber</th>
             </tr>
 
             <?php 
-                $sql = "select * from cuentas order by codigo";
+                $sql = "select * from tablapost";
                 $result = db_query($sql);
                 while($row = mysqli_fetch_object($result)){
             ?>
 
             <tr>
-                <td><?php echo $row->cuenta;?></td>
-                <td><?php echo $row->codigo;?></td>
-                <td><?php echo $row->tipo;?></td>
-                <td><a href="editarCuenta.php?id=<?php echo $row->id;?>">Ver</a></td>
+                <td><?php echo $row->idCuenta;?></td>
+                <td><?php echo $row->debe;?></td>
+                <td><?php echo $row->haber;?></td>
+
             </tr>
             <?php } ?>
 

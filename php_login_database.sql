@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-10-2020 a las 19:29:38
+-- Tiempo de generación: 29-10-2020 a las 20:45:57
 -- Versión del servidor: 10.4.14-MariaDB
 -- Versión de PHP: 7.4.10
 
@@ -29,10 +29,16 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `asiento` (
   `id` int(11) NOT NULL,
-  `fecha` datetime NOT NULL,
-  `descripcion` varchar(250) NOT NULL,
+  `fecha` date NOT NULL,
   `idUsuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `asiento`
+--
+
+INSERT INTO `asiento` (`id`, `fecha`, `idUsuario`) VALUES
+(162, '2020-10-28', 2);
 
 -- --------------------------------------------------------
 
@@ -41,12 +47,21 @@ CREATE TABLE `asiento` (
 --
 
 CREATE TABLE `cuentaasiento` (
-  `idAsiento` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
+  `fecha` date NOT NULL,
   `debe` float NOT NULL,
   `haber` float NOT NULL,
-  `saldo` float NOT NULL,
+  `idUsuario` int(11) NOT NULL,
   `idCuenta` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `cuentaasiento`
+--
+
+INSERT INTO `cuentaasiento` (`id`, `fecha`, `debe`, `haber`, `idUsuario`, `idCuenta`) VALUES
+(6, '2020-10-29', 200, 200, 2, 2),
+(7, '2020-10-29', 200, 200, 15, 2);
 
 -- --------------------------------------------------------
 
@@ -108,6 +123,19 @@ INSERT INTO `cuentas` (`id`, `cuenta`, `codigo`, `tipo`, `recibeSaldo`, `saldoAc
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `tablapost`
+--
+
+CREATE TABLE `tablapost` (
+  `id` int(11) NOT NULL,
+  `idCuenta` int(11) NOT NULL,
+  `debe` float NOT NULL,
+  `haber` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `users`
 --
 
@@ -141,12 +169,18 @@ ALTER TABLE `asiento`
 -- Indices de la tabla `cuentaasiento`
 --
 ALTER TABLE `cuentaasiento`
-  ADD UNIQUE KEY `idAsiento` (`idAsiento`,`idCuenta`);
+  ADD PRIMARY KEY (`id`) USING BTREE;
 
 --
 -- Indices de la tabla `cuentas`
 --
 ALTER TABLE `cuentas`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `tablapost`
+--
+ALTER TABLE `tablapost`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -163,13 +197,25 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT de la tabla `asiento`
 --
 ALTER TABLE `asiento`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=184;
+
+--
+-- AUTO_INCREMENT de la tabla `cuentaasiento`
+--
+ALTER TABLE `cuentaasiento`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `cuentas`
 --
 ALTER TABLE `cuentas`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+
+--
+-- AUTO_INCREMENT de la tabla `tablapost`
+--
+ALTER TABLE `tablapost`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT de la tabla `users`
