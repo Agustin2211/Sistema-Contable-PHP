@@ -3,7 +3,6 @@
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="/php-login/assets/css/style.css">
 		<h2>Administración de Usuarios Registrados</h2>	
-		<h4>Tabla de Usuarios</h4>
 		<div class="well well-small">
 		<div class="row-fluid">
 	</head>
