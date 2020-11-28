@@ -4,16 +4,16 @@
 
 $message = '';
 
-/*if (!empty($_POST['cuenta']) && !empty($_POST['codigo']) && !empty($_POST['tipo']) && !empty($_POST['recibeSaldo']) && !empty($_POST['saldoActual'])) {*/
+if (!empty($_POST)){
     $stmt = $conn->prepare("INSERT INTO cuentas (cuenta, codigo, tipo, recibeSaldo, saldoActual) VALUES (:cuenta, :codigo, :tipo, :recibeSaldo, 0)");
     $stmt->bindParam(':cuenta', $_POST['cuenta']);
     $stmt->bindParam(':codigo', $_POST['codigo']);
     $stmt->bindParam(':tipo', $_POST['tipo']);
     $stmt->bindParam(':recibeSaldo', $_POST['recibeSaldo']);
-    $stmt->execute();
     if ($stmt->execute()) {
         $message = 'Cuenta agregada correctamente';
       }
+    }
     /*echo'<script type="text/javascript">
     alert("Cuenta Guardada Correctamente");
     </script>';
@@ -23,7 +23,6 @@ $message = '';
     } else {
       $message = 'Perdon, hubo un error al agregar la cuenta';
     }*/
-
 
 ?>
 

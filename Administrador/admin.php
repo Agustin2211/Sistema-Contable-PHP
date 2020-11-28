@@ -35,6 +35,10 @@
         </form>
 
         <form>
+            <input type="buttom" value="Empleados" onclick="location.href='empleados.php'">
+        </form>
+
+        <form>
             <input type="buttom" value="Administrar Roles" OnClick = "location.href='administrarRoles.php'">
         </form>
     

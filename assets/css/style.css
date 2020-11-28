@@ -96,7 +96,7 @@ input[type="buttom"]:hover{
     box-shadow: inset;
 }
 
-select{
+input[type="date"]{
     padding: 10px;
     color: black;
     background: white;
@@ -105,6 +105,18 @@ select{
     margin: 20px auto;
     margin-top: 10px;
     border-radius: 5px;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+input[type="select"]{
+    padding: 10px;
+    color: black;
+    background: #023FFF;
+    width: 200px;
+    margin: 20px auto;
+    margin-top: 10px;
+    border-radius: 10px;
     cursor: pointer;
     font-variant-caps: all-petite-caps;
     font-size: 17px;

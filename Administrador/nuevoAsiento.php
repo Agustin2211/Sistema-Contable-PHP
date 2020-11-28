@@ -4,32 +4,34 @@
 
     require('database.php');
 
+    include("funciones.php"); 
+
     $message = '';
     
     date_default_timezone_set('America/Argentina/Buenos_Aires');
 
     if(!empty($_POST)){
-
+        
         $dondeva = $_POST['dondeVa'];
 
         if("debe" == $dondeva){
-            $idcuenta = $_POST['idCuenta'];
+            $cuenta = $_POST['cuenta'];
             $debe = $_POST['monto'];
             $haber = 0;
-            $records = $conn->prepare("INSERT INTO tablapost (idCuenta, debe, haber) VALUES ($idcuenta, $debe, $haber)");
-            $records->bindParam('idCuenta', $idcuenta);
-            $records->bindParam('debe', $debe);
-            $records->bindParam('haber', $haber);
-            $records->execute();
+            $stmt = $conn->prepare("INSERT INTO tablapost (cuenta, debe, haber) VALUES ($cuenta, $debe, $haber)");
+            $stmt->bindParam('cuenta', $cuenta);
+            $stmt->bindParam('debe', $debe);
+            $stmt->bindParam('haber', $haber);
+            $stmt->execute();
         }else{
-            $idcuenta = $_POST['idCuenta'];
-            $debe = 0;
+            $cuenta = $_POST['cuenta'];
             $haber = $_POST['monto'];
-            $records = $conn->prepare("INSERT INTO tablapost (idCuenta, debe, haber) VALUES ($idcuenta, $debe, $haber)");
-            $records->bindParam('idCuenta', $idcuenta);
-            $records->bindParam('debe', $debe);
-            $records->bindParam('haber', $haber);
-            $records->execute();
+            $debe = 0;
+            $stmt = $conn->prepare("INSERT INTO tablapost (cuenta, debe, haber) VALUES ($cuenta, $debe, $haber)");
+            $stmt->bindParam('cuenta', $cuenta);
+            $stmt->bindParam('debe', $debe);
+            $stmt->bindParam('haber', $haber);
+            $stmt->execute();
         }
     }
 ?>
@@ -58,17 +60,16 @@
 
                 <form action="nuevoAsiento.php" class="form-inline" role="form" method="POST">
                     <p>
-                    <label>Seleccionar Cuenta: </label> <select class="form-control input-sm" name="idCuenta" id="idCuenta" this.options[this.selectedIndex].innerHTML>
-                                                        <?php include("funciones.php"); ?>
+                    <label>Seleccionar Cuenta: </label> <select name="cuenta" this.options[this.selectedIndex].innerHTML>
                                                         <?php 
                                                             $sql="SELECT id, cuenta
-                                                            from cuentas
-                                                            where recibeSaldo = '1'";
+                                                            FROM cuentas
+                                                            WHERE recibeSaldo = '1'";
                                                         $result=db_query($sql);
                                                         ?>
         
                                                         <?php while($row=mysqli_fetch_row($result)): ?>
-                                                            <option value= <?php echo $row[0] ?> > <?php echo $row[1];?> </option>
+                                                            <option value= "<?php $row[1]; ?>"> <?php echo $row[1];?> </option>
                                                         <?php endwhile ?>
                                                         </select>
                 </p>
@@ -109,7 +110,7 @@
 
 	            <tr>
 		            <td><?php echo $ver->id; ?></td>
-		            <td><?php echo $ver->idCuenta; ?></td>
+		            <td><?php echo $ver->cuenta; ?></td>
                     <td><?php echo $ver->debe; ?></td>
                     <td><?php echo $ver->haber; ?></td>
                     <td>

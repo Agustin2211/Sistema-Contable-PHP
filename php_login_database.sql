@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 29-10-2020 a las 20:45:57
+-- Tiempo de generación: 13-11-2020 a las 19:25:15
 -- Versión del servidor: 10.4.14-MariaDB
 -- Versión de PHP: 7.4.10
 
@@ -30,15 +30,10 @@ SET time_zone = "+00:00";
 CREATE TABLE `asiento` (
   `id` int(11) NOT NULL,
   `fecha` date NOT NULL,
-  `idUsuario` int(11) NOT NULL
+  `idCuentaAsiento` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Volcado de datos para la tabla `asiento`
---
 
-INSERT INTO `asiento` (`id`, `fecha`, `idUsuario`) VALUES
-(162, '2020-10-28', 2);
 
 -- --------------------------------------------------------
 
@@ -51,17 +46,8 @@ CREATE TABLE `cuentaasiento` (
   `fecha` date NOT NULL,
   `debe` float NOT NULL,
   `haber` float NOT NULL,
-  `idUsuario` int(11) NOT NULL,
   `idCuenta` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `cuentaasiento`
---
-
-INSERT INTO `cuentaasiento` (`id`, `fecha`, `debe`, `haber`, `idUsuario`, `idCuenta`) VALUES
-(6, '2020-10-29', 200, 200, 2, 2),
-(7, '2020-10-29', 200, 200, 15, 2);
 
 -- --------------------------------------------------------
 
@@ -133,6 +119,8 @@ CREATE TABLE `tablapost` (
   `haber` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+
+
 -- --------------------------------------------------------
 
 --
@@ -203,7 +191,7 @@ ALTER TABLE `asiento`
 -- AUTO_INCREMENT de la tabla `cuentaasiento`
 --
 ALTER TABLE `cuentaasiento`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `cuentas`
@@ -215,7 +203,7 @@ ALTER TABLE `cuentas`
 -- AUTO_INCREMENT de la tabla `tablapost`
 --
 ALTER TABLE `tablapost`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT de la tabla `users`
