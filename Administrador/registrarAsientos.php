@@ -51,7 +51,7 @@
 
         echo "ASIENTOS CARGADOS EXITOSAMENTE";
     }else{
-        echo "El DEBE Y EL HABER NO DAN LO MISMO";
+        echo "EL METODO DE LA PARTIDA DOBLE NO SE CUMPLE";
     }
 ?>
 

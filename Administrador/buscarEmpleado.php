@@ -14,7 +14,11 @@
 
     <form action="buscarEmpleado.php" method="POST">
         <p>
-            <label>Metodo de Busqueda: </label>
+            <label>Metodo de Busqueda: </label><select name="metodoBusqueda" this.options[this.selectedIndex].innerHTML required>
+                                                    <option value='nombre'>Nombre</option>
+                                                    <option value='apellido'>Apellido</option>
+                                                    <option value='dni'>D.N.I</option>
+                                                </select>
         </p>
 
         <p>
@@ -22,7 +26,7 @@
         </p>
 
         <p>
-            <input type="submit" name="search" id="search" value="Buscar">
+            <input type="submit" name="search" value="Buscar">
         </p>    
     </form>
 
@@ -34,11 +38,23 @@
         include("funciones.php");
 
         if (isset($_POST['search'])) {
-
-            $keywords = $_POST['keywords'];
-            $connection = mysqli_connect("localhost", "root", "", "php_login_database");
-            $sql = "select * from cuentas where cuenta LIKE '%$keywords%'";
-            $result = db_query($sql);
+            if($_POST['metodoBusqueda'] == "nombre"){
+                $keywords = $_POST['keywords'];
+                $connection = mysqli_connect("localhost", "root", "", "php_login_database");
+                $sql = "select * from empleado where nombre LIKE '%$keywords%'";
+                $result = db_query($sql);
+            }elseif($_POST['metodoBusqueda'] == "apellido"){
+                $keywords = $_POST['keywords'];
+                $connection = mysqli_connect("localhost", "root", "", "php_login_database");
+                $sql = "select * from empleado where apellido LIKE '%$keywords%'";
+                $result = db_query($sql);
+            }
+            elseif($_POST['metodoBusqueda'] == "dni"){
+                $keywords = $_POST['keywords'];
+                $connection = mysqli_connect("localhost", "root", "", "php_login_database");
+                $sql = "select * from empleado where dni LIKE '%$keywords%'";
+                $result = db_query($sql);
+            }
  
             //Si ha resultados
             if (!empty($result)) {
@@ -46,29 +62,26 @@
     ?>
         <table>
 		    <tr>
-			    <th width="30%">Cuenta</th>
-			    <th width="30%">Codigo</th>
-			    <th width="30%">Tipo</th>
-                <th width="30%">Recibe Saldo</th>
-                <th width="30%">Cambiar Visibilidad</th>
+                <th width="30%">Nombre</th>
+                <th width="30%">Apellido</th>
+                <th width="30%">D.N.I</th>
+                <th width="30%">Informacion Empleado</th>
+
 		    </tr>
 	
         <?php 
             while($row = mysqli_fetch_object($result)){
         ?>
             <tr>
-			    <td><?php echo $row->cuenta;?></td>
-                <td><?php echo $row->codigo;?></td>
-                <td><?php echo $row->tipo;?></td>
-                <td><?php echo $row->recibeSaldo;?></td>
-			    <td>
-                <a href="editarCuenta.php?id=<?php echo $row->id;?>"><img src='/php-login/images/actualizar.gif' class='img-rounded'/></a>
-        	    </td>
+                <td><?php echo $row->nombre;?></td>
+                <td><?php echo $row->apellido;?></td>
+			    <td><?php echo $row->dni;?></td>
+			    <td><a href="verEmpleado.php?id=<?php echo $row->id;?>">Ver</a></td>
             </tr>
  
         <?php }
             }else{
-            echo '<h2>No se ha encontrado la Cuenta.</h2>';
+            echo "No se ha encontrado al Empleado.";
         }
         }?>
     

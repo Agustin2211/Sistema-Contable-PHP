@@ -14,15 +14,6 @@ if (!empty($_POST)){
         $message = 'Cuenta agregada correctamente';
       }
     }
-    /*echo'<script type="text/javascript">
-    alert("Cuenta Guardada Correctamente");
-    </script>';
-*/
-    /*if ($stmt->execute()) {
-      $message = 'Cuenta agregada correctamente';
-    } else {
-      $message = 'Perdon, hubo un error al agregar la cuenta';
-    }*/
 
 ?>
 
@@ -72,8 +63,6 @@ if (!empty($_POST)){
         </form>
 
     </div>
-
-       
 
     </body>
 

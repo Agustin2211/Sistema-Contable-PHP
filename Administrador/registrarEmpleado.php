@@ -5,18 +5,31 @@
     $message = '';
 
     if (!empty($_POST)){
-        $stmt = $conn->prepare("INSERT INTO empleado (nombre, apellido, direccion, telefono, fechaDeNacimiento, dni, estadoCivil, cantidadHijos, CUIL) VALUES (:nombre, :apellido, :direccion, :telefono, :fechaDeNacimiento, :dni, :estadoCivil, :cantidadHijos, :CUIL)");
+        $stmt = $conn->prepare("INSERT INTO empleado (nombre, apellido, direccion, telefono, fechadenacimiento, dni, estadocivil, cantidadhijos, cuil) VALUES (:nombre, :apellido, :direccion, :telefono, :fechadenacimiento, :dni, :estadocivil, :cantidadhijos, :cuil)");
         $stmt->bindParam(':nombre', $_POST['nombre']);
         $stmt->bindParam(':apellido', $_POST['apellido']);
         $stmt->bindParam(':direccion', $_POST['direccion']);
         $stmt->bindParam(':telefono', $_POST['telefono']);
-        $stmt->bindParam(':fechaDeNacimiento', $_POST['fechaDeNacimiento']);
+        $stmt->bindParam(':fechadenacimiento', $_POST['fechadenacimiento']);
         $stmt->bindParam(':dni', $_POST['dni']);
-        $stmt->bindParam(':estadoCivil', $_POST['estadoCivil']);
-        $stmt->bindParam(':cantidadHijos', $_POST['cantidadHijos']);
-        $stmt->bindParam(':CUIL', $_POST['CUIL']);
+        $stmt->bindParam(':estadocivil', $_POST['estadocivil']);
+        $stmt->bindParam(':cantidadhijos', $_POST['cantidadhijos']);
+        $stmt->bindParam(':cuil', $_POST['cuil']);
         if ($stmt->execute()) {
+            print($_POST['cuil']);
             $message = 'Empleado agregado correctamente';
+        }else{
+            $message = 'Ups, algo a fallado';
+
+            print($_POST['nombre']);
+            print($_POST['apellido']);
+            print($_POST['direccion']);
+            print($_POST['telefono']);
+            print($_POST['fechadenacimiento']);
+            print($_POST['dni']);
+            print($_POST['estadocivil']);
+            print($_POST['cantidadhijos']);
+
         }
     }
 
@@ -32,42 +45,48 @@
         <title>Administrador</title>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="/php-login/assets/css/style.css">
+        <h1>Cargar Empleado</h1>
     </head>
+
+
+<?php if (!empty($message)) : ?>
+    <p> <?= $message ?></p>
+<?php endif; ?>
 
     <body>
         <div class="container">
             <form action="registrarEmpleado.php" class="form-inline" role="form" method="POST">
 
                 <p>
-                    <label>Nombre: </label><input name="nombre" type="text" id="nombre" required pattern="[a-z A-Z]{1,}" title="El nombre de la cuenta solamente debe contener letras.">
+                    <label>Nombre: </label><input name="nombre" type="text" required pattern="[a-z A-Z]{1,}" title="El nombre del empleado solamente debe contener letras.">
                 </p>
 
                 <p>
-                    <label>Apellido: </label><input name="apellido" type="text" id="apellido" required pattern="[a-z A-Z]{1,}" title="El nombre de la cuenta solamente debe contener letras.">
+                    <label>Apellido: </label><input name="apellido" type="text" required pattern="[a-z A-Z]{1,}" title="El apellido del empleado solamente debe contener letras.">
                 </p>
 
                 <p>
-                    <label>D.N.I: </label><input step="any" type="number" step="0.01" name="dni" id="dni" min='0' required>
+                    <label>D.N.I: </label><input step="any" type="number" step="0.01" name="dni" min='0' required>
                 </p>
 
                 <p>
-                    <label>C.U.I.L: </label><input step="any" type="number" step="0.01" name="cuil" id="cuil" min='0' required>
+                    <label>C.U.I.L: </label><input step="any" type="number" step="0.01" name="cuil" min='0' required>
                 </p>
 
                 <p>
-                    <label>Direccion: </label><input name="direccion" type="text" id="direccion" required pattern="[a-z A-Z]{1,}" title="El nombre de la cuenta solamente debe contener letras.">
+                    <label>Direccion: </label><input name="direccion" type="text" required>
                 </p>
 
                 <p>
-                    <label>Telefono: </label><input step="any" type="number" step="0.01" name="telefono" id="telefono" min='0' required>
+                    <label>Telefono: </label><input step="any" type="number" step="0.01" name="telefono" min='0' required>
                 </p>
 
                 <p>
-                    <label>Fecha de Nacimiento: </label><input step="any" type="date" name="fechaDeNacimiento" id="fechaDeNacimiento" required>
+                    <label>Fecha de Nacimiento: </label><input step="any" type="date" name="fechadenacimiento" required>
                 </p>
 
                 <p>
-                    <label>Estado Civil: </label><select name="estadoCivil" id="estadoCivil" this.options[this.selectedIndex].innerHTML required>
+                    <label>Estado Civil: </label><select name="estadocivil" this.options[this.selectedIndex].innerHTML required>
                                                     <option value='Soltero'>Soltero</option>
                                                     <option value='Casado'>Casado</option>
                                                     <option value='EnPareja'>En Pareja</option>
@@ -75,7 +94,11 @@
                 </p>
 
                 <p>
-                    <label>Cantidad de Hijos: </label><input step="any" type="number" step="0.01" name="cantidadHijos" id="cantidadHijos" min='0' required>
+                    <label>Cantidad de Hijos: </label><input step="any" type="number" step="0.01" name="cantidadhijos" min='0' required>
+                </p>
+
+                <p>
+                    <input type="Submit" value="Cargar Empleado">
                 </p>
 
             </form>

@@ -26,7 +26,7 @@
         }else{
             $cuenta = $_POST['cuenta'];
             $haber = $_POST['monto'];
-            $debe = 0;
+            $debe = 0;  
             $stmt = $conn->prepare("INSERT INTO tablapost (cuenta, debe, haber) VALUES ($cuenta, $debe, $haber)");
             $stmt->bindParam('cuenta', $cuenta);
             $stmt->bindParam('debe', $debe);
