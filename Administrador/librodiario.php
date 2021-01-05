@@ -18,21 +18,25 @@
 
         <table>
             <tr>
-                <th width="30%">Cuenta</th>
-                <th width="30%">Debe</th>
-                <th width="30%">Haber</th>
+                <th width="30%">Asiento</th>
+                <th width="30%">Fecha</th>
+                <th width="30%">Detalle</th>
+                <th width="30%">Ver</th>
             </tr>
 
             <?php 
-                $sql = "select * from tablapost";
+                $sql = "select * from asiento";
                 $result = db_query($sql);
                 while($row = mysqli_fetch_object($result)){
             ?>
 
             <tr>
-                <td><?php echo $row->idCuenta;?></td>
-                <td><?php echo $row->debe;?></td>
-                <td><?php echo $row->haber;?></td>
+                <td><?php echo $row->id;?></td>
+                <td><?php echo $row->fecha;?></td>
+                <td><?php echo $row->detalle;?></td>
+                <td>
+                    <a href="buscarAsiento?id=<?php echo $row->id; clearstatcache(); ?>">Ver</a>
+        	    </td>
 
             </tr>
             <?php } ?>

@@ -18,7 +18,7 @@
             $cuenta = $_POST['cuenta'];
             $debe = $_POST['monto'];
             $haber = 0;
-            $stmt = $conn->prepare("INSERT INTO tablapost (cuenta, debe, haber) VALUES ($cuenta, $debe, $haber)");
+            $stmt = $conn->prepare("INSERT INTO tablapost (cuenta, debe, haber) VALUES ('$cuenta', '$debe', '$haber')");
             $stmt->bindParam('cuenta', $cuenta);
             $stmt->bindParam('debe', $debe);
             $stmt->bindParam('haber', $haber);
@@ -27,7 +27,7 @@
             $cuenta = $_POST['cuenta'];
             $haber = $_POST['monto'];
             $debe = 0;  
-            $stmt = $conn->prepare("INSERT INTO tablapost (cuenta, debe, haber) VALUES ($cuenta, $debe, $haber)");
+            $stmt = $conn->prepare("INSERT INTO tablapost (cuenta, debe, haber) VALUES ('$cuenta', '$debe', '$haber')");
             $stmt->bindParam('cuenta', $cuenta);
             $stmt->bindParam('debe', $debe);
             $stmt->bindParam('haber', $haber);
@@ -54,46 +54,44 @@
 
     <body>
         <div class="container">
-                <p>
-                    <label>Fecha: </label> <input type="datetime" name="fecha" required readonly value="<?php echo date("Y-m-d");?>">
-                </p>
 
                 <form action="nuevoAsiento.php" class="form-inline" role="form" method="POST">
                     <p>
-                    <label>Seleccionar Cuenta: </label> <select name="cuenta" this.options[this.selectedIndex].innerHTML>
-                                                        <?php 
-                                                            $sql="SELECT id, cuenta
-                                                            FROM cuentas
-                                                            WHERE recibeSaldo = '1'";
-                                                        $result=db_query($sql);
-                                                        ?>
+                        <label>Seleccionar Cuenta: </label> <select name="cuenta">
+                                                                <?php 
+                                                                    $sql="SELECT id, cuenta, codigo
+                                                                          FROM cuentas
+                                                                          WHERE recibeSaldo = '1'";
+                                                                    $result=db_query($sql);
+                                                                ?>
         
-                                                        <?php while($row=mysqli_fetch_row($result)): ?>
-                                                            <option value= "<?php $row[1]; ?>"> <?php echo $row[1];?> </option>
-                                                        <?php endwhile ?>
-                                                        </select>
-                </p>
+                                                                <?php while($row=mysqli_fetch_row($result)): ?>
+                                                                    <option value= '<?php $row[0];?>'> <?php echo $row[1];?></option>
+                                                                <?php endwhile ?>
+                                                            </select>
+                    </p>
     
-                <p>
-                    <input type="buttom" value="Agregar Cuenta" OnClick = "location.href='agregarCuenta.php'">
-                    <input type="buttom" value="Ver Plan de Cuenta" onclick = "location.href='verPlanDeCuenta.php'">
-                </p>
+                    <p>
+                        <input type="buttom" value="Agregar Cuenta" OnClick = "location.href='agregarCuenta.php'">
+                        <input type="buttom" value="Ver Plan de Cuenta" onclick = "location.href='verPlanDeCuenta.php'">
+                    </p>
 
-            <p>
-               <label>Monto: </label><input step="any" type="number" step="0.01" name="monto" id="monto" min='0' required><label> </label><select name="dondeVa" required>
-                                                                                                                                            <option value ="debe">Debe</option>
-                                                                                                                                            <option value ="haber">Haber</option>
-                                                                                                                                        </select>
-            </p>
+                    <p>
+                        <label>Monto: </label><input step="any" type="number" step="0.01" name="monto" id="monto" min='0' required><label> </label><select name="dondeVa" required>
+                                                                                                                                                    <option value ="debe">Debe</option>
+                                                                                                                                                    <option value ="haber">Haber</option>
+                                                                                                                                                </select>
+                    </p>
     
-            <p>
-                <input type="submit" value="Cargar Asiento">
-            </p>
-        </form>
+                    <p>
+                        <input type="submit" value="Cargar Asiento">
+                    </p>
+                </form>
+
         </div>
         
         <table class="table table-hover table-condensed table-bordered" style="text-align: center;">
-	            <caption><label>Asientos Cargados</label></caption>
+	        <caption><label>Asientos Cargados</label></caption>
 	            <tr>
 		            <td>Id</td>
 		            <td>Cuenta</td>
@@ -102,11 +100,11 @@
                     <td>Eliminar</td>
                 </tr>
                 
-            <?php 
-                $sql = "SELECT * FROM tablapost";
-                $result= db_query($sql);
-                while($ver=mysqli_fetch_object($result)): 
-            ?>
+                <?php 
+                    $sql = "SELECT * FROM tablapost";
+                    $result= db_query($sql);
+                    while($ver=mysqli_fetch_object($result)): 
+                ?>
 
 	            <tr>
 		            <td><?php echo $ver->id; ?></td>
@@ -116,11 +114,9 @@
                     <td>
                         <a href="borrarAsiento.php?id=<?php echo $ver->id; clearstatcache(); ?>"><img src='/php-login/images/eliminar.png' class='img-rounded'/></a>
         	        </td>
-		    </tr>
-	            </tr>
-            <?php endwhile; ?>
-            </table>
-
+		        </tr>
+                <?php endwhile; ?>
+        </table>
 
         <p>
             <form>

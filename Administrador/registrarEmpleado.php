@@ -20,16 +20,6 @@
             $message = 'Empleado agregado correctamente';
         }else{
             $message = 'Ups, algo a fallado';
-
-            print($_POST['nombre']);
-            print($_POST['apellido']);
-            print($_POST['direccion']);
-            print($_POST['telefono']);
-            print($_POST['fechadenacimiento']);
-            print($_POST['dni']);
-            print($_POST['estadocivil']);
-            print($_POST['cantidadhijos']);
-
         }
     }
 
