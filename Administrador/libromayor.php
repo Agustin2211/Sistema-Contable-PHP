@@ -11,10 +11,41 @@
     </head>
 
     <body>
+        <?php
+	        include("funciones.php");
+	    ?>
 
-	    <form>
-		    <input type="buttom" value ="Atras" onclick="location.href = 'admin.php'">
-	    </form>
+	    <table>
+		    <tr>
+			    <th width="30%">Cuenta</th>
+			    <th width="30%">Codigo</th>
+			    <th width="30%">Ver</th>
+
+		    </tr>
+	
+	    <?php 
+		    $sql = "SELECT * 
+                    FROM cuentas
+                    WHERE recibeSaldo = '1'
+                    ORDER BY codigo";
+		    $result = db_query($sql);
+		    while($row = mysqli_fetch_object($result)){
+        ?>
+	
+		    <tr>
+			    <td><?php echo $row->cuenta;?></td>
+                <td><?php echo $row->codigo;?></td>
+			    <td>
+			    <a href="mostrarCuenta.php?cuenta=<?php echo $row->cuenta;?>">Ver</a>
+        	    </td>
+		    </tr>
+	    <?php } ?>
+
+        </table>
+
+        <form>
+        <input type="buttom" value="Atras" OnClick = "location.href='admin.php'">
+        </form>
 
     </body>
 

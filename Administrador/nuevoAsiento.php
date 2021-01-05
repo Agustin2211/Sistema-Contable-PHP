@@ -54,19 +54,19 @@
 
     <body>
         <div class="container">
-
                 <form action="nuevoAsiento.php" class="form-inline" role="form" method="POST">
                     <p>
-                        <label>Seleccionar Cuenta: </label> <select name="cuenta">
+                        <label>Seleccionar Cuenta: </label> <select class="form-control input-sm" name="cuenta" id="cuenta" this.options[this.selectedIndex].innerHTML>
                                                                 <?php 
-                                                                    $sql="SELECT id, cuenta, codigo
+
+                                                                    $sql="SELECT *
                                                                           FROM cuentas
                                                                           WHERE recibeSaldo = '1'";
                                                                     $result=db_query($sql);
                                                                 ?>
         
                                                                 <?php while($row=mysqli_fetch_row($result)): ?>
-                                                                    <option value= '<?php $row[0];?>'> <?php echo $row[1];?></option>
+                                                                    <option value= <?php echo $row[1] ?> > <?php echo $row[1];?> </option>
                                                                 <?php endwhile ?>
                                                             </select>
                     </p>
