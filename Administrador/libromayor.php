@@ -36,7 +36,7 @@
 			    <td><?php echo $row->cuenta;?></td>
                 <td><?php echo $row->codigo;?></td>
 			    <td>
-			    <a href="mostrarCuenta.php?cuenta=<?php echo $row->cuenta;?>">Ver</a>
+			    <a href="mostrarCuenta.php?cuenta=<?php echo $row->codigo;?>">Ver</a>
         	    </td>
 		    </tr>
 	    <?php } ?>
@@ -44,7 +44,7 @@
         </table>
 
         <form>
-        <input type="buttom" value="Atras" OnClick = "location.href='admin.php'">
+            <input type="buttom" value="Atras" OnClick = "location.href='admin.php'">
         </form>
 
     </body>

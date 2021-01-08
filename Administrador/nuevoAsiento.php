@@ -66,7 +66,7 @@
                                                                 ?>
         
                                                                 <?php while($row=mysqli_fetch_row($result)): ?>
-                                                                    <option value= <?php echo $row[1] ?> > <?php echo $row[1];?> </option>
+                                                                    <option value= <?php echo $row[2] ?> > <?php echo $row[1];?> </option>
                                                                 <?php endwhile ?>
                                                             </select>
                     </p>

@@ -29,14 +29,17 @@
                 <td>Haber</td>
             </tr>
                 
-            <?php 
-                $sql = "SELECT * FROM tablapost";
+            <?php
+                $id = $_GET['id'];
+                $sql = "SELECT *
+                        FROM cuentaasiento 
+                        WHERE idAsiento = '$id'";
                 $result= db_query($sql);
                 while($ver=mysqli_fetch_object($result)): 
             ?>
 
 	        <tr>
-		        <td><?php echo $ver->cuenta; ?></td>
+		        <td><?php echo $ver->idCuenta; ?></td>
                 <td><?php echo $ver->debe; ?></td>
                 <td><?php echo $ver->haber; ?></td>
 		    </tr>

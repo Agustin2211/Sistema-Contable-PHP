@@ -6,7 +6,6 @@
         <title>Buscar Cuenta</title>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="/php-login/assets/css/style.css">
-    
         <form action="buscarCuenta.php" method="POST">
             Buscar Cuenta: <input type="text" id="keywords" name="keywords" size="30" maxlength="30">
             <input type="submit" name="search" id="search" value="Buscar">
@@ -24,7 +23,7 @@
 
             $keywords = $_POST['keywords'];
             $connection = mysqli_connect("localhost", "root", "", "php_login_database");
-            $sql = "select * from cuentas where cuenta LIKE '%$keywords%'";
+            $sql = "select * from cuentas where cuenta = ";
             $result = db_query($sql);
  
             //Si ha resultados
