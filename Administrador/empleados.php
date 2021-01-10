@@ -16,7 +16,11 @@
         <form>
             <input type="buttom" value="Registrar Empleado" onclick="location.href='registrarEmpleado.php'">
         </form>
-    
+
+        <form>
+            <input type="buttom" value="Lista de Empleados" onclick="location.href='listaEmpleado.php'">
+        </form>
+
         <form>
             <input type="buttom" value="Buscar Empleado" onclick="location.href='buscarEmpleado.php'">
         </form>

@@ -8,97 +8,76 @@
 
     require('database.php');
 
-    $message = '';
-
     date_default_timezone_set('America/Argentina/Buenos_Aires');
 
     if(!empty($_POST)){
 
-        /*ASIENTO INTRODUCIDO EN LIBRO DIARIO*/
-        $fecha = date("Y-m-d");
-        $detalle = $_POST['detalle'];
-        $records = $conn->prepare("INSERT INTO asiento (fecha, detalle) VALUES ('$fecha', '$detalle')");
-        $records->bindParam('fecha', $fecha);
-        $records->bindParam('detalle', $detalle);
-        $records->execute();
-
         $saldo1 = 0;
         $saldo2 = 0;
-        $sql = "SELECT *
-                FROM tablapost";
+        $sql = "SELECT * FROM tablapost";
         $result= db_query($sql);
 
         /*REVISAR ESTE WHILE QUE NO ANDA COMO DEBERIA HACERLO*/
-
-        while($ver=mysqli_fetch_row($result)){ 
+        while($ver=mysqli_fetch_row($result)){
             $saldo1 = $saldo1 + ($ver[2]);
             $saldo2 = $saldo2 + ($ver[3]);
-            $saldo = $saldo1 - $saldo2;
-
-            echo($saldo);
-
+            $saldo = ($saldo1) - ($saldo2);
+        }
+    
             if($saldo == 0){
-                if($ver[2] == 0){
+                /*ASIENTO INTRODUCIDO EN LIBRO DIARIO*/
+                $fecha = date("Y-m-d");
+                $detalle = $_POST['detalle'];
+                $records = $conn->prepare("INSERT INTO asiento (fecha, detalle) VALUES ('$fecha', '$detalle')");
+                $records->bindParam('fecha', $fecha);
+                $records->bindParam('detalle', $detalle);
+                $records->execute();
 
-                    /*DE ACA OBTENGO EL IDCUENTA DE LA TABLAPOST*/
-                    $fecha = date("Y-m-d");
-                    $sql2 = "SELECT cuenta 
-                            FROM tablapost";
-                    $result2 = db_query($sql2);
-                    $ver1=mysqli_fetch_array($result2);
-                    $idcuenta = $ver1[0];
-
+                $sqlAsiento = "SELECT * FROM tablapost";
+                $resultAsiento= db_query($sqlAsiento);
+                while($ver=mysqli_fetch_row($resultAsiento)){
+                    $saldo1 = $ver[2];
+                    $saldo2 = $ver[3];
+                    $idcuenta = $ver[1];
+                    
                     /*DE ACA OBTENGO EL IDASIENTO DE LA TABLA ASIENTO*/
-                    $sql3 = "SELECT MAX(id) 
-                            FROM asiento";
-                    $result3 = db_query($sql3);
-                    $ver2=mysqli_fetch_array($result3);
-                    $idasiento = $ver2[0];
-
-                    $cero = 0;
-
-                    $records3 = $conn->prepare("INSERT INTO cuentaasiento (fecha, debe, haber, idCuenta, idAsiento) VALUES ('$fecha', '$saldo1', '$cero', '$idcuenta', '$idasiento')");
-                    $records3->bindParam('fecha', $fecha);
-                    $records3->bindParam('debe', $saldo1);
-                    $records3->bindParam('haber', $cero);
-                    $records3->bindParam('idCuenta', $idcuenta);
-                    $records3->bindParam('idAsiento', $idasiento);  
-                    $records3->execute();
-
-                }else{
-
-                    /*DE ACA OBTENGO EL IDCUENTA DE LA TABLAPOST*/
-                    $fecha = date("Y-m-d");
-                    $sql2 = "SELECT cuenta 
-                            FROM tablapost";
+                    $sql2 = "SELECT MAX(id) FROM asiento";
                     $result2 = db_query($sql2);
-                    $ver1=mysqli_fetch_array($result2);
-                    $idcuenta = $ver1[0];
-
-                    /*DE ACA OBTENGO EL IDASIENTO DE LA TABLA ASIENTO*/
-                    $sql3 = "SELECT MAX(id) 
-                            FROM asiento";
-                    $result3 = db_query($sql3);
-                    $ver2=mysqli_fetch_array($result3);
+                    $ver2=mysqli_fetch_array($result2);
                     $idasiento = $ver2[0];
+                    
+                    if($saldo1 != 0){
+                        
+                        $cero = 0;
 
-                    $cero = 0;
+                        $records3 = $conn->prepare("INSERT INTO cuentaasiento (fecha, debe, haber, idCuenta, idAsiento) VALUES ('$fecha', '$saldo1', '$cero', '$idcuenta', '$idasiento')");
+                        $records3->bindParam('fecha', $fecha);
+                        $records3->bindParam('debe', $saldo1);
+                        $records3->bindParam('haber', $cero);
+                        $records3->bindParam('idCuenta', $idcuenta);
+                        $records3->bindParam('idAsiento', $idasiento);  
+                        $records3->execute();
 
-                    $records3 = $conn->prepare("INSERT INTO cuentaasiento (fecha, debe, haber, idCuenta, idAsiento) VALUES ('$fecha', '$cero', '$saldo2', '$idcuenta', '$idasiento')");
-                    $records3->bindParam('fecha', $fecha);
-                    $records3->bindParam('debe', $cero);
-                    $records3->bindParam('haber', $saldo2);
-                    $records3->bindParam('idCuenta', $idcuenta);
-                    $records3->bindParam('idAsiento', $idasiento);  
-                    $records3->execute();
-                }
+                    }else{
+
+                            $cero = 0;
+
+                            $records3 = $conn->prepare("INSERT INTO cuentaasiento (fecha, debe, haber, idCuenta, idAsiento) VALUES ('$fecha', '$cero', '$saldo2', '$idcuenta', '$idasiento')");
+                            $records3->bindParam('fecha', $fecha);
+                            $records3->bindParam('debe', $cero);
+                            $records3->bindParam('haber', $saldo2);
+                            $records3->bindParam('idCuenta', $idcuenta);
+                            $records3->bindParam('idAsiento', $idasiento);  
+                            $records3->execute();
+
+                        }
                 
-            echo "ASIENTOS CARGADOS EXITOSAMENTE";
+                }
 
+                echo "ASIENTOS CARGADOS EXITOSAMENTE";
             }else{
                 echo "EL METODO DE LA PARTIDA DOBLE NO SE CUMPLE";
-            }   
-        }
+            }    
     }
 ?>
 

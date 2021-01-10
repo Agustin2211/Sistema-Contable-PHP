@@ -93,7 +93,6 @@
         <table class="table table-hover table-condensed table-bordered" style="text-align: center;">
 	        <caption><label>Asientos Cargados</label></caption>
 	            <tr>
-		            <td>Id</td>
 		            <td>Cuenta</td>
                     <td>Debe</td>
                     <td>Haber</td>
@@ -107,7 +106,6 @@
                 ?>
 
 	            <tr>
-		            <td><?php echo $ver->id; ?></td>
 		            <td><?php echo $ver->cuenta; ?></td>
                     <td><?php echo $ver->debe; ?></td>
                     <td><?php echo $ver->haber; ?></td>
