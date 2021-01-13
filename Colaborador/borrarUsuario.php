@@ -1,8 +1,6 @@
 <?php
-
     include("funciones.php");
     $id = $_GET['id'];
-    edit('users','id',$id);
+    delete('users','id',$id);
     header("administrarRoles.php"); 
-    
 ?>

@@ -7,7 +7,7 @@
             <title>Ver Plan de Cuenta</title>
             <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
             <link rel="stylesheet" href="/php-login/assets/css/style.css">
-            <h1>Plan de Cuentas</h1>
+            <h1>Plan de Cuenta</h1>
         </head>
 
     <body>
@@ -20,10 +20,11 @@
 			    <th width="30%">Cuenta</th>
 			    <th width="30%">Codigo</th>
 			    <th width="30%">Tipo</th>
+                <th width="30%">Visibilidad</th>
 		    </tr>
 	
 	    <?php 
-		    $sql = "select * from cuentas where recibeSaldo = 1 order by codigo";
+		    $sql = "select * from cuentas order by codigo";
 		    $result = db_query($sql);
 		    while($row = mysqli_fetch_object($result)){
         ?>
@@ -32,6 +33,7 @@
 			    <td><?php echo $row->cuenta;?></td>
                 <td><?php echo $row->codigo;?></td>
                 <td><?php echo $row->tipo;?></td>
+                <td><?php echo $row->recibeSaldo;?></td>
 		    </tr>
 	    <?php } ?>
 
@@ -42,7 +44,7 @@
         </form>
 
         <form>
-            <input type="buttom" value="Atras" OnClick = "location.href='plandecuenta.php'">
+        <input type="buttom" value="Atras" OnClick = "location.href='plandecuenta.php'">
         </form>
 
     </body>

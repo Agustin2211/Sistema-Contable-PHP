@@ -29,40 +29,41 @@ if (!empty($_POST)){
 
     <body>
     
-<?php if (!empty($message)) : ?>
-    <p> <?= $message ?></p>
-<?php endif; ?>
+    <?php if (!empty($message)) : ?>
+        <p> <?= $message ?></p>
+    <?php endif; ?>
 
-    <div class="container">
-        <form action="agregarCuenta.php" class="form-inline" role="form" method="POST">
+        <div class="container">
             
-            <p>
-                <label>Nombre de la Cuenta: </label><input name="cuenta" type="text" id="cuenta" required pattern="[a-z A-Z]{1,}" title="El nombre de la cuenta solamente debe contener letras.">
-            </p>
+            <form action="agregarCuenta.php" class="form-inline" role="form" method="POST">
+            
+                <p>
+                    <label>Nombre de la Cuenta: </label><input name="cuenta" type="text" id="cuenta" required pattern="[a-z A-Z]{1,}" title="El nombre de la cuenta solamente debe contener letras.">
+                </p>
 
-            <p>
-                <label>Codigo: </label><input name="codigo" type="number" min='0' required>
-            </p>
+                <p>
+                    <label>Codigo: </label><input name="codigo" type="number" min='0' required>
+                </p>
 
-            <p>
-                <label>Tipo de Cuenta: </label><select name="tipo" this.options[this.selectedIndex].innerHTML required>
-                    <option value='Ac'>Activo</option>
-                    <option value='Pa'>Pasivo</option>
-                    <option value='Pm'>Patrimonio Neto</option>
-                    <option value='R+'>Resultado Positivo</option>
-                    <option value='R-'>Resultado Negativo</option>
-                </select>
-            </p>
+                <p>
+                    <label>Tipo de Cuenta: </label><select name="tipo" this.options[this.selectedIndex].innerHTML required>
+                                                        <option value='Ac'>Activo</option>
+                                                        <option value='Pa'>Pasivo</option>
+                                                        <option value='Pm'>Patrimonio Neto</option>
+                                                        <option value='R+'>Resultado Positivo</option>
+                                                        <option value='R-'>Resultado Negativo</option>
+                                                    </select>
+                </p>
 
-            <p>
-                <label>Recibe Saldo: </label><input name="recibeSaldo" type="number" min='0' max='1' required pattern="(0|1)">
-            </p>
+                <p>
+                    <label>Recibe Saldo: </label><input name="recibeSaldo" type="number" min='0' max='1' required pattern="(0|1)">
+                </p>
 
-            <input type="submit" value="Agregar Cuenta">
+                <input type="submit" value="Agregar Cuenta">
         
-        </form>
+            </form>
 
-    </div>
+        </div>
 
     </body>
 

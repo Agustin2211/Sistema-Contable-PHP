@@ -22,7 +22,7 @@
       if($rol == '1'){
           header('location: /php-login/Administrador/admin.php');
       }else{
-        header('location: /php-login/Colaborador/colab.php');  
+        header('location: /php-login/Colaborador/colaborador.php');  
       }
 
     } else {

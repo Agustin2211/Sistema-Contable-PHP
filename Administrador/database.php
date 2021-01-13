@@ -11,5 +11,4 @@
     die('Connection Failed: ' . $e->getMessage());
   }
 
-
 ?>

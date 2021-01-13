@@ -10,31 +10,31 @@
     </head>
 
     <p>
-        Razón social: “D&J Estudio Contable”
+        <label>Razón social: </label><input type="text" readonly value="“D&J Estudio Contable”">
     </p>
 
     <p>
-        CUIT: 20-40416523-0
+       <label>CUIT: </label><input type="text" readonly value="20-40416523-0">
     </p>
 
     <p>
-        Domicilio fiscal: 2564 Gálvez, Rosario, Provincia de Santa Fe
+        <label>Domicilio fiscal: </label><input type="text" readonly value="2564 Gálvez, Rosario, Provincia de Santa Fe">
     </p>
 
     <p>
-        Código Postal: 2000
+       <label>Código Postal: </label><input type="text" readonly value="2000">
     </p>
 
     <p>
-        Teléfono: +540341346037
+        <label>Teléfono: </label><input type="text" readonly value="+540341346037">
     </p>
 
     <p>
-        Correo electrónico: djestudio@contable.com
+        <label>Correo electrónico:</label><input type="text" readonly value="djestudio@contable.com">
     </p>
 
     <form>
-            <input type="buttom" value="Atras" OnClick = "location.href='colab.php'">
+            <input type="buttom" value="Atras" OnClick = "location.href='colaborador.php'">
         </form>
 
 </html>

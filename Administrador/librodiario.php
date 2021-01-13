@@ -7,7 +7,8 @@
         <title>Libro Diario</title>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="/php-login/assets/css/style.css">
-        <h1>Asientos</h1>
+        <h1>Libro Diario</h1>
+        <h2>Asientos Cargados</h2>
     </head>
 
     <body>
@@ -52,6 +53,7 @@
 		        <input type="buttom" value ="Atras" onclick="location.href = 'admin.php'">
 	        </form>
         </p>
+        
     </body>
 
 </html>
