@@ -9,6 +9,8 @@
         <link rel="stylesheet" href="/php-login/assets/css/style.css">
     </head>
 
+    <h1>Datos Fiscales</h1>
+
     <p>
         <label>Razón social: </label><input type="text" readonly value="“D&J Estudio Contable”">
     </p>
@@ -34,7 +36,7 @@
     </p>
 
     <form>
-            <input type="buttom" value="Atras" OnClick = "location.href='colaborador.php'">
-        </form>
+        <input type="buttom" value="Atras" OnClick = "location.href='colaborador.php'">
+    </form>
 
 </html>

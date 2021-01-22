@@ -15,7 +15,7 @@
     </head>
 
     <body>
-        
+
         <h1>Colaborador</h1>
         
         <form>
@@ -37,6 +37,10 @@
         <form>
             <input type="buttom" value="Empleados" onclick="location.href='empleados.php'">
         </form>
+
+        <form>
+            <input type="buttom" value="Puestos" onclick="location.href='puesto.php'">
+        </form>
     
         <form>
             <input type="buttom" value="Datos Fiscales" onclick="location.href='datosFiscales.php'">
@@ -45,5 +49,7 @@
         <form>
             <input type ="buttom" value="Cerrar Sesión" OnClick= "location.href='/php-login/logout.php'">
         </form>
+
     </body>
+    
 </html>

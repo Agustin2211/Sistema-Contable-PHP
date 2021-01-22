@@ -11,7 +11,7 @@
     </head>
 
     <body>
-    
+
         <form>
             <input type="buttom" value="Buscar Cuenta" onclick = "location.href='buscarCuenta.php'">
         </form>

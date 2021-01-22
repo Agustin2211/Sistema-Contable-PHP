@@ -35,6 +35,7 @@
 
                 $sqlAsiento = "SELECT * FROM tablapost";
                 $resultAsiento= db_query($sqlAsiento);
+                
                 while($ver=mysqli_fetch_row($resultAsiento)){
                     $saldo1 = $ver[2];
                     $saldo2 = $ver[3];
@@ -109,7 +110,7 @@
         </form>
 
         <form>
-            <input type="buttom" value="Menu Principal" onclick="location.href='admin.php'">
+            <input type="buttom" value="Menu Principal" onclick="location.href='colaborador.php'">
         </form>
 
     </body>

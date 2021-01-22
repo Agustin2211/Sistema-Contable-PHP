@@ -30,31 +30,30 @@
         </p>    
     </form>
 
-    </head>
-
     <body>
-    <?php
+        <?php
 
-        include("funciones.php");
+            include("funciones.php");
 
-        if (isset($_POST['search'])) {
-            if($_POST['metodoBusqueda'] == "nombre"){
-                $keywords = $_POST['keywords'];
-                $connection = mysqli_connect("localhost", "root", "", "php_login_database");
-                $sql = "select * from empleado where nombre LIKE '%$keywords%'";
-                $result = db_query($sql);
-            }elseif($_POST['metodoBusqueda'] == "apellido"){
-                $keywords = $_POST['keywords'];
-                $connection = mysqli_connect("localhost", "root", "", "php_login_database");
-                $sql = "select * from empleado where apellido LIKE '%$keywords%'";
-                $result = db_query($sql);
-            }
-            elseif($_POST['metodoBusqueda'] == "dni"){
-                $keywords = $_POST['keywords'];
-                $connection = mysqli_connect("localhost", "root", "", "php_login_database");
-                $sql = "select * from empleado where dni LIKE '%$keywords%'";
-                $result = db_query($sql);
-            }
+            if (isset($_POST['search'])) {
+                if($_POST['metodoBusqueda'] == "nombre"){
+                    $keywords = $_POST['keywords'];
+                    $connection = mysqli_connect("localhost", "root", "", "php_login_database");
+                    $sql = "select * from empleado where nombre LIKE '%$keywords%'";
+                    $result = db_query($sql);
+                
+                }elseif($_POST['metodoBusqueda'] == "apellido"){
+                    $keywords = $_POST['keywords'];
+                    $connection = mysqli_connect("localhost", "root", "", "php_login_database");
+                    $sql = "select * from empleado where apellido LIKE '%$keywords%'";
+                    $result = db_query($sql);
+                
+                }elseif($_POST['metodoBusqueda'] == "dni"){
+                    $keywords = $_POST['keywords'];
+                    $connection = mysqli_connect("localhost", "root", "", "php_login_database");
+                    $sql = "select * from empleado where dni LIKE '%$keywords%'";
+                    $result = db_query($sql);
+                }
  
             //Si ha resultados
             if (!empty($result)) {

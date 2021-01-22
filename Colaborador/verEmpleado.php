@@ -32,10 +32,13 @@
     <body>
         <form action="verEmpleado.php" method="POST">
                 <p>
-                <label>Nombre: </label><input name="nombre" type="text" readonly value="<?php echo $row->nombre; ?>">
-
+                    <label>Nombre: </label><input name="nombre" type="text" readonly value="<?php echo $row->nombre; ?>">
                 <p>
                     <label>Apellido: </label><input name="apellido" type="text" readonly value="<?php echo $row->apellido; ?>">
+                </p>
+
+                <p>
+                    <label>Puesto de Trabajo: </label><input name="puesto" type="text"readonly value="<?php echo $row->puesto; ?>">
                 </p>
 
                 <p>
@@ -55,7 +58,7 @@
                 </p>
 
                 <p>
-                    <label>Fecha de Nacimiento: </label><input step="any" type="text" readonly name="fechadenacimiento" value="<?php echo $row->fechanacimiento; ?>">
+                    <label>Fecha de Nacimiento: </label><input step="any" type="date" readonly name="fechadenacimiento" value="<?php echo $row->fechadenacimiento; ?>">
                 </p>
 
                 <p>
@@ -68,7 +71,7 @@
         </form>
 
         <form>
-            <input type="buttom" value="Atras" onclick="location.href='buscarEmpleado.php'">
+            <input type="buttom" value="Atras" onclick="location.href='empleados.php'">
         </form>
 
     </body>

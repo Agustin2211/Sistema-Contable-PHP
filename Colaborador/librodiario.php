@@ -53,6 +53,7 @@
 		        <input type="buttom" value ="Atras" onclick="location.href = 'colaborador.php'">
 	        </form>
         </p>
+        
     </body>
 
 </html>

@@ -19,13 +19,8 @@
 		    <tr>
 			    <th width="30%">Nombre</th>
 			    <th width="30%">Apellido</th>
-			    <th width="30%">C.U.I.L.</th>
                 <th width="30%">D.N.I.</th>
-                <th width="30%">Direccion</th>
-                <th width="30%">Telefono</th>
-                <th width="30%">Fecha de Nacimiento</th>
-                <th width="30%">Estado Civil</th>
-                <th width="30%">Cantidad de Hijos</th>
+                <th width="30%">Ver</th>
 		    </tr>
 	
 	    <?php 
@@ -38,14 +33,8 @@
 		    <tr>
 			    <td><?php echo $row->nombre;?></td>
                 <td><?php echo $row->apellido;?></td>
-                <td><?php echo $row->cuil;?></td>
                 <td><?php echo $row->dni;?></td>
-                <td><?php echo $row->direccion;?></td>
-                <td><?php echo $row->telefono;?></td>
-                <td><?php echo $row->fechadenacimiento;?></td>
-                <td><?php echo $row->estadocivil;?></td>
-                <td><?php echo $row->cantidadhijos;?></td>
-
+                <td><a href="verEmpleado.php?id=<?php echo $row->id;?>">Ver</a></td>
 		    </tr>
 	    <?php } ?>
 

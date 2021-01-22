@@ -51,6 +51,25 @@ function visibilidadCuenta($tblname, $field_id, $id){
 
 }
 
+function visibilidadPuesto($tblname, $field_id, $id){
+	$sql = "select * from $tblname u where $id=id";
+	$result = db_query($sql);
+	$row = mysqli_fetch_object($result);
+
+	if($row->visibilidad == 'Si'){	
+
+		$sql = "UPDATE `$tblname` SET `visibilidad` = 'No' WHERE $field_id = $id";
+		return db_query($sql);
+
+	} else{
+
+		$sql = "UPDATE `$tblname` SET `visibilidad` = 'Si' WHERE $field_id = $id";
+		return db_query($sql);
+
+	}
+
+}
+
 function select_id($tblname,$field_name,$field_id){
 	$sql = "Select * from ".$tblname." where ".$field_name." = ".$field_id."";
 	$db=db_query($sql);
