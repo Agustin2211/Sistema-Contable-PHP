@@ -15,7 +15,7 @@
     </head>
 
     <body>
-        
+
         <h1>Administrador</h1>
         
         <form>
@@ -36,6 +36,10 @@
 
         <form>
             <input type="buttom" value="Empleados" onclick="location.href='empleados.php'">
+        </form>
+
+        <form>
+            <input type="buttom" value="Puestos" onclick="location.href='puesto.php'">
         </form>
 
         <form>

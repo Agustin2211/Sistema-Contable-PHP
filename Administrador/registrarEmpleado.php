@@ -1,11 +1,17 @@
 <?php
 
-    require('database.php');
+    session_start();
+
+require('database.php');
+
+    include("funciones.php"); 
 
     $message = '';
 
+    date_default_timezone_set('America/Argentina/Buenos_Aires');
+
     if (!empty($_POST)){
-        $stmt = $conn->prepare("INSERT INTO empleado (nombre, apellido, direccion, telefono, fechadenacimiento, dni, estadocivil, cantidadhijos, cuil) VALUES (:nombre, :apellido, :direccion, :telefono, :fechadenacimiento, :dni, :estadocivil, :cantidadhijos, :cuil)");
+        $stmt = $conn->prepare("INSERT INTO empleado (nombre, apellido, direccion, telefono, fechadenacimiento, dni, estadocivil, cantidadhijos, cuil, puesto) VALUES (:nombre, :apellido, :direccion, :telefono, :fechadenacimiento, :dni, :estadocivil, :cantidadhijos, :cuil, :puesto)");
         $stmt->bindParam(':nombre', $_POST['nombre']);
         $stmt->bindParam(':apellido', $_POST['apellido']);
         $stmt->bindParam(':direccion', $_POST['direccion']);
@@ -15,8 +21,8 @@
         $stmt->bindParam(':estadocivil', $_POST['estadocivil']);
         $stmt->bindParam(':cantidadhijos', $_POST['cantidadhijos']);
         $stmt->bindParam(':cuil', $_POST['cuil']);
+        $stmt->bindParam(':puesto', $_POST['puesto']);
         if ($stmt->execute()) {
-            print($_POST['cuil']);
             $message = 'Empleado agregado correctamente';
         }else{
             $message = 'Ups, algo a fallado';
@@ -46,6 +52,21 @@
     <body>
         <div class="container">
             <form action="registrarEmpleado.php" class="form-inline" role="form" method="POST">
+
+                <p>
+                    <label>Puesto de Trabajo: </label> <select class="form-control input-sm" name="puesto" id="puesto" this.options[this.selectedIndex].innerHTML>
+                                                            <?php 
+                                                                $sql="SELECT *
+                                                                    FROM puestoempleado
+                                                                    ";
+                                                                $result=db_query($sql);
+                                                            ?>
+        
+                                                            <?php while($row=mysqli_fetch_row($result)): ?>
+                                                                <option value= <?php echo $row[0] ?> > <?php echo $row[1];?> </option>
+                                                            <?php endwhile ?>
+                                                        </select>
+                </p>
 
                 <p>
                     <label>Nombre: </label><input name="nombre" type="text" required pattern="[a-z A-Z]{1,}" title="El nombre del empleado solamente debe contener letras.">

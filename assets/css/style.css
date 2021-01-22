@@ -112,11 +112,12 @@ input[type="date"]{
 input[type="select"]{
     padding: 10px;
     color: black;
-    background: #023FFF;
+    background: white;
+    border-color: #023FFF;
     width: 200px;
     margin: 20px auto;
     margin-top: 10px;
-    border-radius: 10px;
+    border-radius: 5px;
     cursor: pointer;
     font-variant-caps: all-petite-caps;
     font-size: 17px;
