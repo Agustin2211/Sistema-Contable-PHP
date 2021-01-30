@@ -139,6 +139,22 @@ select{
     text-align: center;
 }
 
+textarea{
+    padding: 10px;
+    color: black;
+    background: white;
+    border-color: #023FFF;
+    width: 500px;
+    margin: 20px auto;
+    margin-top: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-variant-caps: all-petite-caps;
+    font-size: 17px;
+    font-weight: bold;
+    text-align: left;
+}
+
 table{
     background-color: white;
     width: 90%;

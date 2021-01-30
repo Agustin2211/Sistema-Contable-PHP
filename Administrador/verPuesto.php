@@ -32,7 +32,7 @@
     <body>
         <form action="verPuesto.php" method="POST">
                 <p>
-                    <label>Numero del Puesto: </label><input name="nombre" type="text" readonly value="<?php echo $row->id; ?>">
+                    <label>Codigo del Puesto: </label><input name="id" type="text" readonly value="<?php echo $row->id; ?>">
                 <p>
 
                 <p>
@@ -50,7 +50,7 @@
                     <label>Visibilidad: </label><input name="Visibilidad" type="text" readonly value="<?php echo $row->visibilidad; ?>">
                 </p>
 
-                <a href="editarPuesto.php?id=<?php echo $row->id;?>">Editar Visibilidad</a>
+                <a href="editarPuesto.php?id=<?php echo $row->id;?>">Editar Puesto</a>
         </form>
 
         <form>
