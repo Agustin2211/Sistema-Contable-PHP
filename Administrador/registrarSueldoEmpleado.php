@@ -14,11 +14,14 @@
 
     if(!empty($_POST)){
 
+        /*LO PRIMERO QUE SE HACE ES REGISTRAR LAS HORAS EXTRAS Y FERIADOS QUE TRABAJO EL EMPLEADO*/
+
         $id = $_GET['id'];
 
         $importeDeHorasExtras = $_POST['horasExtras'] * $_POST['ValorDeHorasExtras'];
         $importeFeriadosTrabajados = $_POST['feriadosTrabajados'] * $_POST['valorDeFeriadosTrabajados'];
 
+        /*EN ESTA PARTE, SE BUSCA EL PUESTO DEL EMPLEADO, EL CUAL CONTIENE CUAL ES SU SUELDO MINIMO*/
 
         $connection = mysqli_connect("localhost", "root", "", "php_login_database");
         $sql = ("SELECT * FROM empleado WHERE id like '$id'");
@@ -33,6 +36,8 @@
         $row2 = mysqli_fetch_object($result2);
 
         $sueldo = $row2->sueldo;
+
+        /*UNA VEZ QUE SE TIENE EL SUELDO, SE HACEN TODOS LAS RESTAS Y SUMAS A SU SUELDO*/
 
         $sueldo = $importeDeHorasExtras + $importeFeriadosTrabajados;
 
@@ -49,7 +54,7 @@
         /*Ley de Riesgo de Trabajo (A.R.T.): 1,5%*/
             $sueldo = $sueldo - (($sueldo * 1.5)/100);
 
-        /*MUCHAS CHANCES DE QUE UTILICE UNA TABLA LA CUAL TENGA LOS DESCUENTOS QUE SON FIJOS*/
+        /*SE REALIZAN LOS ASIENTOS CORRESPONDIENTES A LA TABLAPOST*/
         $cuenta = 530;
         $haber = 0;
         $stmt = $conn->prepare("INSERT INTO tablapost (cuenta, debe, haber) VALUES ('$cuenta', '$sueldo', '$haber')");
@@ -58,6 +63,8 @@
         $stmt->bindParam('haber', $haber);
         $stmt->execute();
 
+
+        /*SI SE PAGA TODO CON DINERO, SE ENTRA A ESTE IF*/
         if($porcentajeCaja == 100){
             $cuenta = 111;
             $haber = 0;
@@ -67,6 +74,8 @@
             $stmt->bindParam('debe', $debe);
             $stmt->bindParam('haber', $haber);
             $stmt->execute();
+        
+        /*SI SE PAGA TODO CON LO DEL BANCO, SE ENTRA A ESTE IF*/
         }elseif ($porcentajeBanco == 100) {
             $cuenta = 113;
             $haber = 0;
@@ -77,6 +86,7 @@
             $stmt->bindParam('haber', $haber);
             $stmt->execute();
         }else{
+            /*SI UNA PARTE SE PAGA CON CAJA Y LA OTRA PARTE CON EL BANCO SE SALTA AL ELSE, QUE ACA OCURRE EL FALLO DE LOS CENTAVOS*/
             $sueldoCaja = $sueldo - (($sueldo * $porcentajeCaja)/100);
             $sueldoBanco  = $sueldo - (($sueldo * $porcentajeBanco)/100);
 
@@ -108,7 +118,7 @@
             $saldo2 = $saldo2 + ($ver[3]);
             $saldo = ($saldo1) - ($saldo2);
         }
-    
+        /*ACA ES DONDE EXPLOTA TODO, COMO NO DA CON EXACTITUD 0 EL SALDO, NUNCA REALIZA EL INGRESO DE DATOS EN EL LIBRO DIARIO*/
             if($saldo == 0){
                 /*ASIENTO INTRODUCIDO EN LIBRO DIARIO*/
                 $fecha = date("Y-m-d");
@@ -173,7 +183,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Editar Cuenta</title>
+        <title>Pago de Sueldo</title>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="/php-login/assets/css/style.css">
     </head>

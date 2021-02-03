@@ -65,9 +65,6 @@
         $porcentajeCaja = $_POST['porcentajeCaja'];
         $porcentajeBanco = $_POST['porcentajeBanco'];
 
-        echo $porcentajeCaja;
-        echo $porcentajeBanco;
-
         if($porcentajeCaja == 100){
             $cuenta = 111;
             $haber = $sueldo;
@@ -108,8 +105,8 @@
             $stmt->execute();
         }
 
-        $saldo1 = 0;
-        $saldo2 = 0;
+        $saldo1 = 0.0;
+        $saldo2 = 0.0;
         $sql = "SELECT * FROM tablapost";
         $result= db_query($sql);
 
@@ -119,7 +116,7 @@
             $saldo = ($saldo1) - ($saldo2);
         }
     
-            if($saldo == 0){
+            if($saldo == 0.0){
                 /*ASIENTO INTRODUCIDO EN LIBRO DIARIO*/
                 $fecha = date("Y-m-d");
                 $detalle = $_POST['detalle'];
@@ -142,9 +139,9 @@
                     $ver2=mysqli_fetch_array($result2);
                     $idasiento = $ver2[0];
                     
-                    if($saldo1 != 0){
+                    if($saldo1 != 0.0){
                         
-                        $cero = 0;
+                        $cero = 0.0;
 
                         $records3 = $conn->prepare("INSERT INTO cuentaasiento (fecha, debe, haber, idCuenta, idAsiento) VALUES ('$fecha', '$saldo1', '$cero', '$idcuenta', '$idasiento')");
                         $records3->bindParam('fecha', $fecha);
@@ -156,7 +153,7 @@
 
                     }else{
 
-                            $cero = 0;
+                            $cero = 0.0;
 
                             $records3 = $conn->prepare("INSERT INTO cuentaasiento (fecha, debe, haber, idCuenta, idAsiento) VALUES ('$fecha', '$cero', '$saldo2', '$idcuenta', '$idasiento')");
                             $records3->bindParam('fecha', $fecha);

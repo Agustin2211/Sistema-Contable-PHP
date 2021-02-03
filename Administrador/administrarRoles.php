@@ -5,6 +5,7 @@
 		<h2>Administración de Usuarios Registrados</h2>	
 		<div class="well well-small">
 		<div class="row-fluid">
+		<title>Administrar Roles</title>
 	</head>
 
 	<body>
