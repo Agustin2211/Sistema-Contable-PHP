@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.0.4
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 10-01-2021 a las 00:30:06
--- Versión del servidor: 10.4.14-MariaDB
--- Versión de PHP: 7.4.10
+-- Tiempo de generación: 03-02-2021 a las 05:11:15
+-- Versión del servidor: 10.4.17-MariaDB
+-- Versión de PHP: 7.4.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -33,6 +33,12 @@ CREATE TABLE `asiento` (
   `detalle` varchar(250) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Volcado de datos para la tabla `asiento`
+--
+
+INSERT INTO `asiento` (`id`, `fecha`, `detalle`) VALUES
+(151, '2021-02-03', 'Pago de sueldo al empleado Kowalski');
 
 -- --------------------------------------------------------
 
@@ -49,6 +55,13 @@ CREATE TABLE `cuentaasiento` (
   `idAsiento` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Volcado de datos para la tabla `cuentaasiento`
+--
+
+INSERT INTO `cuentaasiento` (`id`, `fecha`, `debe`, `haber`, `idCuenta`, `idAsiento`) VALUES
+(36, '2021-02-03', 32314, 0, 530, 151),
+(37, '2021-02-03', 0, 32314, 111, 151);
 
 -- --------------------------------------------------------
 
@@ -123,16 +136,38 @@ CREATE TABLE `empleado` (
   `dni` int(11) NOT NULL,
   `estadocivil` varchar(200) NOT NULL,
   `cantidadhijos` int(11) NOT NULL,
-  `cuil` bigint(11) NOT NULL
+  `cuil` bigint(11) NOT NULL,
+  `puesto` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `empleado`
 --
 
-INSERT INTO `empleado` (`id`, `nombre`, `apellido`, `direccion`, `telefono`, `fechadenacimiento`, `dni`, `estadocivil`, `cantidadhijos`, `cuil`) VALUES
-(1, 'Agustin', 'Kowalski', 'Piedras 853', '2474455903', '1998-11-22', 41645590, 'Soltero', 0, 20416455903),
-(5, 'Esteban', 'Quito', 'Calle Falsa 123', '2477155365', '1997-10-12', 40321654, 'Soltero', 1, 2040321654);
+INSERT INTO `empleado` (`id`, `nombre`, `apellido`, `direccion`, `telefono`, `fechadenacimiento`, `dni`, `estadocivil`, `cantidadhijos`, `cuil`, `puesto`) VALUES
+(1, 'Agustin', 'Kowalski', 'Piedras 853', '2474455903', '1998-11-22', 41645590, 'Soltero', 0, 20416455903, 1),
+(5, 'Esteban', 'Quito', 'Calle Falsa 123', '2477155365', '1997-10-12', 40321654, 'Soltero', 1, 2040321654, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `puestoempleado`
+--
+
+CREATE TABLE `puestoempleado` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(250) NOT NULL,
+  `descripcion` varchar(250) NOT NULL,
+  `sueldoMinimo` int(11) NOT NULL,
+  `visibilidad` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `puestoempleado`
+--
+
+INSERT INTO `puestoempleado` (`id`, `nombre`, `descripcion`, `sueldoMinimo`, `visibilidad`) VALUES
+(1, 'Gerente de Ventas', 'Encargado de manejar todas las ventas de la empresa', 50000, 1);
 
 -- --------------------------------------------------------
 
@@ -147,7 +182,13 @@ CREATE TABLE `tablapost` (
   `haber` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Volcado de datos para la tabla `tablapost`
+--
 
+INSERT INTO `tablapost` (`id`, `cuenta`, `debe`, `haber`) VALUES
+(29, '530', 32314, 0),
+(30, '111', 0, 32314);
 
 -- --------------------------------------------------------
 
@@ -200,6 +241,12 @@ ALTER TABLE `empleado`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `puestoempleado`
+--
+ALTER TABLE `puestoempleado`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `tablapost`
 --
 ALTER TABLE `tablapost`
@@ -219,13 +266,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT de la tabla `asiento`
 --
 ALTER TABLE `asiento`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=151;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=152;
 
 --
 -- AUTO_INCREMENT de la tabla `cuentaasiento`
 --
 ALTER TABLE `cuentaasiento`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT de la tabla `cuentas`
@@ -240,10 +287,16 @@ ALTER TABLE `empleado`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT de la tabla `puestoempleado`
+--
+ALTER TABLE `puestoempleado`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT de la tabla `tablapost`
 --
 ALTER TABLE `tablapost`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT de la tabla `users`

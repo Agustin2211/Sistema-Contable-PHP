@@ -10,9 +10,11 @@
 
     date_default_timezone_set('America/Argentina/Buenos_Aires');
 
+    $id = $_GET['id'];
+
     if(!empty($_POST)){
 
-        $id = $_POST['id'];
+        $id = $_GET['id'];
 
         $importeDeHorasExtras = $_POST['horasExtras'] * $_POST['ValorDeHorasExtras'];
         $importeFeriadosTrabajados = $_POST['feriadosTrabajados'] * $_POST['valorDeFeriadosTrabajados'];
@@ -21,57 +23,45 @@
         $connection = mysqli_connect("localhost", "root", "", "php_login_database");
         $sql = ("SELECT * FROM empleado WHERE id like '$id'");
         $result = db_query($sql);
-        $row = mysqli_fetch_array($result);
+        $row = mysqli_fetch_object($result);
 
-        $puesto = $row[10];
+        $puesto = $row ->puesto;
 
         $connection2 = mysqli_connect("localhost", "root", "", "php_login_database");
         $sql2 = ("SELECT * FROM puestoempleado WHERE id like '$puesto'");
-        $result2 = db_query($sql2);
-        $row2 = mysqli_fetch_array($result2);
+        $result2 = db_query($sql);
+        $row2 = mysqli_fetch_object($result2);
 
-        $sueldo = $row2[3];
+        $sueldo = $row2->sueldo;
 
-        $sueldo = $sueldo + $importeDeHorasExtras + $importeFeriadosTrabajados;
+        $sueldo = $importeDeHorasExtras + $importeFeriadosTrabajados;
 
         /*Aporte Personal Jubilación: 11%*/
             $sueldo = $sueldo - (($sueldo * 11)/100);
-
         /*Aporte Personal O. Social: 3%*/
             $sueldo = $sueldo - (($sueldo * 3)/100);
-
         /*Aporte Personal Sindicato: 2.5%*/
             $sueldo = $sueldo - (($sueldo * 2.5)/100);
-
         /*Contribución Patronal Jubilación: 17.6%*/
             $sueldo = $sueldo - (($sueldo * 17.6)/100);
-
         /*Contribución Patronal O. Social: 5.4%*/
             $sueldo = $sueldo - (($sueldo * 5.4)/100);
-
         /*Ley de Riesgo de Trabajo (A.R.T.): 1,5%*/
             $sueldo = $sueldo - (($sueldo * 1.5)/100);
 
-
+        /*MUCHAS CHANCES DE QUE UTILICE UNA TABLA LA CUAL TENGA LOS DESCUENTOS QUE SON FIJOS*/
         $cuenta = 530;
-        $debe = $sueldo;
         $haber = 0;
-        $stmt = $conn->prepare("INSERT INTO tablapost (cuenta, debe, haber) VALUES ('$cuenta', '$debe', '$haber')");
+        $stmt = $conn->prepare("INSERT INTO tablapost (cuenta, debe, haber) VALUES ('$cuenta', '$sueldo', '$haber')");
         $stmt->bindParam('cuenta', $cuenta);
-        $stmt->bindParam('debe', $debe);
+        $stmt->bindParam('debe', $sueldo);
         $stmt->bindParam('haber', $haber);
         $stmt->execute();
 
-        $porcentajeCaja = $_POST['porcentajeCaja'];
-        $porcentajeBanco = $_POST['porcentajeBanco'];
-
-        echo $porcentajeCaja;
-        echo $porcentajeBanco;
-
         if($porcentajeCaja == 100){
             $cuenta = 111;
-            $haber = $sueldo;
-            $debe = 0;  
+            $haber = 0;
+            $debe = $sueldo;  
             $stmt = $conn->prepare("INSERT INTO tablapost (cuenta, debe, haber) VALUES ('$cuenta', '$debe', '$haber')");
             $stmt->bindParam('cuenta', $cuenta);
             $stmt->bindParam('debe', $debe);
@@ -79,8 +69,8 @@
             $stmt->execute();
         }elseif ($porcentajeBanco == 100) {
             $cuenta = 113;
-            $haber = $sueldo;
-            $debe = 0;  
+            $haber = 0;
+            $debe = $sueldo;  
             $stmt = $conn->prepare("INSERT INTO tablapost (cuenta, debe, haber) VALUES ('$cuenta', '$debe', '$haber')");
             $stmt->bindParam('cuenta', $cuenta);
             $stmt->bindParam('debe', $debe);
@@ -177,66 +167,26 @@
     }   
 ?>
 
+<!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Pagar Sueldo</title>
+        <title>Editar Cuenta</title>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="/php-login/assets/css/style.css">
     </head>
 
     <body>
 
-        <form action="pagarSueldoEmpleado.php" class="form-inline" role="form" method="POST">       
-
-            <p>
-                <label>Pago de Sueldo al Empleado: </label><input step="any" type="number" step="0.01" name="id" id="id" min='0' required>
-            </p>
-
-            <p>
-                <label>Horas Extras Trabajadas: </label><input step="any" type="number" step="0.01" name="horasExtras" value='0' id="horasExtras" min='0' required><label> </label><label>Valor de 1 hora Trabajada: </label><input step="any" type="number" step="0.01" name="ValorDeHorasExtras" value='0' id="ValorDeHorasExtras" min='0' required>
-            </p>
-
-            <p>
-                <label>Feriados Trabajados: </label><input step="any" type="number" step="0.01" name="feriadosTrabajados" value='0' id="feriadosTrabajados" min='0' required><label> </label><label>Valor de un Dia Trabajado: </label><input step="any" type="number" step="0.01" name="valorDeFeriadosTrabajados" value='0' id="valorDeFeriadosTrabajados" min='0' required>
-            </p>
-
-            <textarea readonly>Los aportes y retenciones son los siguientes:
-                o Aporte Personal Jubilación: 11%
-                o Aporte Personal O. Social: 3%
-                o Aporte Personal Sindicato: 2.5%
-                o Contribución Patronal Jubilación: 17.6%
-                o Contribución Patronal O. Social: 5.4%
-                o Ley de Riesgo de Trabajo (A.R.T.): 1,5%
-            </textarea>
-
-            <p>
-                <label>Detalle: </label><input name="detalle" type="text" id="detalle" required>
-            </p>
-
-            <p>
-                <label>Fecha: </label> <input type="datetime" name="fecha" required readonly value="<?php echo date("Y-m-d");?>">
-            </p>
-
-            <p>
-                <label>Porcentaje de Pago por Caja: </label><input step="any" type="number" step="0.01" name="porcentajeCaja" value='0' id="porcentajeCaja" min='0' required>
-            </p>
-
-            <p>
-                <label>Porcentaje de Pago por Banco Cuenta Corriente: </label><input step="any" type="number" step="0.01" name="porcentajeBanco" value='0' id="porcentajeBanco" min='0' required>
-            </p>
-
-
-            <input type="submit" value="Pagar Sueldo">
-
-        </form>
-
+        <h1>Pago de Sueldo Realizado de Forma Correcta</h1>
+        <h2>Haga click en el boton de abajo para volver al menu principal</h2>
+        
         <form>
-            <input type="buttom" value="Atras" onclick="location.href='pagarSueldo.php'">
+            <input type="buttom" value="Atras" OnClick = "location.href='admin.php'">
         </form>
-
+ 
     </body>
-
+    
 </html>

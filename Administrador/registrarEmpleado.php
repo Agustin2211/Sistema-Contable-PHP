@@ -58,7 +58,7 @@ require('database.php');
                                                             <?php 
                                                                 $sql="SELECT *
                                                                     FROM puestoempleado
-                                                                    ";
+                                                                    WHERE visibilidad = '1'";
                                                                 $result=db_query($sql);
                                                             ?>
         
