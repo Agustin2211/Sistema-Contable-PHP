@@ -14,19 +14,15 @@
         <h1>Empleados</h1>
 
         <form>
-            <input type="buttom" value="Lista de Empleados" onclick="location.href='listaEmpleado.php'">
+            <input type="buttom" value="Pagar Sueldo" onclick="location.href='pagarSueldo.php'">
         </form>
 
         <form>
-            <input type="buttom" value="Buscar Empleado" onclick="location.href='buscarEmpleado.php'">
+            <input type="buttom" value="Bonos de Sueldo" onclick="location.href='bonos.php'">
         </form>
 
         <form>
-            <input type="buttom" value="Pagar Sueldo" onclick="location.href='sueldos.php'">
-        </form>
-
-        <form>
-            <input type="buttom" value="Atras" onclick="location.href='colaborador.php'">
+            <input type="buttom" value="Atras" onclick="location.href='empleados.php'">
         </form>
     
     </body>

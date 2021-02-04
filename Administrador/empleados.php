@@ -26,7 +26,7 @@
         </form>
 
         <form>
-            <input type="buttom" value="Pagar Sueldo" onclick="location.href='pagarSueldo.php'">
+            <input type="buttom" value="Pagar Sueldo" onclick="location.href='sueldos.php'">
         </form>
 
         <form>

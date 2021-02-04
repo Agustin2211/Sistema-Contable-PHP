@@ -27,14 +27,12 @@
         <title>Puesto de Trabajo</title>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="/php-login/assets/css/style.css">
-        <h1>Puesto de Trabajo</h1>
     </head>
 
     <body>
         <form action="verPuesto.php" method="POST">
-
                 <p>
-                    <label>Numero del Puesto: </label><input name="nombre" type="text" readonly value="<?php echo $row->id; ?>">
+                    <label>Codigo del Puesto: </label><input name="id" type="text" readonly value="<?php echo $row->id; ?>">
                 <p>
 
                 <p>
@@ -48,6 +46,11 @@
                     <label>Sueldo Minimo: </label><input step="any" type="number" readonly value="<?php echo $row->sueldoMinimo; ?>">
                 </p>
 
+                <p>
+                    <label>Visibilidad: </label><input name="Visibilidad" type="text" readonly value="<?php echo $row->visibilidad; ?>">
+                </p>
+
+                <a href="editarPuesto.php?id=<?php echo $row->id;?>">Editar Puesto</a>
         </form>
 
         <form>

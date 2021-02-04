@@ -32,6 +32,15 @@ function edit($tblname,$field_id,$id){
 
 }
 
+function editarCuenta($tblname, $field_id, $id, $nombre, $descripcion, $sueldoMinimo){
+
+        $sql = "UPDATE $tblname 
+                SET nombre = $nombre, descripcion = $descripcion, sueldoMinimo = $sueldoMinimo 
+				WHERE $field_id = $id";
+		return db_query($sql);
+
+}
+
 function visibilidadCuenta($tblname, $field_id, $id){
 	$sql = "select * from $tblname u where $id=id";
 	$result = db_query($sql);

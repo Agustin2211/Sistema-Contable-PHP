@@ -48,7 +48,7 @@
         </form>
 
         <form>
-        <input type="buttom" value="Atras" OnClick = "location.href='plandecuenta.php'">
+            <input type="buttom" value="Atras" OnClick = "location.href='plandecuenta.php'">
         </form>
 
     </body>

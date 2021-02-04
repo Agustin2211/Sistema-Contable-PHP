@@ -12,11 +12,13 @@
 
     if(!empty($_POST)){
 
+        /*LO PRIMERO QUE SE HACE ES REGISTRAR LAS HORAS EXTRAS Y FERIADOS QUE TRABAJO EL EMPLEADO*/
+
         $id = $_POST['id'];
 
         $importeDeHorasExtras = $_POST['horasExtras'] * $_POST['ValorDeHorasExtras'];
         $importeFeriadosTrabajados = $_POST['feriadosTrabajados'] * $_POST['valorDeFeriadosTrabajados'];
-
+        $bono = $_POST['bono'];
 
         $connection = mysqli_connect("localhost", "root", "", "php_login_database");
         $sql = ("SELECT * FROM empleado WHERE id like '$id'");
@@ -32,40 +34,36 @@
 
         $sueldo = $row2[3];
 
-        $sueldo = $sueldo + $importeDeHorasExtras + $importeFeriadosTrabajados;
+        /*UNA VEZ QUE SE TIENE EL SUELDO, SE HACEN TODOS LAS RESTAS Y SUMAS A SU SUELDO*/
+
+        $sueldo = $sueldo + $importeDeHorasExtras + $importeFeriadosTrabajados + $bono;
 
         /*Aporte Personal Jubilación: 11%*/
             $sueldo = $sueldo - (($sueldo * 11)/100);
-
         /*Aporte Personal O. Social: 3%*/
             $sueldo = $sueldo - (($sueldo * 3)/100);
-
         /*Aporte Personal Sindicato: 2.5%*/
             $sueldo = $sueldo - (($sueldo * 2.5)/100);
-
         /*Contribución Patronal Jubilación: 17.6%*/
             $sueldo = $sueldo - (($sueldo * 17.6)/100);
-
         /*Contribución Patronal O. Social: 5.4%*/
             $sueldo = $sueldo - (($sueldo * 5.4)/100);
-
         /*Ley de Riesgo de Trabajo (A.R.T.): 1,5%*/
-            $sueldo = $sueldo - (($sueldo * 1.5)/100);
+            $sueldo = $sueldo - (($sueldo * 1.5)/100);     
 
-
+        /*SE REALIZAN LOS ASIENTOS CORRESPONDIENTES A LA TABLAPOST*/
         $cuenta = 530;
-        $debe = $sueldo;
-        $haber = 0;
-        $stmt = $conn->prepare("INSERT INTO tablapost (cuenta, debe, haber) VALUES ('$cuenta', '$debe', '$haber')");
+        $haber  = 0;
+        $stmt = $conn->prepare("INSERT INTO tablapost (cuenta, debe, haber) VALUES ('$cuenta', '$sueldo', '$haber')");
         $stmt->bindParam('cuenta', $cuenta);
-        $stmt->bindParam('debe', $debe);
+        $stmt->bindParam('debe', $sueldo);
         $stmt->bindParam('haber', $haber);
         $stmt->execute();
 
-        $porcentajeCaja = $_POST['porcentajeCaja'];
-        $porcentajeBanco = $_POST['porcentajeBanco'];
+        $tipoPago = $_POST['formaPago'];
 
-        if($porcentajeCaja == 100){
+        /*SI SE PAGA TODO CON DINERO, SE ENTRA A ESTE IF*/
+        if($tipoPago == 'caja'){
             $cuenta = 111;
             $haber = $sueldo;
             $debe = 0;  
@@ -74,30 +72,12 @@
             $stmt->bindParam('debe', $debe);
             $stmt->bindParam('haber', $haber);
             $stmt->execute();
-        }elseif ($porcentajeBanco == 100) {
+        
+        /*SI SE PAGA TODO CON LO DEL BANCO, SE ENTRA A ESTE IF*/
+        }elseif ($tipoPago == 'banco') {
             $cuenta = 113;
             $haber = $sueldo;
             $debe = 0;  
-            $stmt = $conn->prepare("INSERT INTO tablapost (cuenta, debe, haber) VALUES ('$cuenta', '$debe', '$haber')");
-            $stmt->bindParam('cuenta', $cuenta);
-            $stmt->bindParam('debe', $debe);
-            $stmt->bindParam('haber', $haber);
-            $stmt->execute();
-        }else{
-            $sueldoCaja = $sueldo - (($sueldo * $porcentajeCaja)/100);
-            $sueldoBanco  = $sueldo - (($sueldo * $porcentajeBanco)/100);
-
-            $cuenta = 111;
-            $debe = 0;
-            $haber = $sueldoCaja;  
-            $stmt = $conn->prepare("INSERT INTO tablapost (cuenta, debe, haber) VALUES ('$cuenta', '$debe', '$haber')");
-            $stmt->bindParam('cuenta', $cuenta);
-            $stmt->bindParam('debe', $debe);
-            $stmt->bindParam('haber', $haber);
-            $stmt->execute();
-
-            $cuenta = 113;
-            $haber = $sueldoBanco;  
             $stmt = $conn->prepare("INSERT INTO tablapost (cuenta, debe, haber) VALUES ('$cuenta', '$debe', '$haber')");
             $stmt->bindParam('cuenta', $cuenta);
             $stmt->bindParam('debe', $debe);
@@ -105,8 +85,8 @@
             $stmt->execute();
         }
 
-        $saldo1 = 0.0;
-        $saldo2 = 0.0;
+        $saldo1 = 0;
+        $saldo2 = 0;
         $sql = "SELECT * FROM tablapost";
         $result= db_query($sql);
 
@@ -115,8 +95,9 @@
             $saldo2 = $saldo2 + ($ver[3]);
             $saldo = ($saldo1) - ($saldo2);
         }
-    
-            if($saldo == 0.0){
+
+        /*ACA ES DONDE EXPLOTA TODO, COMO NO DA CON EXACTITUD 0 EL SALDO, NUNCA REALIZA EL INGRESO DE DATOS EN EL LIBRO DIARIO*/
+            if($saldo == 0){
                 /*ASIENTO INTRODUCIDO EN LIBRO DIARIO*/
                 $fecha = date("Y-m-d");
                 $detalle = $_POST['detalle'];
@@ -139,9 +120,9 @@
                     $ver2=mysqli_fetch_array($result2);
                     $idasiento = $ver2[0];
                     
-                    if($saldo1 != 0.0){
+                    if($saldo1 != 0){
                         
-                        $cero = 0.0;
+                        $cero = 0;
 
                         $records3 = $conn->prepare("INSERT INTO cuentaasiento (fecha, debe, haber, idCuenta, idAsiento) VALUES ('$fecha', '$saldo1', '$cero', '$idcuenta', '$idasiento')");
                         $records3->bindParam('fecha', $fecha);
@@ -153,7 +134,7 @@
 
                     }else{
 
-                            $cero = 0.0;
+                            $cero = 0;
 
                             $records3 = $conn->prepare("INSERT INTO cuentaasiento (fecha, debe, haber, idCuenta, idAsiento) VALUES ('$fecha', '$cero', '$saldo2', '$idcuenta', '$idasiento')");
                             $records3->bindParam('fecha', $fecha);
@@ -200,6 +181,20 @@
                 <label>Feriados Trabajados: </label><input step="any" type="number" step="0.01" name="feriadosTrabajados" value='0' id="feriadosTrabajados" min='0' required><label> </label><label>Valor de un Dia Trabajado: </label><input step="any" type="number" step="0.01" name="valorDeFeriadosTrabajados" value='0' id="valorDeFeriadosTrabajados" min='0' required>
             </p>
 
+            <p>
+                <label>Bono: </label><select class="form-control input-sm" name="bono" id="bono" this.options[this.selectedIndex].innerHTML>
+                                                                    <option value= <?php echo 0 ?> >Ninguno</option>
+                                                                <?php 
+                                                                    $sql="SELECT * FROM bono";
+                                                                    $result=db_query($sql);
+                                                                ?>
+        
+                                                                <?php while($row=mysqli_fetch_row($result)): ?>
+                                                                    <option value= <?php echo $row[3] ?> > <?php echo $row[1];?> </option>
+                                                                <?php endwhile ?>
+                                                            </select>
+            </p>
+            
             <textarea readonly>Los aportes y retenciones son los siguientes:
                 o Aporte Personal Jubilación: 11%
                 o Aporte Personal O. Social: 3%
@@ -218,13 +213,11 @@
             </p>
 
             <p>
-                <label>Porcentaje de Pago por Caja: </label><input step="any" type="number" step="0.01" name="porcentajeCaja" value='0' id="porcentajeCaja" min='0' required>
+                <label>Forma de Pago: </label> <select class="form-control input-sm" name="formaPago" id="formaPago" this.options[this.selectedIndex].innerHTML>
+                                                                    <option value="caja">Caja</option>
+                                                                    <option value="banco">Banco Cuenta Corriente</option>
+                                                            </select>
             </p>
-
-            <p>
-                <label>Porcentaje de Pago por Banco Cuenta Corriente: </label><input step="any" type="number" step="0.01" name="porcentajeBanco" value='0' id="porcentajeBanco" min='0' required>
-            </p>
-
 
             <input type="submit" value="Pagar Sueldo">
 

@@ -110,7 +110,7 @@
         </form>
 
         <form>
-            <input type="buttom" value="Menu Principal" onclick="location.href='colaborador.php'">
+            <input type="buttom" value="Menu Principal" onclick="location.href='admin.php'">
         </form>
 
     </body>
