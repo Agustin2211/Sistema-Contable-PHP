@@ -36,7 +36,7 @@
                 <td><?php echo $row->fecha;?></td>
                 <td><?php echo $row->detalle;?></td>
                 <td>
-                    <a href="buscarAsiento?id=<?php echo $row->id; clearstatcache(); ?>">Ver</a>
+                    <a href="buscarAsiento.php?id=<?php echo $row->id; clearstatcache(); ?>">Ver</a>
         	    </td>
 
             </tr>
