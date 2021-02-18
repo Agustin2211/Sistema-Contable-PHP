@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 03-02-2021 a las 05:11:15
+-- Tiempo de generación: 18-02-2021 a las 02:29:25
 -- Versión del servidor: 10.4.17-MariaDB
 -- Versión de PHP: 7.4.14
 
@@ -33,12 +33,18 @@ CREATE TABLE `asiento` (
   `detalle` varchar(250) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- --------------------------------------------------------
+
 --
--- Volcado de datos para la tabla `asiento`
+-- Estructura de tabla para la tabla `bono`
 --
 
-INSERT INTO `asiento` (`id`, `fecha`, `detalle`) VALUES
-(151, '2021-02-03', 'Pago de sueldo al empleado Kowalski');
+CREATE TABLE `bono` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(250) NOT NULL,
+  `descripcion` varchar(250) NOT NULL,
+  `importe` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -54,14 +60,6 @@ CREATE TABLE `cuentaasiento` (
   `idCuenta` int(11) NOT NULL,
   `idAsiento` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `cuentaasiento`
---
-
-INSERT INTO `cuentaasiento` (`id`, `fecha`, `debe`, `haber`, `idCuenta`, `idAsiento`) VALUES
-(36, '2021-02-03', 32314, 0, 530, 151),
-(37, '2021-02-03', 0, 32314, 111, 151);
 
 -- --------------------------------------------------------
 
@@ -178,17 +176,9 @@ INSERT INTO `puestoempleado` (`id`, `nombre`, `descripcion`, `sueldoMinimo`, `vi
 CREATE TABLE `tablapost` (
   `id` int(11) NOT NULL,
   `cuenta` varchar(250) NOT NULL,
-  `debe` int(11) NOT NULL,
-  `haber` int(11) NOT NULL
+  `debe` float NOT NULL,
+  `haber` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `tablapost`
---
-
-INSERT INTO `tablapost` (`id`, `cuenta`, `debe`, `haber`) VALUES
-(29, '530', 32314, 0),
-(30, '111', 0, 32314);
 
 -- --------------------------------------------------------
 
@@ -220,6 +210,12 @@ INSERT INTO `users` (`id`, `email`, `password`, `rol_id`) VALUES
 -- Indices de la tabla `asiento`
 --
 ALTER TABLE `asiento`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `bono`
+--
+ALTER TABLE `bono`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -266,13 +262,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT de la tabla `asiento`
 --
 ALTER TABLE `asiento`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=152;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=179;
+
+--
+-- AUTO_INCREMENT de la tabla `bono`
+--
+ALTER TABLE `bono`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `cuentaasiento`
 --
 ALTER TABLE `cuentaasiento`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=152;
 
 --
 -- AUTO_INCREMENT de la tabla `cuentas`
@@ -296,7 +298,7 @@ ALTER TABLE `puestoempleado`
 -- AUTO_INCREMENT de la tabla `tablapost`
 --
 ALTER TABLE `tablapost`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `users`
