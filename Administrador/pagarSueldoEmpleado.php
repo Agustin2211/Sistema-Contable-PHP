@@ -38,20 +38,24 @@
 
         /*UNA VEZ QUE SE TIENE EL SUELDO, SE HACEN TODOS LAS RESTAS Y SUMAS A SU SUELDO*/
 
-        $sueldo = $sueldo + $importeDeHorasExtras + $importeFeriadosTrabajados + $bono;
+        $sueldoEmpleadoConHaberes = $sueldo + $importeDeHorasExtras + $importeFeriadosTrabajados + $bono;
 
         /*Aporte Personal Jubilación: 11%*/
-            $sueldo = $sueldo - (($sueldo * 11)/100);
+            $jubilacion = (($sueldo * 11)/100);
         /*Aporte Personal O. Social: 3%*/
-            $sueldo = $sueldo - (($sueldo * 3)/100);
+            $obraSocial = (($sueldo * 3)/100);
+        /*Aporte Personal O. Social: 3%*/
+            $ley = (($sueldo * 3)/100);
         /*Aporte Personal Sindicato: 2.5%*/
-            $sueldo = $sueldo - (($sueldo * 2.5)/100);
-        /*Contribución Patronal Jubilación: 17.6%*/
-            $sueldo = $sueldo - (($sueldo * 17.6)/100);
+            $sindicato = (($sueldo * 2.5)/100);
         /*Contribución Patronal O. Social: 5.4%*/
-            $sueldo = $sueldo - (($sueldo * 5.4)/100);
+            $regulacionSindicato = (($sueldo * 5.4)/100);
         /*Ley de Riesgo de Trabajo (A.R.T.): 1,5%*/
-            $sueldo = $sueldo - (($sueldo * 1.5)/100);     
+            $art = (($sueldo * 1.5)/100);
+
+            $descuentos = $jubilacion + $obraSocial + $ley + $sindicato + $regulacionSindicato + $art;
+
+            $sueldo = $sueldoEmpleadoConHaberes - $descuentos;
 
         /*SE REALIZAN LOS ASIENTOS CORRESPONDIENTES A LA TABLAPOST*/
         $cuenta = 530;
@@ -147,7 +151,7 @@
                             $records3->execute();
 
                         }
-                
+                /*UNA VEZ REALIZADA TODA ESTA PARTE, LO QUE SE DEBE HACER ES EL CONTRA ASIENTO EN CUESTION*/
                 }
 
             $pdf = new PDF();
@@ -217,7 +221,7 @@
             $pdf->Cell(75, 10, utf8_decode("Jubilacion"));
             $pdf->Cell(30, 10, utf8_decode("11.0"));
             $pdf->Cell(25, 10, utf8_decode(" "));
-            $jubilacion = - (($sueldo * 11)/100);
+            $jubilacion = - (($sueldoEmpleado * 11)/100);
             setType($jubilacion, "float");
             $jubilacion2 = number_format($jubilacion, 2, ",", ".");
             $pdf->Cell(30, 10, $jubilacion2);
@@ -228,7 +232,7 @@
             $pdf->Cell(75, 10, utf8_decode("Ley 19032"));
             $pdf->Cell(30, 10, utf8_decode("3.0"));
             $pdf->Cell(25, 10, utf8_decode(" "));
-            $ley = - (($sueldo * 3)/100);
+            $ley = - (($sueldoEmpleado * 3)/100);
             setType($ley, "float");
             $ley2 = number_format($ley, 2, ",", ".");
             $pdf->Cell(30, 10, $ley2);
@@ -240,7 +244,7 @@
             $pdf->Cell(75, 10, utf8_decode("Obra Social"));
             $pdf->Cell(30, 10, utf8_decode("3.0"));
             $pdf->Cell(25, 10, utf8_decode(" "));
-            $obra = - (($sueldo * 3)/100);
+            $obra = - (($sueldoEmpleado * 3)/100);
             setType($obra, "float");
             $obra2 = number_format($obra, 2, ",", ".");
             $pdf->Cell(30, 10, $obra2);
@@ -251,7 +255,7 @@
             $pdf->Cell(75, 10, utf8_decode("Sindicato"));
             $pdf->Cell(30, 10, utf8_decode("2.5"));
             $pdf->Cell(25, 10, utf8_decode(" "));
-            $sindicato = - (($sueldo * 2.5)/100);
+            $sindicato = - (($sueldoEmpleado * 2.5)/100);
             setType($sindicato, "float");
             $sindicato2 = number_format($sindicato, 2, ",", ".");
             $pdf->Cell(30,10, $sindicato2);
@@ -262,7 +266,7 @@
             $pdf->Cell(75, 10, utf8_decode("Regulacion de Sindicato"));
             $pdf->Cell(30, 10, utf8_decode("5.4"));
             $pdf->Cell(25, 10, utf8_decode(" "));
-            $sindicato2 = - (($sueldo * 5.4)/100);
+            $sindicato2 = - (($sueldoEmpleado * 5.4)/100);
             setType($sindicato2, "float");
             $sindicato3 = number_format($sindicato2, 2, ",", ".");
             $pdf->Cell(30, 10, $sindicato3);
@@ -273,7 +277,7 @@
             $pdf->Cell(75, 10, utf8_decode("Ley de Riesgo de Trabajo"));
             $pdf->Cell(30, 10, utf8_decode("1.5"));
             $pdf->Cell(25, 10, utf8_decode(" "));
-            $art = - (($sueldo * 1.5)/100);
+            $art = - (($sueldoEmpleado * 1.5)/100);
             setType($art, "float");
             $art2 = number_format($art, 2, ",", ".");
             $pdf->Cell(30, 10, $art2);
@@ -315,11 +319,11 @@
             $lugaryfecha = "Rosario. " . date("d/m/y");
             $pdf->Cell(130,7, $lugaryfecha,1,0,'C');
 
-            $totalRemuneraciones = $sueldo + $importeDeHorasExtras + $importeFeriadosTrabajados + $bono;
-            $totalRemuneraciones2 = number_format($totalRemuneraciones, 2, ",", ".");
-            $pdf->Cell(30,7,$totalRemuneraciones2,1,0,'C');
 
-            $totalDeducciones = - $jubilacion - $ley - $obra - $sindicato - $sindicato2 - $art;
+            $totalRemuneraciones2 = number_format($sueldoEmpleadoConHaberes, 2, ",", ".");
+            $pdf->Cell(30,7,$sueldoEmpleadoConHaberes,1,0,'C');
+
+            $totalDeducciones = $jubilacion + $ley + $obra + $sindicato + $sindicato2 + $art;
             $totalDeducciones2 = number_format($totalDeducciones, 2, ",", ".");
             $pdf->Cell(30,7,$totalDeducciones2,1,0,'C');
 
@@ -329,7 +333,7 @@
             
             $pdf->Ln(7);
 
-            $totalNeto = $totalRemuneraciones - $totalDeducciones;
+            $totalNeto = $sueldoEmpleadoConHaberes + $totalDeducciones;
             $totalNeto2 = number_format($totalNeto, 2, ",", ".");
             $pdf->Cell(190,7,$totalNeto2,1,0,'L');
 
@@ -345,8 +349,11 @@
             $pdf->Cell(150);
             $pdf->Cell(40,7,utf8_decode("Firma del Empleador"),1,0,'C');
 
-
             $pdf->Output();
+
+            $stmt = $conn->prepare("TRUNCATE TABLE tablapost");
+            $stmt->execute();
+
             }else{
                 echo "EL METODO DE LA PARTIDA DOBLE NO SE CUMPLE";
             }

@@ -75,6 +75,9 @@
                 
                 }
 
+                $stmt = $conn->prepare("TRUNCATE TABLE tablapost");
+                $stmt->execute();
+
                 echo "ASIENTOS CARGADOS EXITOSAMENTE";
             }else{
                 echo "EL METODO DE LA PARTIDA DOBLE NO SE CUMPLE";
