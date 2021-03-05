@@ -16,42 +16,40 @@
 
         /*LO PRIMERO QUE SE HACE ES REGISTRAR LAS HORAS EXTRAS Y FERIADOS QUE TRABAJO EL EMPLEADO*/
 
-        $id = $_POST['id'];
+        $idEmpleado = $_POST['id'];
 
         $importeDeHorasExtras = $_POST['horasExtras'] * $_POST['ValorDeHorasExtras'];
         $importeFeriadosTrabajados = $_POST['feriadosTrabajados'] * $_POST['valorDeFeriadosTrabajados'];
         $bono = $_POST['bono'];
 
-        $connection = mysqli_connect("localhost", "root", "", "php_login_database");
-        $sql = ("SELECT * FROM empleado WHERE id like '$id'");
+        $sql = ("SELECT * FROM empleado WHERE id like '$idEmpleado'");
         $result = db_query($sql);
         $row = mysqli_fetch_array($result);
 
         $puesto = $row[10];
 
-        $connection2 = mysqli_connect("localhost", "root", "", "php_login_database");
         $sql2 = ("SELECT * FROM puestoempleado WHERE id like '$puesto'");
         $result2 = db_query($sql2);
         $row2 = mysqli_fetch_array($result2);
 
-        $sueldo = $row2[3];
+        $sueldoMinimo = $row2[3];
 
         /*UNA VEZ QUE SE TIENE EL SUELDO, SE HACEN TODOS LAS RESTAS Y SUMAS A SU SUELDO*/
 
-        $sueldoEmpleadoConHaberes = $sueldo + $importeDeHorasExtras + $importeFeriadosTrabajados + $bono;
+        $sueldoEmpleadoConHaberes = $sueldoMinimo + $importeDeHorasExtras + $importeFeriadosTrabajados + $bono;
 
         /*Aporte Personal Jubilación: 11%*/
-            $jubilacion = (($sueldo * 11)/100);
+            $jubilacion = (($sueldoMinimo * 11)/100);
         /*Aporte Personal O. Social: 3%*/
-            $obraSocial = (($sueldo * 3)/100);
+            $obraSocial = (($sueldoMinimo * 3)/100);
         /*Aporte Personal O. Social: 3%*/
-            $ley = (($sueldo * 3)/100);
+            $ley = (($sueldoMinimo * 3)/100);
         /*Aporte Personal Sindicato: 2.5%*/
-            $sindicato = (($sueldo * 2.5)/100);
+            $sindicato = (($sueldoMinimo * 2.5)/100);
         /*Contribución Patronal O. Social: 5.4%*/
-            $regulacionSindicato = (($sueldo * 5.4)/100);
+            $regulacionSindicato = (($sueldoMinimo * 5.4)/100);
         /*Ley de Riesgo de Trabajo (A.R.T.): 1,5%*/
-            $art = (($sueldo * 1.5)/100);
+            $art = (($sueldoMinimo * 1.5)/100);
 
             $descuentos = $jubilacion + $obraSocial + $ley + $sindicato + $regulacionSindicato + $art;
 
@@ -102,7 +100,6 @@
             $saldo = ($saldo1) - ($saldo2);
         }
 
-        /*ACA ES DONDE EXPLOTA TODO, COMO NO DA CON EXACTITUD 0 EL SALDO, NUNCA REALIZA EL INGRESO DE DATOS EN EL LIBRO DIARIO*/
             if($saldo == 0){
                 /*ASIENTO INTRODUCIDO EN LIBRO DIARIO*/
                 $fecha = date("Y-m-d");
@@ -151,8 +148,11 @@
                             $records3->execute();
 
                         }
+
+
                 /*UNA VEZ REALIZADA TODA ESTA PARTE, LO QUE SE DEBE HACER ES EL CONTRA ASIENTO EN CUESTION*/
                 }
+
             if($tipoPago == "caja"){
             $pdf = new PDF();
             $pdf ->AliasNbPages();
@@ -956,12 +956,25 @@
                 $pdf->Cell(40,7,utf8_decode("Firma del Empleador"),1,0,'C');    
 
                 $pdf->Output();
-    
+
                 $stmt = $conn->prepare("TRUNCATE TABLE tablapost");
                 $stmt->execute();
+
+
             }
     }
-}
+        $fecha = date("Y-m-d");
+        $stmt = $conn->prepare("INSERT INTO pagosanteriores (idEmpleado, sueldoMinimo, sueldoCobrado, horasExtras, feriadosTrabajados, bono, fecha, tipoPago) VALUES ('$idEmpleado', '$sueldoMinimo', $sueldo,'$importeDeHorasExtras',  '$importeFeriadosTrabajados', '$bono', '$fecha',  '$tipoPago')");
+        $stmt->bindParam('idEmpleado', $idEmpleado);
+        $stmt->bindParam('sueldoMinimo', $sueldoMinimo);
+        $stmt->bindParam('sueldoCobrado', $sueldo);
+        $stmt->bindParam('horasExtras', $importeDeHorasExtras);
+        $stmt->bindParam('feriadosTrabajados', $importeFeriadosTrabajados);
+        $stmt->bindParam('bono', $bono);
+        $stmt->bindParam('fecha', $fecha);
+        $stmt->bindParam('tipoPago', $tipoPago);
+        $stmt->execute();
+    }
 ?>
 
 <html>
@@ -979,7 +992,21 @@
         <form action="pagarSueldoEmpleado.php" class="form-inline" role="form" method="POST">       
 
             <p>
-                <label>Pago de Sueldo al Empleado: </label><input step="any" type="number" step="0.01" name="id" id="id" min='0' required>
+                <label>Pago de Sueldo al Empleado: </label><select class="form-control imput-sm" name="id" id="id" this.options[this.selectedIndex].innerHTML>
+                                                                <option value=<?php echo 0?>>Seleccionar Empleado</option>
+                                                                    <?php
+                                                                        $sql = "SELECT * FROM empleado";
+                                                                        $result = db_query($sql);
+                                                                    ?>
+
+                                                                <?php while($row=mysqli_fetch_row($result)): ?>
+                                                                    <option value= <?php echo $row[0] ?> > <?php echo $row[1] . " " . $row[2];?> </option>
+                                                                <?php endwhile ?>
+                                                            </select>
+
+
+
+
             </p>
 
             <p>
@@ -1018,7 +1045,7 @@
             </p>
 
             <p>
-                <label>Fecha: </label> <input type="datetime" name="fecha" required readonly value="<?php echo date("Y-m-d");?>">
+                <label>Fecha: </label> <input type="datetime" name="fecha" required readonly value="<?php echo date("d-m-Y");?>">
             </p>
 
             <p>
@@ -1030,14 +1057,10 @@
 
             <input type="submit" value="Pagar Sueldo">
 
-            <form>
-            <input type="buttom" value="Comprobante" onclick="location.href='pdf.php'">
-            </form>
-
         </form>
 
         <form>
-            <input type="buttom" value="Atras" onclick="location.href='pagarSueldo.php'">
+            <input type="buttom" value="Atras" onclick="location.href='pagoDeSueldos.php'">
         </form>
 
     </body>

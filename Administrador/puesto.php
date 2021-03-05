@@ -30,7 +30,7 @@
         </form>
 
         <form>
-            <input type="buttom" value="Atras" onclick="location.href='admin.php'">
+            <input type="buttom" value="Atras" onclick="location.href='pagoDeSueldos.php'">
         </form>
     
     </body>

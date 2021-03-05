@@ -16,27 +16,26 @@
 
     <body>
 
-        <h1>Administrador</h1>
+        <h1>Sistema Contable</h1>
         
         <form>
-            <input type="buttom" value="Sistema Contable" OnClick = "location.href='sistemaContable.php'">
+            <input type="buttom" value="Ingresar Asiento" OnClick = "location.href='nuevoAsiento.php'">
         </form>
     
         <form>
-            <input type="buttom" value="Pago de Sueldos" onclick = "location.href='pagoDeSueldos.php'">
-        </form>
-
-
-        <form>
-            <input type="buttom" value="Administrar Roles" OnClick = "location.href='administrarRoles.php'">
+            <input type="buttom" value="Ver Libro Diario" onclick = "location.href='librodiario.php'">
         </form>
     
         <form>
-            <input type="buttom" value="Datos Fiscales" onclick="location.href='datosFiscales.php'">
+            <input type="buttom" value="Ver Libro Mayor" onclick="location.href='libromayor.php'">
         </form>
 
         <form>
-            <input type ="buttom" value="Cerrar Sesión" OnClick= "location.href='/php-login/logout.php'">
+            <input type="buttom" value="Plan de Cuentas" onclick="location.href='plandecuenta.php'">
+        </form>
+
+        <form>
+            <input type="buttom" value="Atras" onclick="location.href='/php-login/Administrador/admin.php'">
         </form>
 
     </body>
