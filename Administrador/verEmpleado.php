@@ -42,6 +42,10 @@
                 </p>
 
                 <p>
+                    <label>Fecha de Ingreso: </label><input step="any" type="date" readonly name="fechadeingreso" value="<?php echo $row->fechaDeIngreso; ?>">
+                </p>
+
+                <p>
                     <label>D.N.I: </label><input step="any" type="number" readonly value="<?php echo $row->dni; ?>">
                 </p>
 

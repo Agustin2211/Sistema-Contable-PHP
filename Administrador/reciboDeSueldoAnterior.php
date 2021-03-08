@@ -25,9 +25,8 @@
             $sql = ("SELECT * FROM empleado WHERE id like '$rowPagoAnterior[1]'");
             $result = db_query($sql);
             $row = mysqli_fetch_array($result);
-    
-            $puesto = $row[10];
 
+            $puesto = $row[11];
 
             $sql2 = ("SELECT * FROM puestoempleado WHERE id like '$puesto'");
             $result2 = db_query($sql2);
@@ -76,7 +75,7 @@
                 $legajoEmpleado = $row[0];
                 $pdf->Cell(50,7,$legajoEmpleado,1,0,'C',);
     
-                $cuilEmpleado = $row[9];
+                $cuilEmpleado = $row[10];
                 $pdf->Cell(50,7,$cuilEmpleado,1,0,'C',);
     
                 $pdf->Ln(7);
@@ -90,22 +89,27 @@
     
                 $pdf->Ln(7);
     
-                $pdf->Cell(65,7,utf8_decode("Sueldo"),1,0,'C',1);
-                $pdf->Cell(65,7,utf8_decode("Periodo"),1,0,'C',1);
-                $pdf->Cell(60,7,utf8_decode("Fecha"),1,0,'C',1);
+                $pdf->Cell(45,7,utf8_decode("Fecha de Ingreso"),1,0,'C',1); 
+                $pdf->Cell(50,7,utf8_decode("Sueldo"),1,0,'C',1);
+                $pdf->Cell(50,7,utf8_decode("Periodo"),1,0,'C',1);
+                $pdf->Cell(45,7,utf8_decode("Fecha"),1,0,'C',1);
                 
                 $pdf->Ln(7);
     
+                $fechaDeIngreso = $row[6];
+                $fechaDeIngreso = date("d/m/Y", strtotime($fechaDeIngreso));
+                $pdf->Cell(45,7,$fechaDeIngreso,1,0,'C');
+
                 $sueldoEmpleado = $rowPagoAnterior[2];
-                $pdf->Cell(65,7,$sueldoEmpleado,1,0,'C');
+                $pdf->Cell(50,7,$sueldoEmpleado,1,0,'C');
 
                 $fecha = $rowPagoAnterior[7];
                 $periodo = date("M Y", strtotime($fecha));
-                $pdf->Cell(65,7,$periodo,1,0,'C');
+                $pdf->Cell(50,7,$periodo,1,0,'C');
     
                 $fecha = $rowPagoAnterior[7];
-                $fecha = date("d-m-y", strtotime($fecha));
-                $pdf->Cell(60,7,$fecha,1,0,'C');
+                $fecha = date("d/m/Y", strtotime($fecha));
+                $pdf->Cell(45,7,$fecha,1,0,'C');
         
                 $pdf->Ln(7);
     
@@ -223,7 +227,9 @@
                 $pdf->Cell(30,7,utf8_decode("Deducciones"),1,0,'C',1);
     
                 $pdf->Ln(7);
-                $lugaryfecha = "Rosario. " . date("d/m/y");
+                $fecha = $rowPagoAnterior[7];
+                $fecha = date("d/m/Y", strtotime($fecha));
+                $lugaryfecha = "Rosario. " . $fecha;
                 $pdf->Cell(130,7, $lugaryfecha,1,0,'C');
     
     
@@ -272,7 +278,7 @@
                 $legajoEmpleado = $row[0];
                 $pdf->Cell(50,7,$legajoEmpleado,1,0,'C',);
     
-                $cuilEmpleado = $row[9];
+                $cuilEmpleado = $row[10];
                 $pdf->Cell(50,7,$cuilEmpleado,1,0,'C',);
     
                 $pdf->Ln(7);
@@ -286,22 +292,27 @@
     
                 $pdf->Ln(7);
     
-                $pdf->Cell(65,7,utf8_decode("Sueldo"),1,0,'C',1);
-                $pdf->Cell(65,7,utf8_decode("Periodo"),1,0,'C',1);
-                $pdf->Cell(60,7,utf8_decode("Fecha"),1,0,'C',1);
+                $pdf->Cell(45,7,utf8_decode("Fecha de Ingreso"),1,0,'C',1); 
+                $pdf->Cell(50,7,utf8_decode("Sueldo"),1,0,'C',1);
+                $pdf->Cell(50,7,utf8_decode("Periodo"),1,0,'C',1);
+                $pdf->Cell(45,7,utf8_decode("Fecha"),1,0,'C',1);
                 
                 $pdf->Ln(7);
     
-                $sueldoEmpleado = $rowPagoAnterior[2];
-                $pdf->Cell(65,7,$sueldoEmpleado,1,0,'C');
+                $fechaDeIngreso = $row[6];
+                $fechaDeIngreso = date("d/m/Y", strtotime($fechaDeIngreso));
+                $pdf->Cell(45,7,$fechaDeIngreso,1,0,'C');
 
+                $sueldoEmpleado = $rowPagoAnterior[2];
+                $pdf->Cell(50,7,$sueldoEmpleado,1,0,'C');
+
+                $fecha = $rowPagoAnterior[7];
                 $periodo = date("M Y", strtotime($fecha));
-                $pdf->Cell(65,7,$periodo,1,0,'C');
+                $pdf->Cell(50,7,$periodo,1,0,'C');
     
                 $fecha = $rowPagoAnterior[7];
-                $fecha = date("d-m-y", strtotime($fecha));
-                $pdf->Cell(60,7,$fecha,1,0,'C');
-
+                $fecha = date("d/m/Y", strtotime($fecha));
+                $pdf->Cell(45,7,$fecha,1,0,'C');
         
                 $pdf->Ln(7);
     
@@ -419,7 +430,9 @@
                 $pdf->Cell(30,7,utf8_decode("Deducciones"),1,0,'C',1);
     
                 $pdf->Ln(7);
-                $lugaryfecha = "Rosario. " . date("d/m/y");
+                $fecha = $rowPagoAnterior[7];
+                $fecha = date("d/m/Y", strtotime($fecha));
+                $lugaryfecha = "Rosario. " . $fecha;
                 $pdf->Cell(130,7, $lugaryfecha,1,0,'C');
     
     
@@ -479,7 +492,7 @@
                     $legajoEmpleado = $row[0];
                     $pdf->Cell(50,7,$legajoEmpleado,1,0,'C',);
         
-                    $cuilEmpleado = $row[9];
+                    $cuilEmpleado = $row[10];
                     $pdf->Cell(50,7,$cuilEmpleado,1,0,'C',);
         
                     $pdf->Ln(7);
@@ -493,25 +506,30 @@
         
                     $pdf->Ln(7);
         
-                    $pdf->Cell(55,7,utf8_decode("Sueldo"),1,0,'C',1);
-                    $pdf->Cell(55,7,utf8_decode("Periodo"),1,0,'C',1);
-                    $pdf->Cell(45,7,utf8_decode("Fecha"),1,0,'C',1);
-                    $pdf->Cell(35, 7, utf8_decode("Banco"),1,0,'C',1);
+                    $pdf->Cell(40,7,utf8_decode("Fecha de Ingreso"),1,0,'C',1);
+                    $pdf->Cell(40,7,utf8_decode("Sueldo"),1,0,'C',1);
+                    $pdf->Cell(40,7,utf8_decode("Periodo"),1,0,'C',1);
+                    $pdf->Cell(40,7,utf8_decode("Fecha"),1,0,'C',1);
+                    $pdf->Cell(30, 7, utf8_decode("Banco"),1,0,'C',1);
                     
                     $pdf->Ln(7);
 
+                    $fechaDeIngreso = $row[6];
+                    $fechaDeIngreso = date("d/m/Y", strtotime($fechaDeIngreso));
+                    $pdf->Cell(40,7,$fechaDeIngreso,1,0,'C');
+
                     $sueldoEmpleado = $rowPagoAnterior[2];
-                    $pdf->Cell(55,7,$sueldoEmpleado,1,0,'C');
+                    $pdf->Cell(40,7,$sueldoEmpleado,1,0,'C');
 
                     $fecha = $rowPagoAnterior[7];
                     $periodo = date("M Y", strtotime($fecha));
-                    $pdf->Cell(55,7,$periodo,1,0,'C');
+                    $pdf->Cell(40,7,$periodo,1,0,'C');
         
                     $fecha = $rowPagoAnterior[7];
-                    $fecha = date("d-m-y", strtotime($fecha));
-                    $pdf->Cell(45,7,$fecha,1,0,'C');
+                    $fecha = date("d/m/Y", strtotime($fecha));
+                    $pdf->Cell(40,7,$fecha,1,0,'C');
     
-                    $pdf->Cell(35,7,utf8_decode("Santander Rio"),1,0,'C');
+                    $pdf->Cell(30,7,utf8_decode("Santander Rio"),1,0,'C');
 
                     $pdf->Ln(7);
         
@@ -629,7 +647,9 @@
                     $pdf->Cell(30,7,utf8_decode("Deducciones"),1,0,'C',1);
         
                     $pdf->Ln(7);
-                    $lugaryfecha = "Rosario. " . date("d/m/y");
+                    $fecha = $rowPagoAnterior[7];
+                    $fecha = date("d/m/Y", strtotime($fecha));
+                    $lugaryfecha = "Rosario. " . $fecha;
                     $pdf->Cell(130,7, $lugaryfecha,1,0,'C');
         
         
@@ -681,7 +701,7 @@
                     $legajoEmpleado = $row[0];
                     $pdf->Cell(50,7,$legajoEmpleado,1,0,'C',);
         
-                    $cuilEmpleado = $row[9];
+                    $cuilEmpleado = $row[10];
                     $pdf->Cell(50,7,$cuilEmpleado,1,0,'C',);
         
                     $pdf->Ln(7);
@@ -695,25 +715,30 @@
         
                     $pdf->Ln(7);
         
-                    $pdf->Cell(55,7,utf8_decode("Sueldo"),1,0,'C',1);
-                    $pdf->Cell(55,7,utf8_decode("Periodo"),1,0,'C',1);
-                    $pdf->Cell(45,7,utf8_decode("Fecha"),1,0,'C',1);
-                    $pdf->Cell(35, 7, utf8_decode("Banco"),1,0,'C',1);
+                    $pdf->Cell(40,7,utf8_decode("Fecha de Ingreso"),1,0,'C',1);
+                    $pdf->Cell(40,7,utf8_decode("Sueldo"),1,0,'C',1);
+                    $pdf->Cell(40,7,utf8_decode("Periodo"),1,0,'C',1);
+                    $pdf->Cell(40,7,utf8_decode("Fecha"),1,0,'C',1);
+                    $pdf->Cell(30, 7, utf8_decode("Banco"),1,0,'C',1);
                     
                     $pdf->Ln(7);
-        
+
+                    $fechaDeIngreso = $row[6];
+                    $fechaDeIngreso = date("d/m/Y", strtotime($fechaDeIngreso));
+                    $pdf->Cell(40,7,$fechaDeIngreso,1,0,'C');
+
                     $sueldoEmpleado = $rowPagoAnterior[2];
-                    $pdf->Cell(55,7,$sueldoEmpleado,1,0,'C');
-    
+                    $pdf->Cell(40,7,$sueldoEmpleado,1,0,'C');
+
                     $fecha = $rowPagoAnterior[7];
                     $periodo = date("M Y", strtotime($fecha));
-                    $pdf->Cell(55,7,$periodo,1,0,'C');
+                    $pdf->Cell(40,7,$periodo,1,0,'C');
         
                     $fecha = $rowPagoAnterior[7];
-                    $fecha = date("d-m-y", strtotime($fecha));
-                    $pdf->Cell(45,7,$fecha,1,0,'C');
-            
-                    $pdf->Cell(35,7,utf8_decode("Santander Rio"),1,0,'C');
+                    $fecha = date("d/m/Y", strtotime($fecha));
+                    $pdf->Cell(40,7,$fecha,1,0,'C');
+    
+                    $pdf->Cell(30,7,utf8_decode("Santander Rio"),1,0,'C');
     
                     $pdf->Ln(7);
         
@@ -751,7 +776,6 @@
                     setType($ley, "float");
                     $ley2 = number_format($ley, 2, ",", ".");
                     $pdf->Cell(30, 10, $ley2);
-        
                     
                     $pdf->Ln(10);            
                     $pdf->Cell(8);
@@ -831,7 +855,9 @@
                     $pdf->Cell(30,7,utf8_decode("Deducciones"),1,0,'C',1);
         
                     $pdf->Ln(7);
-                    $lugaryfecha = "Rosario. " . date("d/m/y");
+                    $fecha = $rowPagoAnterior[7];
+                    $fecha = date("d/m/Y", strtotime($fecha));
+                    $lugaryfecha = "Rosario. " . $fecha;
                     $pdf->Cell(130,7, $lugaryfecha,1,0,'C');
         
                     $totalRemuneraciones2 = number_format($sueldoEmpleadoConHaberes, 2, ",", ".");
