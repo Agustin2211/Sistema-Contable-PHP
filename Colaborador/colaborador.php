@@ -19,27 +19,11 @@
         <h1>Colaborador</h1>
         
         <form>
-            <input type="buttom" value="Ingresar Asiento" OnClick = "location.href='nuevoAsiento.php'">
+            <input type="buttom" value="Sistema Contable" OnClick = "location.href='sistemaContable.php'">
         </form>
     
         <form>
-            <input type="buttom" value="Ver Libro Diario" onclick = "location.href='librodiario.php'">
-        </form>
-    
-        <form>
-            <input type="buttom" value="Ver Libro Mayor" onclick="location.href='libromayor.php'">
-        </form>
-
-        <form>
-            <input type="buttom" value="Plan de Cuentas" onclick="location.href='plandecuenta.php'">
-        </form>
-
-        <form>
-            <input type="buttom" value="Empleados" onclick="location.href='empleados.php'">
-        </form>
-
-        <form>
-            <input type="buttom" value="Puestos" onclick="location.href='puesto.php'">
+            <input type="buttom" value="Pago de Sueldos" onclick = "location.href='pagoDeSueldos.php'">
         </form>
     
         <form>

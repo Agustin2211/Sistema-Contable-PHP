@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-02-2021 a las 02:29:25
+-- Tiempo de generación: 25-03-2021 a las 21:02:59
 -- Versión del servidor: 10.4.17-MariaDB
--- Versión de PHP: 7.4.14
+-- Versión de PHP: 7.4.15
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -32,6 +32,15 @@ CREATE TABLE `asiento` (
   `fecha` date NOT NULL,
   `detalle` varchar(250) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `asiento`
+--
+
+INSERT INTO `asiento` (`id`, `fecha`, `detalle`) VALUES
+(179, '2021-02-22', 'Pago de sueldo al empleado Kowalski'),
+(222, '2021-03-04', 'Pago de sueldo al empleado Kowalski'),
+(250, '2021-03-07', 'Pago de sueldo al empleado Quito');
 
 -- --------------------------------------------------------
 
@@ -60,6 +69,18 @@ CREATE TABLE `cuentaasiento` (
   `idCuenta` int(11) NOT NULL,
   `idAsiento` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `cuentaasiento`
+--
+
+INSERT INTO `cuentaasiento` (`id`, `fecha`, `debe`, `haber`, `idCuenta`, `idAsiento`) VALUES
+(288, '2021-02-22', 36800, 0, 530, 179),
+(289, '2021-03-22', 0, 36800, 113, 179),
+(290, '2021-03-04', 36800, 0, 530, 222),
+(291, '2021-03-04', 0, 36800, 111, 222),
+(320, '2021-03-07', 56800, 0, 530, 250),
+(321, '2021-03-07', 0, 56800, 113, 250);
 
 -- --------------------------------------------------------
 
@@ -131,6 +152,7 @@ CREATE TABLE `empleado` (
   `direccion` varchar(200) NOT NULL,
   `telefono` varchar(200) NOT NULL,
   `fechadenacimiento` date NOT NULL,
+  `fechaDeIngreso` date NOT NULL DEFAULT '2020-12-01',
   `dni` int(11) NOT NULL,
   `estadocivil` varchar(200) NOT NULL,
   `cantidadhijos` int(11) NOT NULL,
@@ -142,9 +164,36 @@ CREATE TABLE `empleado` (
 -- Volcado de datos para la tabla `empleado`
 --
 
-INSERT INTO `empleado` (`id`, `nombre`, `apellido`, `direccion`, `telefono`, `fechadenacimiento`, `dni`, `estadocivil`, `cantidadhijos`, `cuil`, `puesto`) VALUES
-(1, 'Agustin', 'Kowalski', 'Piedras 853', '2474455903', '1998-11-22', 41645590, 'Soltero', 0, 20416455903, 1),
-(5, 'Esteban', 'Quito', 'Calle Falsa 123', '2477155365', '1997-10-12', 40321654, 'Soltero', 1, 2040321654, 1);
+INSERT INTO `empleado` (`id`, `nombre`, `apellido`, `direccion`, `telefono`, `fechadenacimiento`, `fechaDeIngreso`, `dni`, `estadocivil`, `cantidadhijos`, `cuil`, `puesto`) VALUES
+(1, 'Agustin', 'Kowalski', 'Piedras 853', '2474455903', '1998-11-22', '2020-12-01', 41645590, 'Soltero', 0, 20416455903, 1),
+(5, 'Esteban', 'Quito', 'Calle Falsa 123', '2477155365', '1997-10-12', '2020-12-23', 40321654, 'Soltero', 1, 2040321654, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pagosanteriores`
+--
+
+CREATE TABLE `pagosanteriores` (
+  `id` int(11) NOT NULL,
+  `idEmpleado` int(11) NOT NULL,
+  `sueldoMinimo` int(11) NOT NULL,
+  `sueldoCobrado` int(11) NOT NULL,
+  `horasExtras` int(11) NOT NULL,
+  `feriadosTrabajados` int(11) NOT NULL,
+  `bono` int(11) NOT NULL,
+  `fecha` date NOT NULL,
+  `tipoPago` varchar(250) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Con esta tabla se genera devuelta el Recibo de Sueldo';
+
+--
+-- Volcado de datos para la tabla `pagosanteriores`
+--
+
+INSERT INTO `pagosanteriores` (`id`, `idEmpleado`, `sueldoMinimo`, `sueldoCobrado`, `horasExtras`, `feriadosTrabajados`, `bono`, `fecha`, `tipoPago`) VALUES
+(2, 1, 50000, 36800, 0, 0, 0, '2021-02-22', 'Banco'),
+(15, 1, 50000, 36800, 0, 0, 0, '2021-03-04', 'caja'),
+(16, 5, 50000, 56800, 20000, 0, 0, '2021-03-07', 'banco');
 
 -- --------------------------------------------------------
 
@@ -237,6 +286,12 @@ ALTER TABLE `empleado`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `pagosanteriores`
+--
+ALTER TABLE `pagosanteriores`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `puestoempleado`
 --
 ALTER TABLE `puestoempleado`
@@ -262,7 +317,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT de la tabla `asiento`
 --
 ALTER TABLE `asiento`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=179;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=251;
 
 --
 -- AUTO_INCREMENT de la tabla `bono`
@@ -274,7 +329,7 @@ ALTER TABLE `bono`
 -- AUTO_INCREMENT de la tabla `cuentaasiento`
 --
 ALTER TABLE `cuentaasiento`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=152;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=322;
 
 --
 -- AUTO_INCREMENT de la tabla `cuentas`
@@ -287,6 +342,12 @@ ALTER TABLE `cuentas`
 --
 ALTER TABLE `empleado`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `pagosanteriores`
+--
+ALTER TABLE `pagosanteriores`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `puestoempleado`

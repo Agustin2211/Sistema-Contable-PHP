@@ -14,6 +14,10 @@
         <h1>Empleados</h1>
 
         <form>
+            <input type="buttom" value="Registrar Empleado" onclick="location.href='registrarEmpleado.php'">
+        </form>
+
+        <form>
             <input type="buttom" value="Lista de Empleados" onclick="location.href='listaEmpleado.php'">
         </form>
 
@@ -22,11 +26,7 @@
         </form>
 
         <form>
-            <input type="buttom" value="Pagar Sueldo" onclick="location.href='sueldos.php'">
-        </form>
-
-        <form>
-            <input type="buttom" value="Atras" onclick="location.href='colaborador.php'">
+            <input type="buttom" value="Atras" onclick="location.href='pagoDeSueldos.php'">
         </form>
     
     </body>

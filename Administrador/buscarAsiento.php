@@ -34,11 +34,16 @@
                     FROM cuentaasiento 
                     WHERE idAsiento = '$id'";
             $result= db_query($sql);
-            while($ver=mysqli_fetch_object($result)): 
+            while($ver=mysqli_fetch_object($result)):
+            $sql2 = "SELECT *
+                    FROM cuentas
+                    WHERE codigo = '$ver->idCuenta'";
+            $result2 = db_query($sql2);
+            $ver2=mysqli_fetch_object($result2)
         ?>
 
 	    <tr>
-		    <td><?php echo $ver->idCuenta; ?></td>
+		    <td><?php echo $ver2->cuenta; ?></td>
             <td><?php echo $ver->debe; ?></td>
             <td><?php echo $ver->haber; ?></td>
 		</tr>

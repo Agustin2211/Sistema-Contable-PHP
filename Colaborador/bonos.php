@@ -14,6 +14,10 @@
         <h1>Bonos</h1>
 
         <form>
+            <input type="buttom" value="Registrar Bono" onclick="location.href='registrarBono.php'">
+        </form>
+
+        <form>
             <input type="buttom" value="Lista de Bonos" onclick="location.href='listaBono.php'">
         </form>
 
@@ -22,7 +26,7 @@
         </form>
 
         <form>
-            <input type="buttom" value="Atras" onclick="location.href='sueldos.php'">
+            <input type="buttom" value="Atras" onclick="location.href='pagoDeSueldos.php'">
         </form>
     
     </body>

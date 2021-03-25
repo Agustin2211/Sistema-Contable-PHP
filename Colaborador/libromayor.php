@@ -44,7 +44,7 @@
         </table>
 
         <form>
-            <input type="buttom" value="Atras" OnClick = "location.href='colaborador.php'">
+            <input type="buttom" value="Atras" OnClick = "location.href='sistemaContable.php'">
         </form>
 
     </body>

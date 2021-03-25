@@ -1,19 +1,3 @@
-<?php
-
-    include('funciones.php');
-
-    session_start();
-
-    clearstatcache();
-
-    require('database.php');
-    
-    include('../Administrador/pdf.php');
-
-    date_default_timezone_set('America/Argentina/Buenos_Aires');
-
- 
-?>
 
 <!DOCTYPE html>
     <html>
@@ -31,31 +15,34 @@
 
 	    <table>
 		    <tr>
-			    <th width="30%">Nombre</th>
-			    <th width="30%">Apellido</th>
-                <th width="30%">D.N.I.</th>
-                <th width="30%">Ver</th>
+			    <th width="30%">Fecha</th>
+			    <th width="30%">Metodo de Pago</th>
+                <th width="30%">Sueldo Cobrado</th>
+                <th width="30%">Generar Comprobante</th>
 		    </tr>
 	
 	    <?php 
+            include('funciones.php');
+            $idEmpleado = $_GET['id'];
 		    $sql = "SELECT * 
-                    FROM empleado";
+                    FROM pagosanteriores
+                    WHERE idEmpleado = $idEmpleado";
 		    $result = db_query($sql);
 		    while($row = mysqli_fetch_object($result)){
         ?>
 	
 		    <tr>
-			    <td><?php echo $row->nombre;?></td>
-                <td><?php echo $row->apellido;?></td>
-                <td><?php echo $row->dni;?></td>
-                <td><a href="generarPagosAnteriores.php?id=<?php echo $row->id;?>">Ver</a></td>
+			    <td><?php echo $row->fecha;?></td>
+                <td><?php echo $row->tipoPago;?></td>
+                <td><?php echo $row->sueldoCobrado;?></td>
+                <td><a href="reciboDeSueldoAnterior.php?id=<?php echo $row->id;?>">Generar</a></td>
 		    </tr>
 	    <?php } ?>
 
         </table>
 
         <form>
-            <input type="buttom" value="Atras" OnClick = "location.href='pagoDeSueldos.php'">
+            <input type="buttom" value="Atras" OnClick = "location.href='pagosAnteriores.php'">
         </form>
 
     </body>

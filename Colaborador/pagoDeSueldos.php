@@ -39,7 +39,7 @@
         </form>
 
         <form>
-            <input type ="buttom" value="Atras" OnClick= "location.href='/php-login/Administrador/admin.php'">
+            <input type ="buttom" value="Atras" OnClick= "location.href='/php-login/Colaborador/colaborador.php'">
         </form>
 
     </body>

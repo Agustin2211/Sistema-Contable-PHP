@@ -122,7 +122,7 @@
             </form>
 
             <form>
-                <input type="buttom" value ="Atras" onclick="location.href = 'colaborador.php'">
+                <input type="buttom" value ="Atras" onclick="location.href = 'sistemaContable.php'">
             </form>
         </p>
 
