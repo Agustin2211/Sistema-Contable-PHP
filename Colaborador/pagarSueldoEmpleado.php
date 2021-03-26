@@ -349,7 +349,7 @@
                 $pdf->Cell(190,7,$valorEscrito,1,0,"L");
 
                 $pdf->Ln(7);
-                $pdf->Cell(190,7,utf8_decode("Original (preguntar que se pone verdaderamente."),1,0,'L');
+                $pdf->Cell(190,7,utf8_decode("Recibí de conformidad el importe neto en el presente recibo en concepto de haberes correspondiente el período arriba indicado quedando en mi poder un duplicado del mismo debidamente firmado por el empleador."),1,0,'L');
                 $pdf->Ln(7);
                 $pdf->Cell(150);
                 $pdf->Cell(40,7,utf8_decode("Firma del Empleado"),1,0,'C');
@@ -1064,7 +1064,7 @@
             </p>
 
             <p>
-                <label>Fecha: </label> <input type="datetime" name="fecha" required readonly value="<?php echo date("d-m-Y");?>">
+                <label>Fecha: </label> <input type="datetime" name="fecha" required readonly value="<?php echo date("d/m/Y");?>">
             </p>
 
             <p>

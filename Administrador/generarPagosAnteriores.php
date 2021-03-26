@@ -29,10 +29,12 @@
                     WHERE idEmpleado = $idEmpleado";
 		    $result = db_query($sql);
 		    while($row = mysqli_fetch_object($result)){
+                $fecha = $row->fecha;
+                $fecha = date("d/m/Y", strtotime($fecha));
         ?>
 	
 		    <tr>
-			    <td><?php echo $row->fecha;?></td>
+			    <td><?php echo $fecha;?></td>
                 <td><?php echo $row->tipoPago;?></td>
                 <td><?php echo $row->sueldoCobrado;?></td>
                 <td><a href="reciboDeSueldoAnterior.php?id=<?php echo $row->id;?>">Generar</a></td>

@@ -42,7 +42,7 @@
                 </p>
 
                 <p>
-                    <label>Fecha de Ingreso: </label><input step="any" type="date" readonly name="fechadeingreso" value="<?php echo $row->fechaDeIngreso; ?>">
+                    <label>Fecha de Ingreso: </label><input step="any" type="date" readonly name="fechadeingreso" value="<?php echo $row->fechadeingreso; ?>">
                 </p>
 
                 <p>

@@ -2,7 +2,7 @@
 
     session_start();
 
-require('database.php');
+    require('database.php');
 
     include("funciones.php"); 
 
@@ -11,17 +11,30 @@ require('database.php');
     date_default_timezone_set('America/Argentina/Buenos_Aires');
 
     if (!empty($_POST)){
-        $stmt = $conn->prepare("INSERT INTO empleado (nombre, apellido, direccion, telefono, fechadenacimiento, dni, estadocivil, cantidadhijos, cuil, puesto) VALUES (:nombre, :apellido, :direccion, :telefono, :fechadenacimiento, :dni, :estadocivil, :cantidadhijos, :cuil, :puesto)");
-        $stmt->bindParam(':nombre', $_POST['nombre']);
-        $stmt->bindParam(':apellido', $_POST['apellido']);
-        $stmt->bindParam(':direccion', $_POST['direccion']);
-        $stmt->bindParam(':telefono', $_POST['telefono']);
-        $stmt->bindParam(':fechadenacimiento', $_POST['fechadenacimiento']);
-        $stmt->bindParam(':dni', $_POST['dni']);
-        $stmt->bindParam(':estadocivil', $_POST['estadocivil']);
-        $stmt->bindParam(':cantidadhijos', $_POST['cantidadhijos']);
-        $stmt->bindParam(':cuil', $_POST['cuil']);
-        $stmt->bindParam(':puesto', $_POST['puesto']);
+        $nombre = $_POST['nombre'];
+        $apellido = $_POST['apellido'];
+        $direccion = $_POST['direccion'];
+        $telefono = $_POST['telefono'];
+        $fechadenacimiento = $_POST['fechadenacimiento'];
+        $fechadeingreso = date('Y-m-d');
+        $dni = $_POST['dni'];
+        $estadocivil = $_POST['estadocivil'];
+        $cantidadhijos = $_POST['cantidadhijos'];
+        $cuil = $_POST['cuil'];
+        $puesto = $_POST['puesto'];
+
+        $stmt = $conn->prepare("INSERT INTO empleado (nombre, apellido, direccion, telefono, fechadenacimiento, fechadeingreso, dni, estadocivil, cantidadhijos, cuil, puesto) VALUES ('$nombre', '$apellido', '$direccion', '$telefono', '$fechadenacimiento', '$fechadeingreso', '$dni', '$estadocivil', '$cantidadhijos', '$cuil', '$puesto')");
+        $stmt->bindParam(':nombre', $nombre);
+        $stmt->bindParam(':apellido', $apellido);
+        $stmt->bindParam(':direccion', $direccion);
+        $stmt->bindParam(':telefono', $telefono);
+        $stmt->bindParam(':fechadenacimiento', $fechadenacimiento);
+        $stmt->bindParam(':fechadeingreso', $fechadeingreso);
+        $stmt->bindParam(':dni', $dni);
+        $stmt->bindParam(':estadocivil', $estadocivil);
+        $stmt->bindParam(':cantidadhijos', $cantidadhijos);
+        $stmt->bindParam(':cuil', $cuil);
+        $stmt->bindParam(':puesto', $puesto);
         if ($stmt->execute()) {
             $message = 'Empleado agregado correctamente';
         }else{
@@ -94,6 +107,10 @@ require('database.php');
 
                 <p>
                     <label>Fecha de Nacimiento: </label><input step="any" type="date" name="fechadenacimiento" required>
+                </p>
+
+                <p>
+                    <label>Fecha de Ingreso: </label><input type="datetime" name="fechadeingreso" required readonly value="<?php echo date("d/m/Y");?>">
                 </p>
 
                 <p>

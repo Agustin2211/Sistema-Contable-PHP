@@ -29,11 +29,13 @@
                 $sql = "select * from asiento";
                 $result = db_query($sql);
                 while($row = mysqli_fetch_object($result)){
+                    $fecha = $row->fecha;
+                    $fecha = date("d/m/Y", strtotime($fecha));
             ?>
 
             <tr>
                 <td><?php echo $row->id;?></td>
-                <td><?php echo $row->fecha;?></td>
+                <td><?php echo $fecha;?></td>
                 <td><?php echo $row->detalle;?></td>
                 <td>
                     <a href="buscarAsiento.php?id=<?php echo $row->id; clearstatcache(); ?>">Ver</a>

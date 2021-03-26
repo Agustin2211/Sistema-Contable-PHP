@@ -38,11 +38,13 @@
                         FROM cuentaasiento
                         WHERE idCuenta = '$cuenta'");
                 $result = db_query($sql);
-		        while($row = mysqli_fetch_object($result)){  
+		        while($row = mysqli_fetch_object($result)){
+                    $fecha = $row->fecha;
+                    $fecha = date("d/m/Y", strtotime($fecha));  
             ?>
 	
 		    <tr>
-                <td><?php echo $row->fecha;?></td>
+                <td><?php echo $fecha;?></td>
                 <td><?php echo $row->debe;?></td>
                 <td><?php echo $row->haber;?></td>
 		    </tr>

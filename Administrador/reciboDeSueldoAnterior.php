@@ -251,14 +251,10 @@
                 $pdf->Cell(190,7,$totalNeto2,1,0,'L');
     
                 $pdf->Ln(7);
-                $pdf->Cell(190,7,utf8_decode("Son Pesos: "),1,0,"L");
-                $pdf->Ln(7);
                 $valorEscrito = convertir($totalNeto);
-                $pdf->Cell(190,7,$valorEscrito,1,0,"L");
+                $pdf->MultiCell(190,7,utf8_decode("Son Pesos: \n$valorEscrito"),1,"L");
     
-                $pdf->Ln(7);
-                $pdf->Cell(190,7,utf8_decode("Original (preguntar que se pone verdaderamente."),1,0,'L');
-                $pdf->Ln(7);
+                $pdf->MultiCell(190,7,utf8_decode("Recibí de conformidad el importe neto en el presente recibo en concepto de haberes correspondiente \nal período arriba indicado quedando en mi poder un duplicado del mismo debidamente \nfirmado por el empleador."),1,'l');
                 $pdf->Cell(150);
                 $pdf->Cell(40,7,utf8_decode("Firma del Empleado"),1,0,'C');
     
@@ -454,16 +450,13 @@
                 $pdf->Cell(190,7,$totalNeto2,1,0,'L');
     
                 $pdf->Ln(7);
-                $pdf->Cell(190,7,utf8_decode("Son Pesos: "),1,0,"L");
-                $pdf->Ln(7);
                 $valorEscrito = convertir($totalNeto);
-                $pdf->Cell(190,7,$valorEscrito,1,0,"L");
+                $pdf->MultiCell(190,7,utf8_decode("Son Pesos: \n$valorEscrito"),1,"L");
     
-                $pdf->Ln(7);
                 $pdf->Cell(190,7,utf8_decode("El presente es duplicado del recibo original que obra en nuestro poder firmado por el empleado."),1,0,'L');
                 $pdf->Ln(7);
                 $pdf->Cell(150);
-                $pdf->Cell(40,7,utf8_decode("Firma del Empleador"),1,0,'C');
+                $pdf->Cell(40,7,utf8_decode("Firma del Empleador"),1,0,'C');    
     
                 $pdf->Output();
     
@@ -674,14 +667,10 @@
                     $pdf->Cell(50,7,$totalNeto2,1,'L');
     
                     $pdf->Ln(7);
-                    $pdf->Cell(190,7,utf8_decode("Son Pesos: "),1,"L");
-                    $pdf->Ln(7);
                     $valorEscrito = convertir($totalNeto);
-                    $pdf->Cell(190,7,$valorEscrito,1,"L");
+                    $pdf->MultiCell(190,7,utf8_decode("Son Pesos: \n$valorEscrito"),1,"L");
         
-                    $pdf->Ln(7);
-                    $pdf->Cell(190,7,utf8_decode("Recibo Original (preguntar que se pone verdaderamente)."),1,0,'L');
-                    $pdf->Ln(7);
+                    $pdf->MultiCell(190,7,utf8_decode("Recibí de conformidad el importe neto en el presente recibo en concepto de haberes correspondiente \nal período arriba indicado quedando en mi poder un duplicado del mismo debidamente \nfirmado por el empleador."),1,'l');
                     $pdf->Cell(150);
                     $pdf->Cell(40,7,utf8_decode("Firma del Empleado"),1,0,'C');
     
@@ -881,12 +870,9 @@
                     $pdf->Cell(50,7,$totalNeto2,1,'L');
     
                     $pdf->Ln(7);
-                    $pdf->Cell(190,7,utf8_decode("Son Pesos: "),1,"L");
-                    $pdf->Ln(7);
                     $valorEscrito = convertir($totalNeto);
-                    $pdf->Cell(190,7,$valorEscrito,1,"L");
+                    $pdf->MultiCell(190,7,utf8_decode("Son Pesos: \n$valorEscrito"),1,"L");
         
-                    $pdf->Ln(7);
                     $pdf->Cell(190,7,utf8_decode("El presente es duplicado del recibo original que obra en nuestro poder firmado por el empleado."),1,0,'L');
                     $pdf->Ln(7);
                     $pdf->Cell(150);
