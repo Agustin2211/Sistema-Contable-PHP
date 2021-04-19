@@ -16,6 +16,9 @@
     $sql = ("SELECT * FROM empleado WHERE id like '$id'");
     $result = db_query($sql);
     $row = mysqli_fetch_object($result);
+    $sql2 = "SELECT * FROM puestoempleado WHERE id = '$row->puesto'";
+    $result2 = db_query($sql2);
+    $ver2=mysqli_fetch_object($result2);
 
 ?>
 
@@ -38,7 +41,7 @@
                 </p>
 
                 <p>
-                    <label>Puesto de Trabajo: </label><input name="puesto" type="text"readonly value="<?php echo $row->puesto; ?>">
+                    <label>Puesto de Trabajo: </label><input name="puesto" type="text"readonly value="<?php echo $ver2->nombre; ?>">
                 </p>
 
                 <p>

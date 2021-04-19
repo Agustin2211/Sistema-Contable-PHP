@@ -15,7 +15,7 @@ class PDF extends FPDF  {
         $this->Cell(130);
         $this->Cell(0,0, "RECIBO DE HABERES Ley no 20.744");
         $this->Ln(5);
-        $this->Cell(0,0,'Estudio Contable "D&J"');
+        $this->Cell(0,0,"Ferreteria La Tuerca");
         //Corrernos para abajo
         $this->Ln(5);
         $this->Cell(0,0,'Galvez 2564');

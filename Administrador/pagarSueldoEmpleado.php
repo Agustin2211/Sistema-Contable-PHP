@@ -19,7 +19,9 @@
         $idEmpleado = $_POST['id'];
 
         $importeDeHorasExtras = $_POST['horasExtras'] * $_POST['ValorDeHorasExtras'];
+        $cantidadDeHorasTrabajadas = $_POST['horasExtras'];
         $importeFeriadosTrabajados = $_POST['feriadosTrabajados'] * $_POST['valorDeFeriadosTrabajados'];
+        $cantidadDeFeriadosTrabajados = $_POST['feriadosTrabajados'];
         $bono = $_POST['bono'];
 
         $sql = ("SELECT * FROM empleado WHERE id like '$idEmpleado'");
@@ -39,17 +41,17 @@
         $sueldoEmpleadoConHaberes = $sueldoMinimo + $importeDeHorasExtras + $importeFeriadosTrabajados + $bono;
 
         /*Aporte Personal Jubilación: 11%*/
-            $jubilacion = (($sueldoMinimo * 11)/100);
+            $jubilacion = (($sueldoEmpleadoConHaberes * 11)/100);
         /*Aporte Personal O. Social: 3%*/
-            $obraSocial = (($sueldoMinimo * 3)/100);
+            $obraSocial = (($sueldoEmpleadoConHaberes * 3)/100);
         /*Aporte Personal O. Social: 3%*/
-            $ley = (($sueldoMinimo * 3)/100);
+            $ley = (($sueldoEmpleadoConHaberes * 3)/100);
         /*Aporte Personal Sindicato: 2.5%*/
-            $sindicato = (($sueldoMinimo * 2.5)/100);
+            $sindicato = (($sueldoEmpleadoConHaberes * 2.5)/100);
         /*Contribución Patronal O. Social: 5.4%*/
-            $regulacionSindicato = (($sueldoMinimo * 5.4)/100);
+            $regulacionSindicato = (($sueldoEmpleadoConHaberes * 5.4)/100);
         /*Ley de Riesgo de Trabajo (A.R.T.): 1,5%*/
-            $art = (($sueldoMinimo * 1.5)/100);
+            $art = (($sueldoEmpleadoConHaberes * 1.5)/100);
 
             $descuentos = $jubilacion + $obraSocial + $ley + $sindicato + $regulacionSindicato + $art;
 
@@ -151,6 +153,97 @@
 
                 /*UNA VEZ REALIZADA TODA ESTA PARTE, LO QUE SE DEBE HACER ES EL CONTRA ASIENTO EN CUESTION*/
                 }
+            
+                $stmt = $conn->prepare("TRUNCATE TABLE tablapost");
+                $stmt->execute();
+
+                $fecha = date("Y-m-d");
+                $sindicato2 = (($sueldoEmpleadoConHaberes * 5.4)/100);
+                $obra = (($sueldoEmpleadoConHaberes * 3)/100);
+    
+                $cuenta = 530;
+                $debe = $sueldoEmpleadoConHaberes;
+                $haber = 0;
+                $stmt = $conn->prepare("INSERT INTO tablapost (cuenta, debe, haber) VALUES ('$cuenta', '$debe', '$haber')");
+                $stmt->bindParam('cuenta', $cuenta);
+                $stmt->bindParam('debe', $debe);
+                $stmt->bindParam('haber', $haber);
+                $stmt->execute();
+    
+    
+                $cuenta = 212;
+                $debe = 0;
+                $haber = $sueldoEmpleadoConHaberes - ($jubilacion + $ley + $obra + $art + $sindicato + $sindicato2);
+                $stmt = $conn->prepare("INSERT INTO tablapost (cuenta, debe, haber) VALUES ('$cuenta', '$debe', '$haber')");
+                $stmt->bindParam('cuenta', $cuenta);
+                $stmt->bindParam('debe', $debe);
+                $stmt->bindParam('haber', $haber);
+                $stmt->execute();
+    
+                $cuenta = 240;
+                $debe = 0;
+                $haber = ($jubilacion + $ley + $obra + $art);
+                $stmt = $conn->prepare("INSERT INTO tablapost (cuenta, debe, haber) VALUES ('$cuenta', '$debe', '$haber')");
+                $stmt->bindParam('cuenta', $cuenta);
+                $stmt->bindParam('debe', $debe);
+                $stmt->bindParam('haber', $haber);
+                $stmt->execute();
+    
+                $cuenta = 250;
+                $debe = 0;
+                $haber = $sindicato + $sindicato2;
+                $stmt = $conn->prepare("INSERT INTO tablapost (cuenta, debe, haber) VALUES ('$cuenta', '$debe', '$haber')");
+                $stmt->bindParam('cuenta', $cuenta);
+                $stmt->bindParam('debe', $debe);
+                $stmt->bindParam('haber', $haber);
+                $stmt->execute();
+                
+                $detalle = "ContraAsiento de pago de sueldo";
+                $records = $conn->prepare("INSERT INTO asiento (fecha, detalle) VALUES ('$fecha', '$detalle')");
+                $records->bindParam('fecha', $fecha);
+                $records->bindParam('detalle', $detalle);
+                $records->execute();
+    
+                $sqlAsiento = "SELECT * FROM tablapost";
+                $resultAsiento= db_query($sqlAsiento);
+                    
+                while($ver=mysqli_fetch_row($resultAsiento)){
+                    $saldo1 = $ver[2];
+                    $saldo2 = $ver[3];
+                    $idcuenta = $ver[1];
+                        
+                    /*DE ACA OBTENGO EL IDASIENTO DE LA TABLA ASIENTO*/
+                    $sql2 = "SELECT MAX(id) FROM asiento";
+                    $result2 = db_query($sql2);
+                    $ver2=mysqli_fetch_array($result2);
+                    $idasiento = $ver2[0];
+                        
+                        if($saldo1 != 0){
+                            
+                            $cero = 0;
+    
+                            $records3 = $conn->prepare("INSERT INTO cuentaasiento (fecha, debe, haber, idCuenta, idAsiento) VALUES ('$fecha', '$saldo1', '$cero', '$idcuenta', '$idasiento')");
+                            $records3->bindParam('fecha', $fecha);
+                            $records3->bindParam('debe', $saldo1);
+                            $records3->bindParam('haber', $cero);
+                            $records3->bindParam('idCuenta', $idcuenta);
+                            $records3->bindParam('idAsiento', $idasiento);  
+                            $records3->execute();
+    
+                        }else{
+    
+                                $cero = 0;
+    
+                                $records3 = $conn->prepare("INSERT INTO cuentaasiento (fecha, debe, haber, idCuenta, idAsiento) VALUES ('$fecha', '$cero', '$saldo2', '$idcuenta', '$idasiento')");
+                                $records3->bindParam('fecha', $fecha);
+                                $records3->bindParam('debe', $cero);
+                                $records3->bindParam('haber', $saldo2);
+                                $records3->bindParam('idCuenta', $idcuenta);
+                                $records3->bindParam('idAsiento', $idasiento);  
+                                $records3->execute();
+    
+                            }
+                }
 
             if($tipoPago == "caja"){
                 $pdf = new PDF();
@@ -207,37 +300,80 @@
         
                 $pdf->Ln(7);
 
-                $pdf->Cell(30,7,utf8_decode("Codigo"),1,0,'C',1);
-                $pdf->Cell(70,7,utf8_decode("Detalle"),1,0,'C',1);
-                $pdf->Cell(30,7,utf8_decode("Cantidad"),1,0,'C',1);
-                $pdf->Cell(30,7,utf8_decode("Haberes"),1,0,'C',1);
+                $pdf->Cell(20,7,utf8_decode("Codigo"),1,0,'C',1);
+                $pdf->Cell(60,7,utf8_decode("Detalle"),1,0,'C',1);
+                $pdf->Cell(20,7,utf8_decode("Cantidad"),1,0,'C',1);
+                $pdf->Cell(30,7,utf8_decode("Hab.C/Desc."),1,0,'C',1);
+                $pdf->Cell(30,7,utf8_decode("Hab.S/Desc."),1,0,'C',1);
                 $pdf->Cell(30,7,utf8_decode("Deducciones"),1,0,'C',1);
 
                 $pdf->Ln(10);
                 $pdf->Cell(8);
-                $pdf->Cell(30, 10, utf8_decode("3"));
-                $pdf->Cell(75, 10, utf8_decode("Sueldo"));
-                $pdf->Cell(30, 10, utf8_decode("1.0"));
-                $pdf->Cell(30, 10, $sueldoEmpleado);
+                $pdf->Cell(20, 10, utf8_decode("3"));
+                $pdf->Cell(60, 10, utf8_decode("Sueldo"));
+                $pdf->Cell(20, 10, utf8_decode("1.0"));
+                settype($sueldoEmpleado, "float");
+                $sueldoEmpleado2 = number_format($sueldoEmpleado, 2, ",", ".");
+                $pdf->Cell(30, 10, $sueldoEmpleado2);
+    
+
+    
+                if($importeDeHorasExtras != 0){
+                    $pdf->Ln(10);
+                    $pdf->Cell(8);
+                    $pdf->Cell(20, 10, utf8_decode("701"));
+                    $pdf->Cell(60, 10, utf8_decode("Horas Extras"));
+                    settype($cantidadDeHorasTrabajadas, "float");
+                    $cantidadDeHorasTrabajadas2 = number_format($cantidadDeHorasTrabajadas, 1, ".", ",");
+                    $pdf->Cell(20, 10, $cantidadDeHorasTrabajadas2);
+                    settype($importeDeHorasExtras, "float");
+                    $importeDeHorasExtras2 = number_format($importeDeHorasExtras, 2, ",", ".");
+                    $pdf->Cell(60, 10, $importeDeHorasExtras2);
+                }
+
+
+                if($importeFeriadosTrabajados != 0){
+                    $pdf->Ln(10);
+                    $pdf->Cell(8);
+                    $pdf->Cell(20, 10, utf8_decode("702"));
+                    $pdf->Cell(60, 10, utf8_decode("Feriados Trabajados"));
+                    settype($cantidadDeFeriadosTrabajados, "float");
+                    $cantidadDeFeriadosTrabajados2 = number_format($cantidadDeFeriadosTrabajados, 1, ".", ",");
+                    $pdf->Cell(20, 10, $cantidadDeFeriadosTrabajados2);
+                    settype($importeFeriadosTrabajados, "float");
+                    $importeFeriadosTrabajados2 = number_format($importeFeriadosTrabajados, 2, ",", ".");
+                    $pdf->Cell(60, 10, $importeFeriadosTrabajados2);
+                }
+
+                if($bono != 0){
+                    $pdf->Ln(10);
+                    $pdf->Cell(8);
+                    $pdf->Cell(20, 10, utf8_decode("703"));
+                    $pdf->Cell(60, 10, utf8_decode("Bono"));
+                    $pdf->Cell(20, 10, utf8_decode(" "));
+                    settype($bono, "float");
+                    $bono2 = number_format($bono, 2, ",", ".");
+                    $pdf->Cell(60, 10, $bono2);
+                }
 
                 $pdf->Ln(10);
                 $pdf->Cell(8);
-                $pdf->Cell(30, 10, utf8_decode("501"));
-                $pdf->Cell(75, 10, utf8_decode("Jubilacion"));
-                $pdf->Cell(30, 10, utf8_decode("11.0"));
-                $pdf->Cell(25, 10, utf8_decode(" "));
-                $jubilacion = - (($sueldoEmpleado * 11)/100);
+                $pdf->Cell(20, 10, utf8_decode("501"));
+                $pdf->Cell(60, 10, utf8_decode("Jubilacion"));
+                $pdf->Cell(20, 10, utf8_decode("11.0"));
+                $pdf->Cell(60, 10, utf8_decode(" "));
+                $jubilacion = - (($sueldoEmpleadoConHaberes * 11)/100);
                 setType($jubilacion, "float");
                 $jubilacion2 = number_format($jubilacion, 2, ",", ".");
                 $pdf->Cell(30, 10, $jubilacion2);
                 
                 $pdf->Ln(10);
                 $pdf->Cell(8);
-                $pdf->Cell(30, 10, utf8_decode("505"));
-                $pdf->Cell(75, 10, utf8_decode("Ley 19032"));
-                $pdf->Cell(30, 10, utf8_decode("3.0"));
-                $pdf->Cell(25, 10, utf8_decode(" "));
-                $ley = - (($sueldoEmpleado * 3)/100);
+                $pdf->Cell(20, 10, utf8_decode("505"));
+                $pdf->Cell(60, 10, utf8_decode("Ley 19032"));
+                $pdf->Cell(20, 10, utf8_decode("3.0"));
+                $pdf->Cell(60, 10, utf8_decode(" "));
+                $ley = - (($sueldoEmpleadoConHaberes * 3)/100);
                 setType($ley, "float");
                 $ley2 = number_format($ley, 2, ",", ".");
                 $pdf->Cell(30, 10, $ley2);
@@ -245,74 +381,47 @@
                 
                 $pdf->Ln(10);            
                 $pdf->Cell(8);
-                $pdf->Cell(30, 10, utf8_decode("505"));
-                $pdf->Cell(75, 10, utf8_decode("Obra Social"));
-                $pdf->Cell(30, 10, utf8_decode("3.0"));
-                $pdf->Cell(25, 10, utf8_decode(" "));
-                $obra = - (($sueldoEmpleado * 3)/100);
+                $pdf->Cell(20, 10, utf8_decode("505"));
+                $pdf->Cell(60, 10, utf8_decode("Obra Social"));
+                $pdf->Cell(20, 10, utf8_decode("3.0"));
+                $pdf->Cell(60, 10, utf8_decode(" "));
+                $obra = - (($sueldoEmpleadoConHaberes * 3)/100);
                 setType($obra, "float");
                 $obra2 = number_format($obra, 2, ",", ".");
                 $pdf->Cell(30, 10, $obra2);
                 
                 $pdf->Ln(10);
                 $pdf->Cell(8);
-                $pdf->Cell(30, 10, utf8_decode("600"));
-                $pdf->Cell(75, 10, utf8_decode("Sindicato"));
-                $pdf->Cell(30, 10, utf8_decode("2.5"));
-                $pdf->Cell(25, 10, utf8_decode(" "));
-                $sindicato = - (($sueldoEmpleado * 2.5)/100);
+                $pdf->Cell(20, 10, utf8_decode("600"));
+                $pdf->Cell(60, 10, utf8_decode("Sindicato"));
+                $pdf->Cell(20, 10, utf8_decode("2.5"));
+                $pdf->Cell(60, 10, utf8_decode(" "));
+                $sindicato = - (($sueldoEmpleadoConHaberes * 2.5)/100);
                 setType($sindicato, "float");
                 $sindicato2 = number_format($sindicato, 2, ",", ".");
                 $pdf->Cell(30,10, $sindicato2);
 
                 $pdf->Ln(10);
                 $pdf->Cell(8);
-                $pdf->Cell(30, 10, utf8_decode("601"));
-                $pdf->Cell(75, 10, utf8_decode("Regulacion de Sindicato"));
-                $pdf->Cell(30, 10, utf8_decode("5.4"));
-                $pdf->Cell(25, 10, utf8_decode(" "));
-                $sindicato2 = - (($sueldoEmpleado * 5.4)/100);
+                $pdf->Cell(20, 10, utf8_decode("601"));
+                $pdf->Cell(60, 10, utf8_decode("Regulacion de Sindicato"));
+                $pdf->Cell(20, 10, utf8_decode("5.4"));
+                $pdf->Cell(60, 10, utf8_decode(" "));
+                $sindicato2 = - (($sueldoEmpleadoConHaberes * 5.4)/100);
                 setType($sindicato2, "float");
                 $sindicato3 = number_format($sindicato2, 2, ",", ".");
                 $pdf->Cell(30, 10, $sindicato3);
 
                 $pdf->Ln(10);
                 $pdf->Cell(8);
-                $pdf->Cell(30, 10, utf8_decode("670"));
-                $pdf->Cell(75, 10, utf8_decode("Ley de Riesgo de Trabajo"));
-                $pdf->Cell(30, 10, utf8_decode("1.5"));
-                $pdf->Cell(25, 10, utf8_decode(" "));
-                $art = - (($sueldoEmpleado * 1.5)/100);
+                $pdf->Cell(20, 10, utf8_decode("670"));
+                $pdf->Cell(60, 10, utf8_decode("Ley de Riesgo de Trabajo"));
+                $pdf->Cell(20, 10, utf8_decode("1.5"));
+                $pdf->Cell(60, 10, utf8_decode(" "));
+                $art = - (($sueldoEmpleadoConHaberes * 1.5)/100);
                 setType($art, "float");
                 $art2 = number_format($art, 2, ",", ".");
                 $pdf->Cell(30, 10, $art2);
-
-                if($bono != 0){
-                    $pdf->Ln(10);
-                    $pdf->Cell(8);
-                    $pdf->Cell(30, 10, utf8_decode("703"));
-                    $pdf->Cell(75, 10, utf8_decode("Bono"));
-                    $pdf->Cell(30, 10, utf8_decode(" "));
-                    $pdf->Cell(30, 10, $bono);
-                }
-
-                if($importeDeHorasExtras != 0){
-                    $pdf->Ln(10);
-                    $pdf->Cell(8);
-                    $pdf->Cell(30, 10, utf8_decode("701"));
-                    $pdf->Cell(75, 10, utf8_decode("Horas Extras"));
-                    $pdf->Cell(30, 10, utf8_decode(" "));
-                    $pdf->Cell(30, 10, $importeDeHorasExtras);
-                }
-
-                if($importeFeriadosTrabajados != 0){
-                    $pdf->Ln(10);
-                    $pdf->Cell(8);
-                    $pdf->Cell(30, 10, utf8_decode("702"));
-                    $pdf->Cell(75, 10, utf8_decode("Feriados Trabajados"));
-                    $pdf->Cell(30, 10, utf8_decode(" "));
-                    $pdf->Cell(30, 10, $importeFeriadosTrabajados);
-                }
 
                 $pdf->Ln(20);
 
@@ -324,9 +433,8 @@
                 $lugaryfecha = "Rosario. " . date("d/m/Y");
                 $pdf->Cell(130,7, $lugaryfecha,1,0,'C');
 
-
                 $totalRemuneraciones2 = number_format($sueldoEmpleadoConHaberes, 2, ",", ".");
-                $pdf->Cell(30,7,$sueldoEmpleadoConHaberes,1,0,'C');
+                $pdf->Cell(30,7,$totalRemuneraciones2,1,0,'C');
 
                 $totalDeducciones = $jubilacion + $ley + $obra + $sindicato + $sindicato2 + $art;
                 $totalDeducciones2 = number_format($totalDeducciones, 2, ",", ".");
@@ -346,7 +454,6 @@
                 $valorEscrito = convertir($totalNeto);
                 $pdf->MultiCell(190,7,utf8_decode("Son Pesos: \n$valorEscrito"),1,"L");
 
-                $pdf->Ln(7);
                 $pdf->MultiCell(190,7,utf8_decode("Recibí de conformidad el importe neto en el presente recibo en concepto de haberes correspondiente \nal período arriba indicado quedando en mi poder un duplicado del mismo debidamente \nfirmado por el empleador."),1,'l');
                 $pdf->Cell(150);
                 $pdf->Cell(40,7,utf8_decode("Firma del Empleado"),1,0,'C');
@@ -403,112 +510,125 @@
         
                 $pdf->Ln(7);
 
-                $pdf->Cell(30,7,utf8_decode("Codigo"),1,0,'C',1);
-                $pdf->Cell(70,7,utf8_decode("Detalle"),1,0,'C',1);
-                $pdf->Cell(30,7,utf8_decode("Cantidad"),1,0,'C',1);
-                $pdf->Cell(30,7,utf8_decode("Haberes"),1,0,'C',1);
+                $pdf->Cell(20,7,utf8_decode("Codigo"),1,0,'C',1);
+                $pdf->Cell(60,7,utf8_decode("Detalle"),1,0,'C',1);
+                $pdf->Cell(20,7,utf8_decode("Cantidad"),1,0,'C',1);
+                $pdf->Cell(30,7,utf8_decode("Hab.C/Desc."),1,0,'C',1);
+                $pdf->Cell(30,7,utf8_decode("Hab.S/Desc."),1,0,'C',1);
                 $pdf->Cell(30,7,utf8_decode("Deducciones"),1,0,'C',1);
 
                 $pdf->Ln(10);
                 $pdf->Cell(8);
-                $pdf->Cell(30, 10, utf8_decode("3"));
-                $pdf->Cell(75, 10, utf8_decode("Sueldo"));
-                $pdf->Cell(30, 10, utf8_decode("1.0"));
-                $pdf->Cell(30, 10, $sueldoEmpleado);
+                $pdf->Cell(20, 10, utf8_decode("3"));
+                $pdf->Cell(60, 10, utf8_decode("Sueldo"));
+                $pdf->Cell(20, 10, utf8_decode("1.0"));
+                settype($sueldoEmpleado, "float");
+                $sueldoEmpleado2 = number_format($sueldoEmpleado, 2, ",", ".");
+                $pdf->Cell(30, 10, $sueldoEmpleado2);
+    
+                if($importeDeHorasExtras != 0){
+                    $pdf->Ln(10);
+                    $pdf->Cell(8);
+                    $pdf->Cell(20, 10, utf8_decode("701"));
+                    $pdf->Cell(60, 10, utf8_decode("Horas Extras"));
+                    settype($cantidadDeHorasTrabajadas, "float");
+                    $cantidadDeHorasTrabajadas2 = number_format($cantidadDeHorasTrabajadas, 1, ".", ",");
+                    $pdf->Cell(20, 10, $cantidadDeHorasTrabajadas2);
+                    settype($importeDeHorasExtras, "float");
+                    $importeDeHorasExtras2 = number_format($importeDeHorasExtras, 2, ",", ".");
+                    $pdf->Cell(60, 10, $importeDeHorasExtras2);
+                }
+    
+                if($importeFeriadosTrabajados != 0){
+                    $pdf->Ln(10);
+                    $pdf->Cell(8);
+                    $pdf->Cell(20, 10, utf8_decode("702"));
+                    $pdf->Cell(60, 10, utf8_decode("Feriados Trabajados"));
+                    settype($cantidadDeFeriadosTrabajados, "float");
+                    $cantidadDeFeriadosTrabajados2 = number_format($cantidadDeFeriadosTrabajados, 1, ".", ",");
+                    $pdf->Cell(20, 10, $cantidadDeFeriadosTrabajados2);
+                    settype($importeFeriadosTrabajados, "float");
+                    $importeFeriadosTrabajados2 = number_format($importeFeriadosTrabajados, 2, ",", ".");
+                    $pdf->Cell(60, 10, $importeFeriadosTrabajados2);
+                }
+
+                if($bono != 0){
+                    $pdf->Ln(10);
+                    $pdf->Cell(8);
+                    $pdf->Cell(20, 10, utf8_decode("703"));
+                    $pdf->Cell(60, 10, utf8_decode("Bono"));
+                    $pdf->Cell(20, 10, utf8_decode(" "));
+                    settype($bono, "float");
+                    $bono2 = number_format($bono, 2, ",", ".");
+                    $pdf->Cell(60, 10, $bono2);
+                }
 
                 $pdf->Ln(10);
+
                 $pdf->Cell(8);
-                $pdf->Cell(30, 10, utf8_decode("501"));
-                $pdf->Cell(75, 10, utf8_decode("Jubilacion"));
-                $pdf->Cell(30, 10, utf8_decode("11.0"));
-                $pdf->Cell(25, 10, utf8_decode(" "));
-                $jubilacion = - (($sueldoEmpleado * 11)/100);
+                $pdf->Cell(20, 10, utf8_decode("501"));
+                $pdf->Cell(60, 10, utf8_decode("Jubilacion"));
+                $pdf->Cell(20, 10, utf8_decode("11.0"));
+                $pdf->Cell(60, 10, utf8_decode(" "));
+                $jubilacion = - (($sueldoEmpleadoConHaberes * 11)/100);
                 setType($jubilacion, "float");
                 $jubilacion2 = number_format($jubilacion, 2, ",", ".");
                 $pdf->Cell(30, 10, $jubilacion2);
                 
                 $pdf->Ln(10);
                 $pdf->Cell(8);
-                $pdf->Cell(30, 10, utf8_decode("505"));
-                $pdf->Cell(75, 10, utf8_decode("Ley 19032"));
-                $pdf->Cell(30, 10, utf8_decode("3.0"));
-                $pdf->Cell(25, 10, utf8_decode(" "));
-                $ley = - (($sueldoEmpleado * 3)/100);
+                $pdf->Cell(20, 10, utf8_decode("505"));
+                $pdf->Cell(60, 10, utf8_decode("Ley 19032"));
+                $pdf->Cell(20, 10, utf8_decode("3.0"));
+                $pdf->Cell(60, 10, utf8_decode(" "));
+                $ley = - (($sueldoEmpleadoConHaberes * 3)/100);
                 setType($ley, "float");
                 $ley2 = number_format($ley, 2, ",", ".");
                 $pdf->Cell(30, 10, $ley2);
-
                 
                 $pdf->Ln(10);            
                 $pdf->Cell(8);
-                $pdf->Cell(30, 10, utf8_decode("505"));
-                $pdf->Cell(75, 10, utf8_decode("Obra Social"));
-                $pdf->Cell(30, 10, utf8_decode("3.0"));
-                $pdf->Cell(25, 10, utf8_decode(" "));
-                $obra = - (($sueldoEmpleado * 3)/100);
+                $pdf->Cell(20, 10, utf8_decode("505"));
+                $pdf->Cell(60, 10, utf8_decode("Obra Social"));
+                $pdf->Cell(20, 10, utf8_decode("3.0"));
+                $pdf->Cell(60, 10, utf8_decode(" "));
+                $obra = - (($sueldoEmpleadoConHaberes * 3)/100);
                 setType($obra, "float");
                 $obra2 = number_format($obra, 2, ",", ".");
                 $pdf->Cell(30, 10, $obra2);
                 
                 $pdf->Ln(10);
                 $pdf->Cell(8);
-                $pdf->Cell(30, 10, utf8_decode("600"));
-                $pdf->Cell(75, 10, utf8_decode("Sindicato"));
-                $pdf->Cell(30, 10, utf8_decode("2.5"));
-                $pdf->Cell(25, 10, utf8_decode(" "));
-                $sindicato = - (($sueldoEmpleado * 2.5)/100);
+                $pdf->Cell(20, 10, utf8_decode("600"));
+                $pdf->Cell(60, 10, utf8_decode("Sindicato"));
+                $pdf->Cell(20, 10, utf8_decode("2.5"));
+                $pdf->Cell(60, 10, utf8_decode(" "));
+                $sindicato = - (($sueldoEmpleadoConHaberes * 2.5)/100);
                 setType($sindicato, "float");
                 $sindicato2 = number_format($sindicato, 2, ",", ".");
                 $pdf->Cell(30,10, $sindicato2);
 
                 $pdf->Ln(10);
                 $pdf->Cell(8);
-                $pdf->Cell(30, 10, utf8_decode("601"));
-                $pdf->Cell(75, 10, utf8_decode("Regulacion de Sindicato"));
-                $pdf->Cell(30, 10, utf8_decode("5.4"));
-                $pdf->Cell(25, 10, utf8_decode(" "));
-                $sindicato2 = - (($sueldoEmpleado * 5.4)/100);
+                $pdf->Cell(20, 10, utf8_decode("601"));
+                $pdf->Cell(60, 10, utf8_decode("Regulacion de Sindicato"));
+                $pdf->Cell(20, 10, utf8_decode("5.4"));
+                $pdf->Cell(60, 10, utf8_decode(" "));
+                $sindicato2 = - (($sueldoEmpleadoConHaberes * 5.4)/100);
                 setType($sindicato2, "float");
                 $sindicato3 = number_format($sindicato2, 2, ",", ".");
                 $pdf->Cell(30, 10, $sindicato3);
 
                 $pdf->Ln(10);
                 $pdf->Cell(8);
-                $pdf->Cell(30, 10, utf8_decode("670"));
-                $pdf->Cell(75, 10, utf8_decode("Ley de Riesgo de Trabajo"));
-                $pdf->Cell(30, 10, utf8_decode("1.5"));
-                $pdf->Cell(25, 10, utf8_decode(" "));
-                $art = - (($sueldoEmpleado * 1.5)/100);
+                $pdf->Cell(20, 10, utf8_decode("670"));
+                $pdf->Cell(60, 10, utf8_decode("Ley de Riesgo de Trabajo"));
+                $pdf->Cell(20, 10, utf8_decode("1.5"));
+                $pdf->Cell(60, 10, utf8_decode(" "));
+                $art = - (($sueldoEmpleadoConHaberes * 1.5)/100);
                 setType($art, "float");
                 $art2 = number_format($art, 2, ",", ".");
                 $pdf->Cell(30, 10, $art2);
-
-                if($bono != 0){
-                    $pdf->Ln(10);
-                    $pdf->Cell(8);
-                    $pdf->Cell(30, 10, utf8_decode("703"));
-                    $pdf->Cell(75, 10, utf8_decode("Bono"));
-                    $pdf->Cell(30, 10, utf8_decode(" "));
-                    $pdf->Cell(30, 10, $bono);
-                }
-
-                if($importeDeHorasExtras != 0){
-                    $pdf->Ln(10);
-                    $pdf->Cell(8);
-                    $pdf->Cell(30, 10, utf8_decode("701"));
-                    $pdf->Cell(75, 10, utf8_decode("Horas Extras"));
-                    $pdf->Cell(30, 10, utf8_decode(" "));
-                    $pdf->Cell(30, 10, $importeDeHorasExtras);
-                }
-
-                if($importeFeriadosTrabajados != 0){
-                    $pdf->Ln(10);
-                    $pdf->Cell(8);
-                    $pdf->Cell(30, 10, utf8_decode("702"));
-                    $pdf->Cell(75, 10, utf8_decode("Feriados Trabajados"));
-                    $pdf->Cell(30, 10, utf8_decode(" "));
-                    $pdf->Cell(30, 10, $importeFeriadosTrabajados);
-                }
 
                 $pdf->Ln(20);
 
@@ -522,7 +642,7 @@
 
 
                 $totalRemuneraciones2 = number_format($sueldoEmpleadoConHaberes, 2, ",", ".");
-                $pdf->Cell(30,7,$sueldoEmpleadoConHaberes,1,0,'C');
+                $pdf->Cell(30,7,$totalRemuneraciones2,1,0,'C');
 
                 $totalDeducciones = $jubilacion + $ley + $obra + $sindicato + $sindicato2 + $art;
                 $totalDeducciones2 = number_format($totalDeducciones, 2, ",", ".");
@@ -542,12 +662,11 @@
                 $valorEscrito = convertir($totalNeto);
                 $pdf->MultiCell(190,7,utf8_decode("Son Pesos: \n$valorEscrito"),1,"L");
 
-                $pdf->Ln(7);
+ 
                 $pdf->Cell(190,7,utf8_decode("El presente es duplicado del recibo original que obra en nuestro poder firmado por el empleado."),1,0,'L');
-                $pdf->Ln(7);
                 $pdf->Cell(150);
                 $pdf->Cell(40,7,utf8_decode("Firma del Empleador"),1,0,'C');
-
+                
                 $pdf->Output();
 
                 $stmt = $conn->prepare("TRUNCATE TABLE tablapost");
@@ -614,37 +733,77 @@
 
                 $pdf->Ln(7);
     
-                $pdf->Cell(30,7,utf8_decode("Codigo"),1,0,'C',1);
-                $pdf->Cell(70,7,utf8_decode("Detalle"),1,0,'C',1);
-                $pdf->Cell(30,7,utf8_decode("Cantidad"),1,0,'C',1);
-                $pdf->Cell(30,7,utf8_decode("Haberes"),1,0,'C',1);
+                $pdf->Cell(20,7,utf8_decode("Codigo"),1,0,'C',1);
+                $pdf->Cell(60,7,utf8_decode("Detalle"),1,0,'C',1);
+                $pdf->Cell(20,7,utf8_decode("Cantidad"),1,0,'C',1);
+                $pdf->Cell(30,7,utf8_decode("Hab.C/Desc."),1,0,'C',1);
+                $pdf->Cell(30,7,utf8_decode("Hab.S/Desc."),1,0,'C',1);
                 $pdf->Cell(30,7,utf8_decode("Deducciones"),1,0,'C',1);
     
                 $pdf->Ln(10);
                 $pdf->Cell(8);
-                $pdf->Cell(30, 10, utf8_decode("3"));
-                $pdf->Cell(75, 10, utf8_decode("Sueldo"));
-                $pdf->Cell(30, 10, utf8_decode("1.0"));
-                $pdf->Cell(30, 10, $sueldoEmpleado);
+                $pdf->Cell(20, 10, utf8_decode("3"));
+                $pdf->Cell(60, 10, utf8_decode("Sueldo"));
+                $pdf->Cell(20, 10, utf8_decode("1.0"));
+                settype($sueldoEmpleado, "float");
+                $sueldoEmpleado2 = number_format($sueldoEmpleado, 2, ",", ".");
+                $pdf->Cell(30, 10, $sueldoEmpleado2);
+    
+                if($bono != 0){
+                    $pdf->Ln(10);
+                    $pdf->Cell(8);
+                    $pdf->Cell(20, 10, utf8_decode("703"));
+                    $pdf->Cell(60, 10, utf8_decode("Bono"));
+                    $pdf->Cell(20, 10, utf8_decode(" "));
+                    settype($bono, "float");
+                    $bono2 = number_format($bono, 2, ",", ".");
+                    $pdf->Cell(60, 10, $bono2);
+                }
+    
+                if($importeDeHorasExtras != 0){
+                    $pdf->Ln(10);
+                    $pdf->Cell(8);
+                    $pdf->Cell(20, 10, utf8_decode("701"));
+                    $pdf->Cell(60, 10, utf8_decode("Horas Extras"));
+                    settype($cantidadDeHorasTrabajadas, "float");
+                    $cantidadDeHorasTrabajadas2 = number_format($cantidadDeHorasTrabajadas, 1, ".", ",");
+                    $pdf->Cell(20, 10, $cantidadDeHorasTrabajadas2);
+                    settype($importeDeHorasExtras, "float");
+                    $importeDeHorasExtras2 = number_format($importeDeHorasExtras, 2, ",", ".");
+                    $pdf->Cell(60, 10, $importeDeHorasExtras2);
+                }
+    
+                if($importeFeriadosTrabajados != 0){
+                    $pdf->Ln(10);
+                    $pdf->Cell(8);
+                    $pdf->Cell(20, 10, utf8_decode("702"));
+                    $pdf->Cell(60, 10, utf8_decode("Feriados Trabajados"));
+                    settype($cantidadDeFeriadosTrabajados, "float");
+                    $cantidadDeFeriadosTrabajados2 = number_format($cantidadDeFeriadosTrabajados, 1, ".", ",");
+                    $pdf->Cell(20, 10, $cantidadDeFeriadosTrabajados2);
+                    settype($importeFeriadosTrabajados, "float");
+                    $importeFeriadosTrabajados2 = number_format($importeFeriadosTrabajados, 2, ",", ".");
+                    $pdf->Cell(60, 10, $importeFeriadosTrabajados2);
+                }
     
                 $pdf->Ln(10);
                 $pdf->Cell(8);
-                $pdf->Cell(30, 10, utf8_decode("501"));
-                $pdf->Cell(75, 10, utf8_decode("Jubilacion"));
-                $pdf->Cell(30, 10, utf8_decode("11.0"));
-                $pdf->Cell(25, 10, utf8_decode(" "));
-                $jubilacion = - (($sueldoEmpleado * 11)/100);
+                $pdf->Cell(20, 10, utf8_decode("501"));
+                $pdf->Cell(60, 10, utf8_decode("Jubilacion"));
+                $pdf->Cell(20, 10, utf8_decode("11.0"));
+                $pdf->Cell(60, 10, utf8_decode(" "));
+                $jubilacion = - (($sueldoEmpleadoConHaberes * 11)/100);
                 setType($jubilacion, "float");
                 $jubilacion2 = number_format($jubilacion, 2, ",", ".");
                 $pdf->Cell(30, 10, $jubilacion2);
                 
                 $pdf->Ln(10);
                 $pdf->Cell(8);
-                $pdf->Cell(30, 10, utf8_decode("505"));
-                $pdf->Cell(75, 10, utf8_decode("Ley 19032"));
-                $pdf->Cell(30, 10, utf8_decode("3.0"));
-                $pdf->Cell(25, 10, utf8_decode(" "));
-                $ley = - (($sueldoEmpleado * 3)/100);
+                $pdf->Cell(20, 10, utf8_decode("505"));
+                $pdf->Cell(60, 10, utf8_decode("Ley 19032"));
+                $pdf->Cell(20, 10, utf8_decode("3.0"));
+                $pdf->Cell(60, 10, utf8_decode(" "));
+                $ley = - (($sueldoEmpleadoConHaberes * 3)/100);
                 setType($ley, "float");
                 $ley2 = number_format($ley, 2, ",", ".");
                 $pdf->Cell(30, 10, $ley2);
@@ -652,74 +811,47 @@
                 
                 $pdf->Ln(10);            
                 $pdf->Cell(8);
-                $pdf->Cell(30, 10, utf8_decode("505"));
-                $pdf->Cell(75, 10, utf8_decode("Obra Social"));
-                $pdf->Cell(30, 10, utf8_decode("3.0"));
-                $pdf->Cell(25, 10, utf8_decode(" "));
-                $obra = - (($sueldoEmpleado * 3)/100);
+                $pdf->Cell(20, 10, utf8_decode("505"));
+                $pdf->Cell(60, 10, utf8_decode("Obra Social"));
+                $pdf->Cell(20, 10, utf8_decode("3.0"));
+                $pdf->Cell(60, 10, utf8_decode(" "));
+                $obra = - (($sueldoEmpleadoConHaberes * 3)/100);
                 setType($obra, "float");
                 $obra2 = number_format($obra, 2, ",", ".");
                 $pdf->Cell(30, 10, $obra2);
                 
                 $pdf->Ln(10);
                 $pdf->Cell(8);
-                $pdf->Cell(30, 10, utf8_decode("600"));
-                $pdf->Cell(75, 10, utf8_decode("Sindicato"));
-                $pdf->Cell(30, 10, utf8_decode("2.5"));
-                $pdf->Cell(25, 10, utf8_decode(" "));
-                $sindicato = - (($sueldoEmpleado * 2.5)/100);
+                $pdf->Cell(20, 10, utf8_decode("600"));
+                $pdf->Cell(60, 10, utf8_decode("Sindicato"));
+                $pdf->Cell(20, 10, utf8_decode("2.5"));
+                $pdf->Cell(60, 10, utf8_decode(" "));
+                $sindicato = - (($sueldoEmpleadoConHaberes * 2.5)/100);
                 setType($sindicato, "float");
                 $sindicato2 = number_format($sindicato, 2, ",", ".");
                 $pdf->Cell(30,10, $sindicato2);
     
                 $pdf->Ln(10);
                 $pdf->Cell(8);
-                $pdf->Cell(30, 10, utf8_decode("601"));
-                $pdf->Cell(75, 10, utf8_decode("Regulacion de Sindicato"));
-                $pdf->Cell(30, 10, utf8_decode("5.4"));
-                $pdf->Cell(25, 10, utf8_decode(" "));
-                $sindicato2 = - (($sueldoEmpleado * 5.4)/100);
+                $pdf->Cell(20, 10, utf8_decode("601"));
+                $pdf->Cell(60, 10, utf8_decode("Regulacion de Sindicato"));
+                $pdf->Cell(20, 10, utf8_decode("5.4"));
+                $pdf->Cell(60, 10, utf8_decode(" "));
+                $sindicato2 = - (($sueldoEmpleadoConHaberes * 5.4)/100);
                 setType($sindicato2, "float");
                 $sindicato3 = number_format($sindicato2, 2, ",", ".");
                 $pdf->Cell(30, 10, $sindicato3);
     
                 $pdf->Ln(10);
                 $pdf->Cell(8);
-                $pdf->Cell(30, 10, utf8_decode("670"));
-                $pdf->Cell(75, 10, utf8_decode("Ley de Riesgo de Trabajo"));
-                $pdf->Cell(30, 10, utf8_decode("1.5"));
-                $pdf->Cell(25, 10, utf8_decode(" "));
-                $art = - (($sueldoEmpleado * 1.5)/100);
+                $pdf->Cell(20, 10, utf8_decode("670"));
+                $pdf->Cell(60, 10, utf8_decode("Ley de Riesgo de Trabajo"));
+                $pdf->Cell(20, 10, utf8_decode("1.5"));
+                $pdf->Cell(60, 10, utf8_decode(" "));
+                $art = - (($sueldoEmpleadoConHaberes * 1.5)/100);
                 setType($art, "float");
                 $art2 = number_format($art, 2, ",", ".");
                 $pdf->Cell(30, 10, $art2);
-    
-                if($bono != 0){
-                    $pdf->Ln(10);
-                    $pdf->Cell(8);
-                    $pdf->Cell(30, 10, utf8_decode("703"));
-                    $pdf->Cell(75, 10, utf8_decode("Bono"));
-                    $pdf->Cell(30, 10, utf8_decode(" "));
-                    $pdf->Cell(30, 10, $bono);
-                }
-    
-                if($importeDeHorasExtras != 0){
-                    $pdf->Ln(10);
-                    $pdf->Cell(8);
-                    $pdf->Cell(30, 10, utf8_decode("701"));
-                    $pdf->Cell(75, 10, utf8_decode("Horas Extras"));
-                    $pdf->Cell(30, 10, utf8_decode(" "));
-                    $pdf->Cell(30, 10, $importeDeHorasExtras);
-                }
-    
-                if($importeFeriadosTrabajados != 0){
-                    $pdf->Ln(10);
-                    $pdf->Cell(8);
-                    $pdf->Cell(30, 10, utf8_decode("702"));
-                    $pdf->Cell(75, 10, utf8_decode("Feriados Trabajados"));
-                    $pdf->Cell(30, 10, utf8_decode(" "));
-                    $pdf->Cell(30, 10, $importeFeriadosTrabajados);
-                }
     
                 $pdf->Ln(20);
     
@@ -731,9 +863,8 @@
                 $lugaryfecha = "Rosario. " . date("d/m/Y");
                 $pdf->Cell(130,7, $lugaryfecha,1,0,'C');
     
-    
                 $totalRemuneraciones2 = number_format($sueldoEmpleadoConHaberes, 2, ",", ".");
-                $pdf->Cell(30,7,$sueldoEmpleadoConHaberes,1,0,'C');
+                $pdf->Cell(30,7,$sueldoRemuneraciones2,1,0,'C');
     
                 $totalDeducciones = $jubilacion + $ley + $obra + $sindicato + $sindicato2 + $art;
                 $totalDeducciones2 = number_format($totalDeducciones, 2, ",", ".");
@@ -756,8 +887,8 @@
                 $valorEscrito = convertir($totalNeto);
                 $pdf->MultiCell(190,7,utf8_decode("Son Pesos: \n$valorEscrito"),1,"L");
     
-                $pdf->Ln(7);
                 $pdf->MultiCell(190,7,utf8_decode("Recibí de conformidad el importe neto en el presente recibo en concepto de haberes correspondiente \nal período arriba indicado quedando en mi poder un duplicado del mismo debidamente \nfirmado por el empleador."),1,'l');
+                $pdf->ln(7);
                 $pdf->Cell(150);
                 $pdf->Cell(40,7,utf8_decode("Firma del Empleado"),1,0,'C');
 
@@ -816,112 +947,125 @@
 
                 $pdf->Ln(7);
     
-                $pdf->Cell(30,7,utf8_decode("Codigo"),1,0,'C',1);
-                $pdf->Cell(70,7,utf8_decode("Detalle"),1,0,'C',1);
-                $pdf->Cell(30,7,utf8_decode("Cantidad"),1,0,'C',1);
-                $pdf->Cell(30,7,utf8_decode("Haberes"),1,0,'C',1);
+                $pdf->Cell(20,7,utf8_decode("Codigo"),1,0,'C',1);
+                $pdf->Cell(60,7,utf8_decode("Detalle"),1,0,'C',1);
+                $pdf->Cell(20,7,utf8_decode("Cantidad"),1,0,'C',1);
+                $pdf->Cell(30,7,utf8_decode("Hab.C/Desc."),1,0,'C',1);
+                $pdf->Cell(30,7,utf8_decode("Hab.S/Desc."),1,0,'C',1);
                 $pdf->Cell(30,7,utf8_decode("Deducciones"),1,0,'C',1);
     
                 $pdf->Ln(10);
                 $pdf->Cell(8);
-                $pdf->Cell(30, 10, utf8_decode("3"));
-                $pdf->Cell(75, 10, utf8_decode("Sueldo"));
-                $pdf->Cell(30, 10, utf8_decode("1.0"));
-                $pdf->Cell(30, 10, $sueldoEmpleado);
+                $pdf->Cell(20, 10, utf8_decode("3"));
+                $pdf->Cell(60, 10, utf8_decode("Sueldo"));
+                $pdf->Cell(20, 10, utf8_decode("1.0"));
+                settype($sueldoEmpleado, "float");
+                $sueldoEmpleado2 = number_format($sueldoEmpleado, 2, ",", ".");
+                $pdf->Cell(30, 10, $sueldoEmpleado2);
+    
+                if($importeDeHorasExtras != 0){
+                    $pdf->Ln(10);
+                    $pdf->Cell(8);
+                    $pdf->Cell(20, 10, utf8_decode("701"));
+                    $pdf->Cell(60, 10, utf8_decode("Horas Extras"));
+                    settype($cantidadDeHorasTrabajadas, "float");
+                    $cantidadDeHorasTrabajadas2 = number_format($cantidadDeHorasTrabajadas, 1, ".", ",");
+                    $pdf->Cell(20, 10, $cantidadDeHorasTrabajadas2);
+                    settype($importeDeHorasExtras, "float");
+                    $importeDeHorasExtras2 = number_format($importeDeHorasExtras, 2, ",", ".");
+                    $pdf->Cell(60, 10, $importeDeHorasExtras2);
+                }
+    
+                if($importeFeriadosTrabajados != 0){
+                    $pdf->Ln(10);
+                    $pdf->Cell(8);
+                    $pdf->Cell(20, 10, utf8_decode("702"));
+                    $pdf->Cell(60, 10, utf8_decode("Feriados Trabajados"));
+                    settype($cantidadDeFeriadosTrabajados, "float");
+                    $cantidadDeFeriadosTrabajados2 = number_format($cantidadDeFeriadosTrabajados, 1, ".", ",");
+                    $pdf->Cell(20, 10, $cantidadDeFeriadosTrabajados2);
+                    settype($importeFeriadosTrabajados, "float");
+                    $ImporteDeFeriadosTrabajados2 = number_format($importeFeriadosTrabajados, 2, ",", ".");
+                    $pdf->Cell(60, 10, $ImporteDeFeriadosTrabajados2);
+                }
+
+                if($bono != 0){
+                    $pdf->Ln(10);
+                    $pdf->Cell(8);
+                    $pdf->Cell(20, 10, utf8_decode("703"));
+                    $pdf->Cell(60, 10, utf8_decode("Bono"));
+                    $pdf->Cell(20, 10, utf8_decode(" "));
+                    settype($bono, "float");
+                    $bono2 = number_format($bono, 2, ",", ".");
+                    $pdf->Cell(60, 10, $bono2);
+                }
     
                 $pdf->Ln(10);
                 $pdf->Cell(8);
-                $pdf->Cell(30, 10, utf8_decode("501"));
-                $pdf->Cell(75, 10, utf8_decode("Jubilacion"));
-                $pdf->Cell(30, 10, utf8_decode("11.0"));
-                $pdf->Cell(25, 10, utf8_decode(" "));
-                $jubilacion = - (($sueldoEmpleado * 11)/100);
+                $pdf->Cell(20, 10, utf8_decode("501"));
+                $pdf->Cell(60, 10, utf8_decode("Jubilacion"));
+                $pdf->Cell(20, 10, utf8_decode("11.0"));
+                $pdf->Cell(60, 10, utf8_decode(" "));
+                $jubilacion = - (($sueldoEmpleadoConHaberes * 11)/100);
                 setType($jubilacion, "float");
                 $jubilacion2 = number_format($jubilacion, 2, ",", ".");
                 $pdf->Cell(30, 10, $jubilacion2);
                 
                 $pdf->Ln(10);
                 $pdf->Cell(8);
-                $pdf->Cell(30, 10, utf8_decode("505"));
-                $pdf->Cell(75, 10, utf8_decode("Ley 19032"));
-                $pdf->Cell(30, 10, utf8_decode("3.0"));
-                $pdf->Cell(25, 10, utf8_decode(" "));
-                $ley = - (($sueldoEmpleado * 3)/100);
+                $pdf->Cell(20, 10, utf8_decode("505"));
+                $pdf->Cell(60, 10, utf8_decode("Ley 19032"));
+                $pdf->Cell(20, 10, utf8_decode("3.0"));
+                $pdf->Cell(60, 10, utf8_decode(" "));
+                $ley = - (($sueldoEmpleadoConHaberes * 3)/100);
                 setType($ley, "float");
                 $ley2 = number_format($ley, 2, ",", ".");
                 $pdf->Cell(30, 10, $ley2);
-    
-                
-                $pdf->Ln(10);            
+       
+                $pdf->Ln(10);
+
                 $pdf->Cell(8);
-                $pdf->Cell(30, 10, utf8_decode("505"));
-                $pdf->Cell(75, 10, utf8_decode("Obra Social"));
-                $pdf->Cell(30, 10, utf8_decode("3.0"));
-                $pdf->Cell(25, 10, utf8_decode(" "));
-                $obra = - (($sueldoEmpleado * 3)/100);
+                $pdf->Cell(20, 10, utf8_decode("505"));
+                $pdf->Cell(60, 10, utf8_decode("Obra Social"));
+                $pdf->Cell(20, 10, utf8_decode("3.0"));
+                $pdf->Cell(60, 10, utf8_decode(" "));
+                $obra = - (($sueldoEmpleadoConHaberes * 3)/100);
                 setType($obra, "float");
                 $obra2 = number_format($obra, 2, ",", ".");
                 $pdf->Cell(30, 10, $obra2);
                 
                 $pdf->Ln(10);
                 $pdf->Cell(8);
-                $pdf->Cell(30, 10, utf8_decode("600"));
-                $pdf->Cell(75, 10, utf8_decode("Sindicato"));
-                $pdf->Cell(30, 10, utf8_decode("2.5"));
-                $pdf->Cell(25, 10, utf8_decode(" "));
-                $sindicato = - (($sueldoEmpleado * 2.5)/100);
+                $pdf->Cell(20, 10, utf8_decode("600"));
+                $pdf->Cell(60, 10, utf8_decode("Sindicato"));
+                $pdf->Cell(20, 10, utf8_decode("2.5"));
+                $pdf->Cell(60, 10, utf8_decode(" "));
+                $sindicato = - (($sueldoEmpleadoConHaberes * 2.5)/100);
                 setType($sindicato, "float");
                 $sindicato2 = number_format($sindicato, 2, ",", ".");
                 $pdf->Cell(30,10, $sindicato2);
     
                 $pdf->Ln(10);
                 $pdf->Cell(8);
-                $pdf->Cell(30, 10, utf8_decode("601"));
-                $pdf->Cell(75, 10, utf8_decode("Regulacion de Sindicato"));
-                $pdf->Cell(30, 10, utf8_decode("5.4"));
-                $pdf->Cell(25, 10, utf8_decode(" "));
-                $sindicato2 = - (($sueldoEmpleado * 5.4)/100);
+                $pdf->Cell(20, 10, utf8_decode("601"));
+                $pdf->Cell(60, 10, utf8_decode("Regulacion de Sindicato"));
+                $pdf->Cell(20, 10, utf8_decode("5.4"));
+                $pdf->Cell(60, 10, utf8_decode(" "));
+                $sindicato2 = - (($sueldoEmpleadoConHaberes * 5.4)/100);
                 setType($sindicato2, "float");
                 $sindicato3 = number_format($sindicato2, 2, ",", ".");
                 $pdf->Cell(30, 10, $sindicato3);
     
                 $pdf->Ln(10);
                 $pdf->Cell(8);
-                $pdf->Cell(30, 10, utf8_decode("670"));
-                $pdf->Cell(75, 10, utf8_decode("Ley de Riesgo de Trabajo"));
-                $pdf->Cell(30, 10, utf8_decode("1.5"));
-                $pdf->Cell(25, 10, utf8_decode(" "));
+                $pdf->Cell(20, 10, utf8_decode("670"));
+                $pdf->Cell(60, 10, utf8_decode("Ley de Riesgo de Trabajo"));
+                $pdf->Cell(20, 10, utf8_decode("1.5"));
+                $pdf->Cell(60, 10, utf8_decode(" "));
                 $art = - (($sueldoEmpleado * 1.5)/100);
                 setType($art, "float");
                 $art2 = number_format($art, 2, ",", ".");
                 $pdf->Cell(30, 10, $art2);
-    
-                if($bono != 0){
-                    $pdf->Ln(10);
-                    $pdf->Cell(8);
-                    $pdf->Cell(30, 10, utf8_decode("703"));
-                    $pdf->Cell(75, 10, utf8_decode("Bono"));
-                    $pdf->Cell(30, 10, utf8_decode(" "));
-                    $pdf->Cell(30, 10, $bono);
-                }
-    
-                if($importeDeHorasExtras != 0){
-                    $pdf->Ln(10);
-                    $pdf->Cell(8);
-                    $pdf->Cell(30, 10, utf8_decode("701"));
-                    $pdf->Cell(75, 10, utf8_decode("Horas Extras"));
-                    $pdf->Cell(30, 10, utf8_decode(" "));
-                    $pdf->Cell(30, 10, $importeDeHorasExtras);
-                }
-    
-                if($importeFeriadosTrabajados != 0){
-                    $pdf->Ln(10);
-                    $pdf->Cell(8);
-                    $pdf->Cell(30, 10, utf8_decode("702"));
-                    $pdf->Cell(75, 10, utf8_decode("Feriados Trabajados"));
-                    $pdf->Cell(30, 10, utf8_decode(" "));
-                    $pdf->Cell(30, 10, $importeFeriadosTrabajados);
-                }
     
                 $pdf->Ln(20);
     
@@ -935,7 +1079,7 @@
     
     
                 $totalRemuneraciones2 = number_format($sueldoEmpleadoConHaberes, 2, ",", ".");
-                $pdf->Cell(30,7,$sueldoEmpleadoConHaberes,1,0,'C');
+                $pdf->Cell(30,7,$totalRemuneraciones2,1,0,'C');
     
                 $totalDeducciones = $jubilacion + $ley + $obra + $sindicato + $sindicato2 + $art;
                 $totalDeducciones2 = number_format($totalDeducciones, 2, ",", ".");
@@ -958,7 +1102,6 @@
                 $valorEscrito = convertir($totalNeto);
                 $pdf->MultiCell(190,7,utf8_decode("Son Pesos: \n$valorEscrito"),1,"L");
     
-                $pdf->Ln(7);
                 $pdf->Cell(190,7,utf8_decode("El presente es duplicado del recibo original que obra en nuestro poder firmado por el empleado."),1,0,'L');
                 $pdf->Ln(7);
                 $pdf->Cell(150);
@@ -972,13 +1115,16 @@
 
             }
     }
+
         $fecha = date("Y-m-d");
-        $stmt = $conn->prepare("INSERT INTO pagosanteriores (idEmpleado, sueldoMinimo, sueldoCobrado, horasExtras, feriadosTrabajados, bono, fecha, tipoPago) VALUES ('$idEmpleado', '$sueldoMinimo', $sueldo,'$importeDeHorasExtras',  '$importeFeriadosTrabajados', '$bono', '$fecha',  '$tipoPago')");
+        $stmt = $conn->prepare("INSERT INTO pagosanteriores (idEmpleado, sueldoMinimo, sueldoCobrado, horasExtras, horasExtrasTrabajados, feriadosTrabajados, cantidadDeFeriadosTrabajados,bono, fecha, tipoPago) VALUES ('$idEmpleado', '$sueldoMinimo', $sueldo,'$importeDeHorasExtras', '$cantidadDeHorasTrabajadas',  '$importeFeriadosTrabajados', '$cantidadDeFeriadosTrabajados','$bono', '$fecha',  '$tipoPago')");
         $stmt->bindParam('idEmpleado', $idEmpleado);
         $stmt->bindParam('sueldoMinimo', $sueldoMinimo);
         $stmt->bindParam('sueldoCobrado', $sueldo);
         $stmt->bindParam('horasExtras', $importeDeHorasExtras);
+        $stmt->bindParam('horasExtrasTrabajadas', $cantidadDeHorasTrabajadas);
         $stmt->bindParam('feriadosTrabajados', $importeFeriadosTrabajados);
+        $stmt->bindParam('cantidadDeFeriadosTrabajos', $cantidadDeFeriadosTrabajados);
         $stmt->bindParam('bono', $bono);
         $stmt->bindParam('fecha', $fecha);
         $stmt->bindParam('tipoPago', $tipoPago);
@@ -1044,7 +1190,6 @@
                 o Aporte Personal Jubilación: 11%
                 o Aporte Personal O. Social: 3%
                 o Aporte Personal Sindicato: 2.5%
-                o Contribución Patronal Jubilación: 17.6%
                 o Contribución Patronal O. Social: 5.4%
                 o Ley de Riesgo de Trabajo (A.R.T.): 1,5%
             </textarea>
