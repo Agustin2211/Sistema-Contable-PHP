@@ -52,7 +52,7 @@
             </form>
     
 	        <form>
-		        <input type="buttom" value ="Atras" onclick="location.href = 'sistemaContable.php'">
+		        <input type="buttom" value ="Atras" onclick="location.href = 'principalLibroDiario.php'">
 	        </form>
         </p>
         

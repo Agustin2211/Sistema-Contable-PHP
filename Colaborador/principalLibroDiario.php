@@ -9,25 +9,25 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Sueldos Anteriores</title>
+        <title>Libro Diario</title>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="/php-login/assets/css/style.css">
     </head>
 
     <body>
 
-        <h1>Pagos de Sueldos Anteriores</h1>
+        <h1>Libro Diario</h1>
         
         <form>
-            <input type="buttom" value="Ver Por Fecha" OnClick = "location.href='buscarPagoFecha.php'">
+            <input type="buttom" value="Buscar Asiento" OnClick = "location.href='buscarAsientoFecha.php'">
         </form>
     
         <form>
-            <input type="buttom" value="Ver Por Empleado" onclick = "location.href='pagosanterioresporempleado.php'">
+            <input type="buttom" value="Ver Libro Diario" onclick = "location.href='Librodiario.php'">
         </form>
 
         <form>
-            <input type="buttom" value="Atras" onclick="location.href='/php-login/Colaborador/pagodesueldos.php'">
+            <input type="buttom" value="Atras" onclick="location.href='/php-login/Colaborador/sistemacontable.php'">
         </form>
 
     </body>

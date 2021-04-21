@@ -23,7 +23,7 @@
         </form>
     
         <form>
-            <input type="buttom" value="Ver Libro Diario" onclick = "location.href='librodiario.php'">
+            <input type="buttom" value="Ver Libro Diario" onclick = "location.href='principalLibroDiario.php'">
         </form>
     
         <form>

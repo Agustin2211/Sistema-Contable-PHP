@@ -1,3 +1,19 @@
+<?php
+
+    include('funciones.php');
+
+    session_start();
+
+    clearstatcache();
+
+    require('database.php');
+    
+    include('../Administrador/pdf.php');
+
+    date_default_timezone_set('America/Argentina/Buenos_Aires');
+
+ 
+?>
 
 <!DOCTYPE html>
     <html>
@@ -15,29 +31,24 @@
 
 	    <table>
 		    <tr>
-			    <th width="30%">Fecha</th>
-			    <th width="30%">Metodo de Pago</th>
-                <th width="30%">Sueldo Cobrado</th>
-                <th width="30%">Generar Comprobante</th>
+			    <th width="30%">Nombre</th>
+			    <th width="30%">Apellido</th>
+                <th width="30%">D.N.I.</th>
+                <th width="30%">Ver</th>
 		    </tr>
 	
 	    <?php 
-            include('funciones.php');
-            $idEmpleado = $_GET['id'];
 		    $sql = "SELECT * 
-                    FROM pagosanteriores
-                    WHERE idEmpleado = $idEmpleado";
+                    FROM empleado";
 		    $result = db_query($sql);
 		    while($row = mysqli_fetch_object($result)){
-                $fecha = $row->fecha;
-                $fecha = date("d/m/Y", strtotime($fecha));
         ?>
 	
 		    <tr>
-			    <td><?php echo $fecha;?></td>
-                <td><?php echo $row->tipoPago;?></td>
-                <td><?php echo $row->sueldoCobrado;?></td>
-                <td><a href="reciboDeSueldoAnterior.php?id=<?php echo $row->id;?>">Generar</a></td>
+			    <td><?php echo $row->nombre;?></td>
+                <td><?php echo $row->apellido;?></td>
+                <td><?php echo $row->dni;?></td>
+                <td><a href="generarPagosAnteriores.php?id=<?php echo $row->id;?>">Ver</a></td>
 		    </tr>
 	    <?php } ?>
 
